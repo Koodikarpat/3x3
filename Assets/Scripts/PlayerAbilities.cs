@@ -14,6 +14,7 @@ public class PlayerAbilities : MonoBehaviour
 
 	void Start () 
 	{
+		//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
 		currentButton = 4;
 
 		for (int i = 0; i < 9; i++)
@@ -23,9 +24,6 @@ public class PlayerAbilities : MonoBehaviour
 
 	void Update () 
 	{
-		//Keeping track of the location of the player gameobject; "what button is player on at the moment"
-
-
 		//Getting the mousedown click on buttons to get player moving on the selected location.
 		ButtonSelection buttonSelection = buttonGroup.GetComponent<ButtonSelection> ();
 		if (Input.GetMouseButtonUp (0))
@@ -34,9 +32,10 @@ public class PlayerAbilities : MonoBehaviour
 	}
 	public void MoveButton(int button)
 	{
-		
 
-		//isLegalMove
+		//isLegalMove 
+
+		//isIllegalMove
 
 		transform.position = buttonPosition [button];
 		currentButton = button;
