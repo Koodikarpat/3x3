@@ -33,18 +33,47 @@ public class PlayerAbilities : MonoBehaviour
 
 	public void MoveButton(int button)
 	{
-
-		transform.position = buttonPosition [button];
-		currentButton = button;
-		
+		if (isLegalMove (currentButton, button)) 
+		{
+			transform.position = buttonPosition [button];
+			currentButton = button;
+		}
 	}
 
-	/*bool isLegalMove
-	{
-		if (x + 1 = 5), (x - 1 = 39, (x - 3 = 1), (x + 3 = 7)
-			
+	bool isLegalMove(int start, int end)
 
-	}*/
+	//Restricking player movents to just one button away and only horizontally and vertically.
+
+	{
+		if ((start - 3 == end) || (start + 3 == end))
+			return true;
+		
+		if (start + 1 == end) 
+		{
+			if ((start == 2) || (start == 5)) 
+			{
+				return false;
+			} 
+			else 
+			{
+				return true;
+			}
+		}
+			
+		if (start - 1 == end) 
+		{
+			if ((start == 3) || (start == 6)) 
+			{
+				return false;
+			}
+			else 
+			{
+				return true;
+			}
+		}
+		return false;
+			
+	}
 
 
 }
