@@ -30,17 +30,21 @@ public class PlayerAbilities : MonoBehaviour
 			Debug.Log ("release");
 
 	}
+
 	public void MoveButton(int button)
 	{
-
-		//isLegalMove 
-
-		//isIllegalMove
 
 		transform.position = buttonPosition [button];
 		currentButton = button;
 		
 	}
+
+	/*bool isLegalMove
+	{
+		if (x + 1 = 5), (x - 1 = 39, (x - 3 = 1), (x + 3 = 7)
+			
+
+	}*/
 
 
 }
