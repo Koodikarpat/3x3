@@ -5,44 +5,54 @@ using UnityEngine;
 
 public class TurnControl : MonoBehaviour {
 	//kumman vuoro?
-	bool Player1 = true;
-	bool Player2 = false;
+	public bool Player1 = true;
+	public bool Player2 = false;
 	//timer test- works!
-	public float timeLeft = 10.0f;
+	float timeLeft = 10.99f;
+	//ajankääntö- works!
+	float turnTime;
 
-	public Text textComponent; 
-	public Text playerTurn;
-
+	private Text timer; //kello teksti
+	//idk - vuoro
+	Text playerTurn;
+	public GameObject playerTurnText; 
+	public GameObject timerText;
 
 	// Use this for initialization
 	void Start () {
-		textComponent = GetComponent<Text> ();
+		timer = timerText.GetComponent<Text> ();
+		turnTime = timeLeft;
+		playerTurn = playerTurnText.GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void Update ()
 	{
-		//timer test -works!
+		Debug.Log ("L:" + timeLeft);
+		//timer/ajakääntö -works!
 		timeLeft -= Time.deltaTime;
-		textComponent.text = ""+ Mathf.Floor(timeLeft);
-		if(timeLeft < 0)
-			 
-		{
-			// tämä muuttuu vielä
-			 //ChangeTurn();
-			 //if textComponent.text = "JEE";
-			//PlayerTurn.text = ("Player 1");
-				//if bool= false //tai if TurnControl.Player2 ? 
+		timer.text = "" + Mathf.Floor (timeLeft);
+		if (timeLeft < 0) {
+			timeLeft += turnTime;
+			// onko tämä tarpeen?
+			ChangeTurn();
 		}
 	}
+	public void ChangeTurn () //Vuoronvaihto
+	{
+		Player1 = !Player1;
+		Player2 = !Player2;
+		if (Player1) {
+			playerTurn.text = ("Player 1");
+			//player-1-controlled
+		}
+		if (Player2){
+			playerTurn.text = ("Player 2");
+			//player-2-controlled
+		}
+		}
 }
-// funktio vuoronvaihto idk still writing - aika resetoi, vaihtaa nappi kontrolli, kortti kontrolli, teksti
-// void ChangeTurn
-// if bool=true 
-// if bool=false
+// vuoronvaihto - napit - siirto, clickaus?
+//pelaajanappi - 1
+//pelaajanappi - 2 
 
-		
-//timeLeft= <0 
-	//boolean=true	
-	//if boolean=true
-		//boolean=false

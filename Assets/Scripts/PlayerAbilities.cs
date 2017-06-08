@@ -10,16 +10,13 @@ public class PlayerAbilities : MonoBehaviour
 	public GameObject buttonGroup;
 	public Color[] buttonColors;
 	private Vector2[] buttonPosition = new Vector2[9];
-	int currentButton;
+	//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
+	public int currentButton;
 
 
 
 	void Start () 
 	{
-
-		//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
-		currentButton = 4;
-
 		for (int i = 0; i < 9; i++) 
 		{
 			buttonPosition [i] = buttonArray [i].transform.position;
