@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileEffects : MonoBehaviour {
+public abstract class TileEffects  {
 
-	// Use this for initialization
-	void Start () {
+	public Color color;
+
+	public virtual void Action()
+	{
+
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
 }

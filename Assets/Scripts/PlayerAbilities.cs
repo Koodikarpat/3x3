@@ -8,7 +8,7 @@ public class PlayerAbilities : MonoBehaviour
 	
 	public GameObject[] buttonArray = new GameObject[9];//Array for all the mapbuttons, the movement of the players will be restricted to only these buttons.
 	public GameObject buttonGroup;
-	public Color[] buttonColors;
+	public TileEffects[] buttonTypes;
 	private Vector2[] buttonPosition = new Vector2[9];
 	//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
 	public int currentButton;
@@ -17,10 +17,17 @@ public class PlayerAbilities : MonoBehaviour
 
 	void Start () 
 	{
+		buttonTypes = TilePlacements.GetRandoms ();
+
 		for (int i = 0; i < 9; i++) 
 		{
 			buttonPosition [i] = buttonArray [i].transform.position;
-			//buttonArray [i] = buttonColors [i];
+
+			//nappien randomoitu asettelu
+			ColorBlock buttonColors = buttonArray [i].GetComponent<Button> ().colors;
+			buttonColors.normalColor = buttonTypes [i].color;
+			buttonArray [i].GetComponent<Button> ().colors = buttonColors;
+
 		}
 		
 	}

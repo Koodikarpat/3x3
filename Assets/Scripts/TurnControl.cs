@@ -28,7 +28,7 @@ public class TurnControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		Debug.Log ("L:" + timeLeft);
+		//Debug.Log ("L:" + timeLeft);
 		//timer/ajakääntö -works!
 		timeLeft -= Time.deltaTime;
 		timer.text = "" + Mathf.Floor (timeLeft);
