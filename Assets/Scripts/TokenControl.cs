@@ -5,39 +5,44 @@ using UnityEngine.UI;
 
 public class TokenControl : MonoBehaviour {
 
-	Sprite currentToken;
-	public Image token1;
-	public Image token2;
-	public Image token3;
+	SpriteRenderer currentSprite; //current token
+	public Sprite[] spriteArray; //current thingy letssee if this works
 
-	public GameObject tokensImage;
-	public Button leftButton;
-	public Button rightButton;
+	public Button leftButton; //left button
+	public Button rightButton; //right button
+	int tokenCounter = 2; //starting point - now token 1
 
-	public Image[] imageArray; //test to convert to array
-	//public list<Sprite> tokensList = new list<Sprite> (); //idk aikaisempi testi
-	//private int selectedImage; //dan teki tämän idk miten toimii täysin
 
 	// Use this for initialization
 	void Start () {
-		//selectedImage = 0; //dan  again
-		//currentToken = tokensImage.GetComponent<Sprite> ();
+			 
+		currentSprite = GetComponent<SpriteRenderer> (); //current token
+		currentSprite.sprite = spriteArray [tokenCounter]; //first token to show, starts from token 1 now
 
-		imageArray = new Image[] {
-			token1, token2, token3
-		};
+		Button lbtn = leftButton.GetComponent<Button>(); //left button
+		lbtn.onClick.AddListener (LeftTaskOnClick);
+		//run if/else that if at min value, disable button to scroll left
 
-		  
-
-		Button btn = leftButton.GetComponent<Button>();
-		btn.onClick.AddListener (TaskOnClick);
+		Button rbtn = rightButton.GetComponent<Button>(); //right button
+		rbtn.onClick.AddListener (RightTaskOnClick);
+		//run if/else that if at max value, disable button to scroll right
 	} 
 
-	void TaskOnClick()
+	void LeftTaskOnClick() //left button
 	{
-		//selectedImage -= 1; //dan
-		//currentToken = tokensList[selectedImage]; //dan
-		//imageFrame.setImage (tokensList [selectedImage]); //dan
+		tokenCounter--;
+		if (tokenCounter < 0) //tyhjä välissä idk what to do
+			tokenCounter = spriteArray.Length -1;
+		currentSprite.sprite = spriteArray [tokenCounter];
+
+	}
+
+	void RightTaskOnClick () //right button.
+	{
+		tokenCounter++;
+		if (tokenCounter > spriteArray.Length -1) //se toimii!! ei tyhjää välissä
+			tokenCounter = 0;
+		currentSprite.sprite = spriteArray [tokenCounter];
 	}
 	// Update is called once per frame
 	void Update () {
