@@ -6,12 +6,14 @@ using UnityEngine.UI;
 public class PlayerAbilities : MonoBehaviour 
 {
 	
-	public GameObject[] buttonArray = new GameObject[9];//Array for all the mapbuttons, the movement of the players will be restricted to only these buttons.
+	public GameObject[] buttonArray = new GameObject[9];
+	//Array for all the mapbuttons, the movement of the players will be restricted to only these buttons.
 	public GameObject buttonGroup;
 	public TileEffects[] buttonTypes;
 	private Vector2[] buttonPosition = new Vector2[9];
 	//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
 	public int currentButton;
+	public GameObject turnControlObject;
 
 
 
@@ -44,17 +46,28 @@ public class PlayerAbilities : MonoBehaviour
 
 	public void MoveButton(int button)
 	{
+
 		//The movement itself.
 		if (isLegalMove (currentButton, button)) 
 		{
+
+
+			TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
+			turncontrol.ChangeTurn ();
+
+
+
 			transform.position = buttonPosition [button];
 			currentButton = button;
+
 		}
+
+
 	}
 
 	bool isLegalMove(int start, int end)
 
-	//Restricking player movents to just one button away and only horizontally and vertically.
+	//Restricking player movements to just one button away and only horizontally and vertically.
 
 	{
 		if ((start - 3 == end) || (start + 3 == end))
@@ -84,8 +97,7 @@ public class PlayerAbilities : MonoBehaviour
 			}
 		}
 		return false;
-			
+
+		//STILL NEED TO RESTRICT THEM FROM OVERLAPPING
 	}
-
-
 }
