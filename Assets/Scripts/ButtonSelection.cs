@@ -22,7 +22,7 @@ public class ButtonSelection : MonoBehaviour
 
 	public void click(int button)
 	{
-		//Moving player to a selected location
+		//Moving player to a selected location.
 		GameObject currentPlayer;
 		TurnControl turnControl = TurnController.GetComponent<TurnControl> ();
 		if (turnControl.Player1) {

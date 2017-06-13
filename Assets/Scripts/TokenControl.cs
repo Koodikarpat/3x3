@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TokenControl : MonoBehaviour {
 
-	SpriteRenderer currentSprite; //current token
+	public SpriteRenderer currentSprite; //current token
 	public Sprite[] spriteArray; //current thingy letssee if this works
 
 	public Button leftButton; //left button
@@ -37,7 +37,7 @@ public class TokenControl : MonoBehaviour {
 
 	}
 
-	void RightTaskOnClick () //right button.
+	void RightTaskOnClick () //right button..
 	{
 		tokenCounter++;
 		if (tokenCounter > spriteArray.Length -1) //se toimii!! ei tyhjää välissä
