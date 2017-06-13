@@ -6,7 +6,7 @@ public abstract class TileEffects  {
 
 	public Color color;
 
-	public virtual void Action()
+	public virtual void Action(GameObject player)
 	{
 
 		

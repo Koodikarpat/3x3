@@ -2,40 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class TilePlacements {
+public static class TilePlacements 
+{
 
 
 
 	// Use this for initialization
-	public static TileEffects[] GetRandoms()
+	public static TileEffects GetRandom()
 	{
-		TileEffects[] tiles = new TileEffects[9];
-
-		for (int i = 0; i < 9; i++)
-		{
 			int random = Random.Range (0, 3); 
-			//TileEffects [i] = 
-			
 
-			
-
-
-				switch (random) 
+			switch (random) 
 			{
 			case 2:
-				tiles[i] = new Poison();
-				break;
+				return new Poison();
 
 			case 1:
-				tiles[i] = new Heal ();
-				break;
+				return new Heal ();
 
 			case 0:
-				tiles[i] = new Attack ();
-				break;
+				return new Attack ();
 
-			}
-		}
-		return tiles;	
+			default:
+				return null;
+			}	
 	}
 }
