@@ -27,10 +27,10 @@ public class ButtonSelection : MonoBehaviour
 		TurnControl turnControl = TurnController.GetComponent<TurnControl> ();
 		if (turnControl.Player1) {
 			currentPlayer = player1;
-			turnControl.ChangeTurn ();
+			//turnControl.ChangeTurn ();
 		} else if (turnControl.Player2) {
 			currentPlayer = player2;
-			turnControl.ChangeTurn ();
+			//turnControl.ChangeTurn ();
 		} else {
 			Debug.Log ("Virhe - Molempien Vuoro");
 			return;
