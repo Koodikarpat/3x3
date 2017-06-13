@@ -1,4 +1,4 @@
-# 3x3
+P# 3x3
 Android game
 
 3x3 pohjainen 1 vs 1 peli, jossa on tarkoituksena kortein ja liikkumalla pelikentällä saada vastustajan HP laskemaan nollaan asti.
@@ -19,10 +19,8 @@ Poisonia tulisi pelikentälle vain kaksi kappaletta, sillä se on vahvin, Attack
 
 Joka kertaa kun pelaaja astuu nappulalle, sen tilalle tulee uusi bonus kun pelaaja tästä lähtee.
 
-
-
-
-
+Pelaajien ei pitäisi jäädä vain istumaan paikoilleen odottamaan uusia bonuksia,ja jos he eivät liiku vuoronsa aikana, menettävät he 
+suuren määrän elämäpisteitä. Tällä saadan myös AFK pelit loppumaan nopeampaa :p
 
 
 
