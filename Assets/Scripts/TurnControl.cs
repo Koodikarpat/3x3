@@ -8,7 +8,7 @@ public class TurnControl : MonoBehaviour {
 	public bool Player1 = true;
 	public bool Player2 = false;
 	//timer test- works!
-	float timeLeft = 10.99f;
+	float timeLeft = 20.99f;
 	//ajankääntö- works!
 	float turnTime;
 
@@ -32,10 +32,13 @@ public class TurnControl : MonoBehaviour {
 		//timer/ajakääntö -works!
 		timeLeft -= Time.deltaTime;
 		timer.text = "" + Mathf.Floor (timeLeft);
-		if (timeLeft < 0) {
-			timeLeft += turnTime;
-			// onko tämä tarpeen?
-			ChangeTurn();
+
+		{
+			if (timeLeft < 0) 
+			{
+
+				ChangeTurn ();
+			}
 		}
 	}
 	public void ChangeTurn () //Vuoronvaihto
@@ -46,11 +49,13 @@ public class TurnControl : MonoBehaviour {
 			playerTurn.text = ("Player 1");
 			//player-1-controlled
 		}
-		if (Player2){
+		if (Player2) {
 			playerTurn.text = ("Player 2");
 			//player-2-controlled
 		}
-		}
+
+		timeLeft = turnTime;
+	}
 }
 // vuoronvaihto - napit - siirto, clickaus?
 //pelaajanappi - 1
