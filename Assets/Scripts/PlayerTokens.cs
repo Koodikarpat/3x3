@@ -9,8 +9,8 @@ public class PlayerTokens : MonoBehaviour {
 	public GameObject player2;
 
 	public SpriteRenderer currentToken1; //what it is now, idk if needed with the other there?
-	public static GameObject TokenSprite; //where sprite is
-	public SpriteRenderer currentSprite; //the same? ^
+	private static GameObject TokenSprite; //where sprite is
+	//private SpriteRenderer currentSprite; //the same? ^
 
 	// Use this for initialization
 	void Start () {
@@ -18,17 +18,17 @@ public class PlayerTokens : MonoBehaviour {
 	}
 	//get the part from other script?
 	TokenControl tokenControl = TokenSprite.GetComponent<TokenControl> (); 
-
+	player1 = currentSprite.sprite;
 	/// currentToken1 
 
 
-	// Update is called once per frame...
+	// Update is called once per frame....
 	void Update () 
 	{
 		
 	}
-	public void Player1TokenIs ()
-	{
-		player1 = currentSprite;
+	//public void Player1TokenIs ().
+	//{
+	//	player1 = currentSprite;
 	}
-}
+
