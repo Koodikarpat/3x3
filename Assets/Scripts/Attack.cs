@@ -10,9 +10,9 @@ public class Attack : TileEffects
 		//hakee värin paletista
 	
 	}
-	public override void Action (GameObject player)
+	public override void Action (GameObject player, GameObject enemy)
 	{
-		player.GetComponent<HealthController> ().TakeDamage (3);
+		enemy.GetComponent<HealthController> ().TakeDamage (3);
 		Debug.Log ("TakeDamage");
 	}
 }

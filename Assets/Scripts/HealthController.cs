@@ -36,6 +36,7 @@ public class HealthController : MonoBehaviour
 
 		currentHealth += amount;
 		HealthCounter.text = "" + currentHealth;
+
 	}
 
 

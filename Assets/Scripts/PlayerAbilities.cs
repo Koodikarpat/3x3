@@ -10,6 +10,7 @@ public class PlayerAbilities : MonoBehaviour
 	//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
 	public int currentButton;
 	public GameObject turnControlObject;
+	public GameObject enemy;
 
 	ButtonSelection buttons;
 
@@ -44,7 +45,7 @@ public class PlayerAbilities : MonoBehaviour
 			transform.position = buttons.buttonPosition [button];
 			currentButton = button;
 
-			buttons.buttonTypes [currentButton].Action (gameObject);
+			buttons.buttonTypes [currentButton].Action (gameObject, enemy);
 
 		}
 

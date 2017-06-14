@@ -10,9 +10,9 @@ public class Poison : TileEffects
 		//hakee värin paletista
 	
 	}
-	public override void Action (GameObject player)
+	public override void Action (GameObject player, GameObject enemy)
 	{
-		player.GetComponent<HealthController> ().TakeDamage (5);
+		enemy.GetComponent<HealthController> ().TakeDamage (5);
 		Debug.Log ("Poison");
 	}
 
