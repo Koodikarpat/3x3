@@ -13,14 +13,13 @@ public class PlayerTokens : MonoBehaviour {
 	//private SpriteRenderer currentSprite; //the same? ^
 
 	// Use this for initialization
-	void Start () {
-		
-	}
+	void Start () 
+	{
 	//get the part from other script?
-	TokenControl tokenControl = TokenSprite.GetComponent<TokenControl> (); 
-	player1 = currentSprite.sprite;
+	//TokenControl tokenControl = TokenSprite.GetComponent<TokenControl> (); 
+	//	player1 = currentSprite.sprite;
 	/// currentToken1 
-
+	}
 
 	// Update is called once per frame....
 	void Update () 
