@@ -15,7 +15,7 @@ public class TokenControl : MonoBehaviour {
 	//to keep
 	void Awake ()
 	{
-		DontDestroyOnLoad (transform.gameObject);
+		DontDestroyOnLoad (gameObject);
 	}
 
 	// Use this for initialization
