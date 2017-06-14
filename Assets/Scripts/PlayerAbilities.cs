@@ -37,15 +37,16 @@ public class PlayerAbilities : MonoBehaviour
 			turncontrol.ChangeTurn ();
 
 			//Changing the buttons in the beginnning and when the player leaves a tile.
-			buttons.buttonTypes [currentButton] = TilePlacements.GetRandom ();
-			ColorBlock buttonColors = buttons.buttonArray [currentButton].GetComponent<Button> ().colors;
-			buttonColors.normalColor = buttons.buttonTypes [currentButton].color;
-			buttons.buttonArray [currentButton].GetComponent<Button> ().colors = buttonColors;
+			buttons.tiles[currentButton].type = TilePlacements.GetRandom ();
+			buttons.tiles[currentButton].gameObject.GetComponentInChildren<Text> ().text = ""+buttons.tiles[currentButton].type.strength;
+			ColorBlock buttonColors = buttons.tiles[currentButton].gameObject.GetComponent<Button> ().colors;
+			buttonColors.normalColor = buttons.tiles[currentButton].type.color;
+			buttons.tiles[currentButton].gameObject.GetComponent<Button> ().colors = buttonColors;
 	
-			transform.position = buttons.buttonPosition [button];
+			transform.position = buttons.tiles[button].position;
 			currentButton = button;
 
-			buttons.buttonTypes [currentButton].Action (gameObject, enemy);
+			buttons.tiles[currentButton].type.Action (gameObject, enemy);
 
 		}
 

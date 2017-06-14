@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Attack : TileEffects
 {
-	public Attack()
-
+	public Attack(int strength) : base(strength)
 	{
 		color = Palette.RED;
 		//hakee värin paletista
@@ -12,7 +11,7 @@ public class Attack : TileEffects
 	}
 	public override void Action (GameObject player, GameObject enemy)
 	{
-		enemy.GetComponent<HealthController> ().TakeDamage (3);
+		enemy.GetComponent<HealthController> ().TakeDamage (strength);
 		Debug.Log ("TakeDamage");
 	}
 }

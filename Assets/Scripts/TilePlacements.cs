@@ -12,16 +12,21 @@ public static class TilePlacements
 	{
 			int random = Random.Range (0, 3); 
 
+
+
+			int strength = (Random.Range (1, 5));
+
+
 			switch (random) 
 			{
 			case 2:
-				return new Poison();
+				return new Poison(strength);
 
 			case 1:
-				return new Heal ();
+				return new Heal (strength);
 
 			case 0:
-				return new Attack ();
+				return new Attack (strength);
 
 			default:
 				return null;

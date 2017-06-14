@@ -3,8 +3,7 @@ using System.Collections;
 
 public class Heal : TileEffects
 {
-	public Heal()
-
+	public Heal(int strength) : base(strength)
 	{
 		color = Palette.GREEN;
 		//hakee värin paletista
@@ -12,7 +11,7 @@ public class Heal : TileEffects
 	}
 	public override void Action (GameObject player, GameObject enemy)
 	{
-		player.GetComponent<HealthController> ().Heal (2);
+		player.GetComponent<HealthController> ().Heal (strength);
 		Debug.Log ("Heal");
 	}
 }

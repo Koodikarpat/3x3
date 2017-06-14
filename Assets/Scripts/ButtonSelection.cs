@@ -9,28 +9,26 @@ public class ButtonSelection : MonoBehaviour
 	public GameObject player2;
 	public GameObject TurnController;
 
-
-	public GameObject[] buttonArray = new GameObject[9];
-	//Array for all the mapbuttons, the movement of the players will be restricted to only these buttons.
-	public TileEffects[] buttonTypes = new TileEffects[9];
-	public Vector2[] buttonPosition = new Vector2[9];
+	public Tile[] tiles = new Tile[9];
 
 	void Start () 
 	{
 
 		for (int i = 0; i < 9; i++) 
 		{
-			buttonPosition [i] = buttonArray [i].transform.position;
+			tiles[i].position = tiles[i].gameObject.transform.position;
 
-			buttonTypes [i] = TilePlacements.GetRandom ();
+			tiles[i].type = TilePlacements.GetRandom ();
 
-			Debug.Log (i + " " + buttonTypes [i]);
+
+			Debug.Log (i + " " + tiles[i].type);
 
 			//nappien randomoitu asettelu
-			ColorBlock buttonColors = buttonArray [i].GetComponent<Button> ().colors;
-			buttonColors.normalColor = buttonTypes [i].color;
-			buttonArray [i].GetComponent<Button> ().colors = buttonColors;
+			tiles[i].gameObject.GetComponentInChildren<Text> ().text = ""+tiles[i].type.strength;
 
+			ColorBlock buttonColors = tiles[i].gameObject.GetComponent<Button> ().colors;
+			buttonColors.normalColor = tiles[i].type.color;
+			tiles[i].gameObject.GetComponent<Button> ().colors = buttonColors;
 		}
 
 	}
