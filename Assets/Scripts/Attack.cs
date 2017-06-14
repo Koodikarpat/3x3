@@ -12,7 +12,7 @@ public class Attack : TileEffects
 	public override void Action (GameObject player, GameObject enemy)
 	{
 		enemy.GetComponent<HealthController> ().TakeDamage (strength);
-		Debug.Log ("TakeDamage");
+		//Debug.Log ("TakeDamage");
 	}
 }
 

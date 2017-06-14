@@ -58,6 +58,11 @@ public class PlayerAbilities : MonoBehaviour
 	//Restricking player movements to just one button away and only horizontally and vertically.
 
 	{
+		if (end == enemy.GetComponent<PlayerAbilities> ().currentButton)
+			return false;
+
+
+
 		if ((start - 3 == end) || (start + 3 == end))
 			return true;
 		

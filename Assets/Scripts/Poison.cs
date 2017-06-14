@@ -12,7 +12,7 @@ public class Poison : TileEffects
 	public override void Action (GameObject player, GameObject enemy)
 	{
 		enemy.GetComponent<HealthController> ().TakeDamage (5);
-		Debug.Log ("Poison");
+		//Debug.Log ("Poison");
 	}
 
 }

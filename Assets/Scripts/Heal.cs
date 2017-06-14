@@ -12,7 +12,7 @@ public class Heal : TileEffects
 	public override void Action (GameObject player, GameObject enemy)
 	{
 		player.GetComponent<HealthController> ().Heal (strength);
-		Debug.Log ("Heal");
+		//Debug.Log ("Heal");
 	}
 }
 
