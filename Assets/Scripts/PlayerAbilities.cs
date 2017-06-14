@@ -35,6 +35,7 @@ public class PlayerAbilities : MonoBehaviour
 			TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
 			turncontrol.ChangeTurn ();
 
+			//Changing the buttons in the beginnning and when the player leaves a tile.
 			buttons.buttonTypes [currentButton] = TilePlacements.GetRandom ();
 			ColorBlock buttonColors = buttons.buttonArray [currentButton].GetComponent<Button> ().colors;
 			buttonColors.normalColor = buttons.buttonTypes [currentButton].color;
@@ -83,6 +84,6 @@ public class PlayerAbilities : MonoBehaviour
 		}
 		return false;
 
-		//STILL NEED TO RESTRICT THEM FROM OVERLAPPING
+		//STILL NEED TO RESTRICT THEM FROM OVERLAPPING!!
 	}
 }

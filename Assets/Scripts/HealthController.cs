@@ -24,6 +24,7 @@ public class HealthController : MonoBehaviour
 			currentHealth = 0;
 			GameOver = true;
 			GameOverText.GetComponent <Text> ().text = "Game Over!";
+			Debug.Log ("Gameover");
 		}
 
 		HealthCounter.text = "" + currentHealth;
@@ -34,7 +35,7 @@ public class HealthController : MonoBehaviour
 	{
 
 		currentHealth += amount;
-
+		HealthCounter.text = "" + currentHealth;
 	}
 
 
