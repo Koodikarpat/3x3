@@ -11,6 +11,7 @@ public class HealthController : MonoBehaviour
 	public GameObject GameOverText;
 	public GameObject healthCounterObject;
 	public GameObject PoisonCounterObject;
+	public GameObject animator;
 
 	Text HealthCounter; 
 	Text PoisonCounter;
@@ -19,6 +20,8 @@ public class HealthController : MonoBehaviour
 
 	public void TakeDamage (int amount)
 	{
+		animator.GetComponent<Animator> ().SetTrigger("TakeDamage");
+
 		currentHealth -= amount;
 
 		if (currentHealth <= 0) {
