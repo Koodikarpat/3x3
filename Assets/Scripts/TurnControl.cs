@@ -17,6 +17,8 @@ public class TurnControl : MonoBehaviour {
 	Text playerTurn;
 	public GameObject playerTurnText; 
 	public GameObject timerText;
+	public GameObject Player1Object;
+	public GameObject Player2Object;
 
 	// Use this for initialization
 	void Start () {
@@ -47,10 +49,12 @@ public class TurnControl : MonoBehaviour {
 		Player2 = !Player2;
 		if (Player1) {
 			playerTurn.text = ("Player 1");
+			Player1Object.GetComponent <StatusEffects> ().tick ();
 			//player-1-controlled
 		}
 		if (Player2) {
 			playerTurn.text = ("Player 2");
+			Player2Object.GetComponent <StatusEffects> ().tick ();
 			//player-2-controlled
 		}
 

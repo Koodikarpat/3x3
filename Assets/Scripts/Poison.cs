@@ -11,7 +11,8 @@ public class Poison : TileEffects
 	}
 	public override void Action (GameObject player, GameObject enemy)
 	{
-		enemy.GetComponent<HealthController> ().TakeDamage (5);
+		if (strength > enemy.GetComponent<StatusEffects> ().turnsLeft)
+				enemy.GetComponent<StatusEffects> ().turnsLeft = strength;
 		//Debug.Log ("Poison");
 	}
 

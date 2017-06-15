@@ -20,9 +20,6 @@ public class ButtonSelection : MonoBehaviour
 
 			tiles[i].type = TilePlacements.GetRandom ();
 
-
-			Debug.Log (i + " " + tiles[i].type);
-
 			//nappien randomoitu asettelu
 			tiles[i].gameObject.GetComponentInChildren<Text> ().text = ""+tiles[i].type.strength;
 

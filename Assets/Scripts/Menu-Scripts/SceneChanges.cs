@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class SceneChanges : MonoBehaviour {
 
 	public Button localMultiplayer;
+	public Button Online;
 
 	// Use this for initialization
 	void Start () {
@@ -19,6 +20,10 @@ public class SceneChanges : MonoBehaviour {
 	}
 	public void ChangeSceneLocalMultiplayer ()
 	{
-		SceneManager.LoadScene ("scene");
+		SceneManager.LoadScene (" tommin scene");
+	}
+	public void ChangeSceneOnline ()
+	{
+		SceneManager.LoadScene ("LoadingScreen");
 	}
 }
