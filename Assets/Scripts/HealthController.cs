@@ -30,9 +30,7 @@ public class HealthController : MonoBehaviour
 			GameOverText.GetComponent <Text> ().text = "Game Over!";
 			Debug.Log ("Gameover");
 		}
-		PoisonCounter = PoisonCounterObject.GetComponent < Text > ();
 		HealthCounter.text = "" + currentHealth;
-		PoisonCounter.text = "" + GetComponent <StatusEffects> ().turnsLeft;
 	
 	}
 
@@ -49,7 +47,6 @@ public class HealthController : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		//PoisonCounter = PoisonCounterObject.GetComponent < Text > ();
 		HealthCounter = healthCounterObject.GetComponent < Text > ();
 		GameOver = false;
 	}
