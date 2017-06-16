@@ -4,15 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class SceneChanges : MonoBehaviour { //connected to - Buttons, will include all the scene change button functions
-
+public class SceneChanges : MonoBehaviour { 
+	//connected to - Buttons, will include all the scene change button functions
 	public Button localMultiplayer;
-	public GameObject SceneController;
-	public GameObject TokenSprite; //player1, works
-	public GameObject randomTokenSprite; //player2 for now, random test
-
 	public Button Online;
 
+	//for moving the player tokens
+	public GameObject SceneController;
+	//player1
+	public GameObject TokenSprite; 
+	//player2 random 
+	public GameObject randomTokenSprite; 
 
 	// Use this for initialization
 	void Start () {
@@ -29,18 +31,19 @@ public class SceneChanges : MonoBehaviour { //connected to - Buttons, will inclu
 		SceneControllerScript sceneControllerScript = SceneController.GetComponent<SceneControllerScript> ();//get script
 
 		//player1 - works
-		SpriteRenderer currentSprite = TokenSprite.GetComponent<TokenControl>().currentSprite;//define currentsprite
-		sceneControllerScript.tokenSprite = currentSprite.sprite; //define tokenSprite as currentSprite= toimii! ottaa oikean kuvan
+		SpriteRenderer currentSprite = TokenSprite.GetComponent<TokenControl>().currentSprite;
+		sceneControllerScript.tokenSprite = currentSprite.sprite; 
 
-		//player2 random, test???
-		Sprite randomSprite = TokenSprite.GetComponent<TokenControl>().randomSprite;//test
-		sceneControllerScript.randomTokenSprite = randomSprite;//test 
+		//player2 random - works
+		Sprite randomSprite = TokenSprite.GetComponent<TokenControl>().randomSprite;
+		sceneControllerScript.randomTokenSprite = randomSprite;
 			
+		//and go to the right scene
 		SceneManager.LoadScene ("tommin scene");
 
 	}
-	public void ChangeSceneOnline ()
+	public void ChangeSceneOnline () //loading Screen for Online version
 	{
-		SceneManager.LoadScene ("LoadingScreen");
+		SceneManager.LoadScene ("LoadingScreen"); //loading screen
 	}
 }

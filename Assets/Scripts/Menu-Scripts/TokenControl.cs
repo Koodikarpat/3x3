@@ -4,29 +4,32 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TokenControl : MonoBehaviour {
+	//SceneChanges, SceneControllerScript and FindToken all pull from here
 
-	//player2 testing
-	public Sprite randomSprite; //testing, random token
-	int randomSpriteIndex; //testing, random token
-
-	//player1
+	//player1 - pulls from array, works
 	public SpriteRenderer currentSprite; //current token - (spriterenderer and other scripts pull from here)
-	public Sprite[] spriteArray; //current thingy letssee if this works
+	public Sprite[] spriteArray; 
+
+	//player2 random
+	public Sprite randomSprite; 
+	int randomSpriteIndex; 
+
+	//starting point for array - now token 1
+	int tokenCounter = 2; 
 
 	//buttons
 	public Button leftButton; //left button
 	public Button rightButton; //right button
-	int tokenCounter = 2; //starting point - now token 1
 
 	// Use this for initialization
 	void Start () {
-			 //currentSprite - player1
+		//currentSprite - player1
 		currentSprite = GetComponent<SpriteRenderer> (); //current token 
 		currentSprite.sprite = spriteArray [tokenCounter]; //first token to show, starts from token 1 now
 
 		//randomSprite - player2
-		randomSpriteIndex = Random.Range(0, spriteArray.Length); //test
-		randomSprite = spriteArray [randomSpriteIndex]; //test
+		randomSpriteIndex = Random.Range(0, spriteArray.Length); 
+		randomSprite = spriteArray [randomSpriteIndex]; 
 
 		//buttons - left
 		Button lbtn = leftButton.GetComponent<Button>(); //works, do not touch
@@ -36,7 +39,7 @@ public class TokenControl : MonoBehaviour {
 		rbtn.onClick.AddListener (RightTaskOnClick);
 
 	} 
-	//left button task
+	//left button task (player1)
 	void LeftTaskOnClick() //do not touch
 	{
 		tokenCounter--;
@@ -45,7 +48,7 @@ public class TokenControl : MonoBehaviour {
 		currentSprite.sprite = spriteArray [tokenCounter];
 
 	}
-	//right button task
+	//right button task (player1)
 	void RightTaskOnClick () //do not touch
 	{
 		tokenCounter++;

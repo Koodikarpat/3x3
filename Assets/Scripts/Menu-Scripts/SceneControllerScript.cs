@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneControllerScript : MonoBehaviour {//keeps the Object SceneController in all scenes
-	//to move the player tokens
-	public Sprite randomTokenSprite; //player 2: test
+public class SceneControllerScript : MonoBehaviour {
+	//keeps the Object SceneController in all scenes - (TokenControl - SceneChange - (FindToken))
 
-	public Sprite tokenSprite; //player 1: currentSprite = tokenSprite
-	TokenControl tokenControl; //token choosing script
+	//to move the player tokens to next scene:
+	//token choosing script
+	TokenControl tokenControl; 
+	//player 1: currentSprite = tokenSprite
+	public Sprite tokenSprite;
+	//player 2: randomSprite = randomTokenSprite
+	public Sprite randomTokenSprite; 
 
 	//keep this object
 	void Awake () {
