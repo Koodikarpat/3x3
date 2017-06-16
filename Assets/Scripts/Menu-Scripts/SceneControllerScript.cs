@@ -8,10 +8,10 @@ public class SceneControllerScript : MonoBehaviour {
 	//to move the player tokens to next scene:
 	//token choosing script
 	TokenControl tokenControl; 
-	//player 1: currentSprite = tokenSprite
-	public Sprite tokenSprite;
-	//player 2: randomSprite = randomTokenSprite
-	public Sprite randomTokenSprite; 
+		//player 1: currentSprite = tokenSprite
+	//public Sprite tokenSprite;
+		//player 2: randomSprite = randomTokenSprite
+	//public Sprite randomTokenSprite; 
 
 	//keep this object
 	void Awake () {

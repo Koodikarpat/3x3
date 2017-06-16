@@ -11,10 +11,10 @@ public class SceneChanges : MonoBehaviour {
 
 	//for moving the player tokens
 	public GameObject SceneController;
-	//player1
-	public GameObject TokenSprite; 
-	//player2 random 
-	public GameObject randomTokenSprite; 
+			//player1 UNDER CONSTRUCTION
+	//public GameObject TokenSprite; 
+		//player2 random  UNDER CONSTRUCTION
+	//public GameObject randomTokenSprite; 
 
 	// Use this for initialization
 	void Start () {
@@ -30,13 +30,13 @@ public class SceneChanges : MonoBehaviour {
 		//move the right token to the play scene
 		SceneControllerScript sceneControllerScript = SceneController.GetComponent<SceneControllerScript> ();//get script
 
-		//player1 - works
-		SpriteRenderer currentSprite = TokenSprite.GetComponent<TokenControl>().currentSprite;
-		sceneControllerScript.tokenSprite = currentSprite.sprite; 
+			//player1 - works UNDER CONSTRUCTION
+		//SpriteRenderer currentSprite = TokenSprite.GetComponent<TokenControl>().currentSprite;
+		//sceneControllerScript.tokenSprite = currentSprite.sprite; 
 
-		//player2 random - works
-		Sprite randomSprite = TokenSprite.GetComponent<TokenControl>().randomSprite;
-		sceneControllerScript.randomTokenSprite = randomSprite;
+			//player2 random - works UNDER CONSTRUCTION
+		//Sprite randomSprite = TokenSprite.GetComponent<TokenControl>().randomSprite;
+		//sceneControllerScript.randomTokenSprite = randomSprite;
 			
 		//and go to the right scene
 		SceneManager.LoadScene ("tommin scene");
