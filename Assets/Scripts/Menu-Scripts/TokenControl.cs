@@ -5,44 +5,48 @@ using UnityEngine.UI;
 
 public class TokenControl : MonoBehaviour {
 
-	public SpriteRenderer currentSprite; //current token
+	//player2 testing
+	public Sprite randomSprite; //testing, random token
+	int randomSpriteIndex; //testing, random token
+
+	//player1
+	public SpriteRenderer currentSprite; //current token - (spriterenderer and other scripts pull from here)
 	public Sprite[] spriteArray; //current thingy letssee if this works
 
+	//buttons
 	public Button leftButton; //left button
 	public Button rightButton; //right button
 	int tokenCounter = 2; //starting point - now token 1
 
-	//to keep
-	void Awake ()
-	{
-		DontDestroyOnLoad (gameObject);
-	}
-
 	// Use this for initialization
 	void Start () {
-			 
-		currentSprite = GetComponent<SpriteRenderer> (); //current token
+			 //currentSprite - player1
+		currentSprite = GetComponent<SpriteRenderer> (); //current token 
 		currentSprite.sprite = spriteArray [tokenCounter]; //first token to show, starts from token 1 now
 
-		Button lbtn = leftButton.GetComponent<Button>(); //left button
+		//randomSprite - player2
+		randomSpriteIndex = Random.Range(0, spriteArray.Length); //test
+		randomSprite = spriteArray [randomSpriteIndex]; //test
+
+		//buttons - left
+		Button lbtn = leftButton.GetComponent<Button>(); //works, do not touch
 		lbtn.onClick.AddListener (LeftTaskOnClick);
-		//run if/else that if at min value, disable button to scroll left
-
-		Button rbtn = rightButton.GetComponent<Button>(); //right button
+		//buttons - right
+		Button rbtn = rightButton.GetComponent<Button>(); //works, do not touch
 		rbtn.onClick.AddListener (RightTaskOnClick);
-		//run if/else that if at max value, disable button to scroll right.
-	} 
 
-	void LeftTaskOnClick() //left button
+	} 
+	//left button task
+	void LeftTaskOnClick() //do not touch
 	{
 		tokenCounter--;
-		if (tokenCounter < 0) //tyhjä välissä idk what to do
+		if (tokenCounter < 0) 
 			tokenCounter = spriteArray.Length -1;
 		currentSprite.sprite = spriteArray [tokenCounter];
 
 	}
-
-	void RightTaskOnClick () //right button..
+	//right button task
+	void RightTaskOnClick () //do not touch
 	{
 		tokenCounter++;
 		if (tokenCounter > spriteArray.Length -1) //se toimii!! ei tyhjää välissä
