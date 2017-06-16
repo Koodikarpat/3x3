@@ -46,7 +46,8 @@ public class TokenControl : MonoBehaviour {
 		if (tokenCounter < 0) 
 			tokenCounter = spriteArray.Length -1;
 		currentSprite.sprite = spriteArray [tokenCounter];
-
+		//if (randomSprite = currentSprite)
+			//randomSprite = spriteArray [randomSpriteIndex];
 	}
 	//right button task (player1)
 	void RightTaskOnClick () //do not touch
@@ -55,6 +56,9 @@ public class TokenControl : MonoBehaviour {
 		if (tokenCounter > spriteArray.Length -1) //se toimii!! ei tyhjää välissä
 			tokenCounter = 0;
 		currentSprite.sprite = spriteArray [tokenCounter];
+		//if (randomSprite = currentSprite)
+			//randomSprite = spriteArray [randomSpriteIndex];
+		//randomRandomSprite = 
 	}
 	// Update is called once per frame
 	void Update () {
