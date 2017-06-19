@@ -25,11 +25,11 @@ public class TokenControl : MonoBehaviour {
 	void Start () {
 				//currentSprite - player1 UNDER CONSTRUCTION
 		//currentSprite = GetComponent<SpriteRenderer> (); //current token 
-		currentToken = prefabArray [tokenCounter]; //first token to show
+		currentToken = SetPrefab(tokenCounter); //first token to show
 
 		//randomSprite - player2 UNDER CONSTRUCTION
-		randomPrefabIndex = Random.Range(0, prefabArray.Length); 
-		randomToken = prefabArray [randomPrefabIndex]; 
+		//randomPrefabIndex = Random.Range(0, prefabArray.Length); 
+		//randomToken = SetPrefab(randomPrefabIndex); 
 
 		//buttons - left
 		Button lbtn = leftButton.GetComponent<Button>(); //works, do not touch
@@ -45,7 +45,7 @@ public class TokenControl : MonoBehaviour {
 		tokenCounter--;
 		if (tokenCounter < 0) 
 			tokenCounter = prefabArray.Length -1;
-		currentToken = prefabArray [tokenCounter];
+		currentToken = SetPrefab(tokenCounter);
 
 	}
 	//right button task (player1) UNDER CONSTRUCTION
@@ -54,7 +54,13 @@ public class TokenControl : MonoBehaviour {
 		tokenCounter++;
 		if (tokenCounter > prefabArray.Length -1) //se toimii!! ei tyhjää välissä
 			tokenCounter = 0;
-		currentToken = prefabArray [tokenCounter];
+		currentToken = SetPrefab(tokenCounter);
+
+	}
+	GameObject SetPrefab (int tokenCounter)
+	{
+		Destroy (currentToken);
+		return Instantiate (prefabArray [tokenCounter], transform);
 
 	}
 	// Update is called once per frame
