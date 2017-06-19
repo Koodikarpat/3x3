@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class SceneChanges : MonoBehaviour { 
+public class SceneChanges : MonoBehaviour { //might need renaming, this and SceneControllerScript
 	//connected to - Buttons, will include all the scene change button functions
 	public Button localMultiplayer;
 	public Button Online;
 
-	//for moving the player tokens
+	//for moving the player tokens (SceneControllerScript, TokenControl script)
 	public GameObject SceneController;
 			//player1 UNDER CONSTRUCTION
 	//public GameObject TokenSprite; 

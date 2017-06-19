@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneControllerScript : MonoBehaviour {
-	//keeps the Object SceneController in all scenes - (TokenControl - SceneChange - (FindToken))
+public class SceneControllerScript : MonoBehaviour { //might need renaming, this and SceneChanges
+	//permanent object = keeps the Object SceneController in all scenes - (TokenControl - SceneChange - (FindToken))
 
 	//to move the player tokens to next scene:
 	//token choosing script

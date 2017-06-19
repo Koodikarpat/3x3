@@ -7,7 +7,7 @@ public class TokenControl : MonoBehaviour {
 	//SceneChanges, SceneControllerScript and FindToken all pull from here
 
 	//player1 - pulls from array, UNDER CONSTRUCTION
-	public GameObject currentToken; //current token - (spriterenderer and other scripts pull from here)
+	public GameObject currentToken; //current token - (currentToken GameObject and other scripts pull from here)
 	public GameObject[] prefabArray; 
 
 	//player2 random UNDER CONSTRUCTION
