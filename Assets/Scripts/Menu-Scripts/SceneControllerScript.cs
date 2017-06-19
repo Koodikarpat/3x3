@@ -8,18 +8,24 @@ public class SceneControllerScript : MonoBehaviour { //might need renaming, this
 	//to move the player tokens to next scene:
 	//token choosing script
 	TokenControl tokenControl; 
-		//player 1: currentSprite = tokenSprite
-	//public Sprite tokenSprite;
-		//player 2: randomSprite = randomTokenSprite
-	//public Sprite randomTokenSprite; 
+
+		//player1 (currentSprite = tokenSprite)
+	//public Sprite tokenSprite; 
+
+		//player1 - testing script
+	public GameObject currentToken;
+
+		//player 2: randomSprite = randomTokenSprite --UNDER CONSTRUCTION
+	//public Sprite randomTokenSprite; --UNDER CONSTRUCTION
 
 	//keep this object
 	void Awake () {
 		DontDestroyOnLoad(gameObject);
+		//DontDestroyOnLoad (currentToken1);
 	}
 	// Use this for initialization
 	void Start () {
-
+		
 	}
 	
 	// Update is called once per frame

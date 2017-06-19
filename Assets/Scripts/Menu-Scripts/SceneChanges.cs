@@ -11,8 +11,11 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this and Scen
 
 	//for moving the player tokens (SceneControllerScript, TokenControl script)
 	public GameObject SceneController;
-			//player1 UNDER CONSTRUCTION
-	//public GameObject TokenSprite; 
+
+			//player1 UNDER CONSTRUCTION--test
+	public GameObject TokenControl;
+	//public GameObject currentToken; 
+
 		//player2 random  UNDER CONSTRUCTION
 	//public GameObject randomTokenSprite; 
 
@@ -31,8 +34,14 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this and Scen
 		SceneControllerScript sceneControllerScript = SceneController.GetComponent<SceneControllerScript> ();//get script
 
 			//player1 - works UNDER CONSTRUCTION
-		//SpriteRenderer currentSprite = TokenSprite.GetComponent<TokenControl>().currentSprite;
-		//sceneControllerScript.tokenSprite = currentSprite.sprite; 
+		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = sceneControllerScript.transform; 
+		sceneControllerScript.currentToken = TokenControl.GetComponent<TokenControl>().currentToken;
+
+
+			//player1 - new, testing script
+
+
+
 
 			//player2 random - works UNDER CONSTRUCTION
 		//Sprite randomSprite = TokenSprite.GetComponent<TokenControl>().randomSprite;

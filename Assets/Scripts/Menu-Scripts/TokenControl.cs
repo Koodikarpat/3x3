@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class TokenControl : MonoBehaviour {
 	//SceneChanges, SceneControllerScript and FindToken all pull from here
 
-	//player1 - pulls from array, UNDER CONSTRUCTION
+	//player1 - pulls from array, works again
 	public GameObject currentToken; //current token - (currentToken GameObject and other scripts pull from here)
 	public GameObject[] prefabArray; 
 
 	//player2 random UNDER CONSTRUCTION
-	public GameObject randomToken; 
-	int randomPrefabIndex; 
+	//public GameObject randomSprite; 
+	//int randomPrefabIndex; 
 
 	//starting point for array - can change freely
 	int tokenCounter = 1; 
@@ -23,13 +23,12 @@ public class TokenControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-				//currentSprite - player1 UNDER CONSTRUCTION
-		//currentSprite = GetComponent<SpriteRenderer> (); //current token 
+				//currentSprite - player1 works again
 		currentToken = SetPrefab(tokenCounter); //first token to show
 
-		//randomSprite - player2 UNDER CONSTRUCTION
+		//randomSprite - player2 UNDER CONSTRUCTION - makes extra object on mainmenu
 		//randomPrefabIndex = Random.Range(0, prefabArray.Length); 
-		//randomToken = SetPrefab(randomPrefabIndex); 
+		//randomSprite = SetPrefab(randomPrefabIndex); 
 
 		//buttons - left
 		Button lbtn = leftButton.GetComponent<Button>(); //works, do not touch
@@ -39,7 +38,7 @@ public class TokenControl : MonoBehaviour {
 		rbtn.onClick.AddListener (RightTaskOnClick);
 
 	} 
-	//left button task (player1) UNDER CONSTRUCTION
+	//left button task (player1) works again
 	void LeftTaskOnClick() //do not touch
 	{
 		tokenCounter--;
@@ -48,7 +47,7 @@ public class TokenControl : MonoBehaviour {
 		currentToken = SetPrefab(tokenCounter);
 
 	}
-	//right button task (player1) UNDER CONSTRUCTION
+	//right button task (player1) works again
 	void RightTaskOnClick () //do not touch
 	{
 		tokenCounter++;
@@ -56,7 +55,7 @@ public class TokenControl : MonoBehaviour {
 			tokenCounter = 0;
 		currentToken = SetPrefab(tokenCounter);
 
-	}
+	}//makes an object out of the prefab, new stuff
 	GameObject SetPrefab (int tokenCounter)
 	{
 		Destroy (currentToken);

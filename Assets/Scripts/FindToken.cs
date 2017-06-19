@@ -9,9 +9,14 @@ public class FindToken : MonoBehaviour {
 	//pysyvä objecti
 	GameObject sceneController;
 
-	//player1
-	//Image player1Token; //player1: toimii
-	//public GameObject player1;
+	//player1: toimi
+	//Image player1Token; 
+	public GameObject player1;
+
+	//player1 testing script
+	//public GameObject currentToken;
+
+
 
 	//player2
 	//Image player2RandomToken;//test -	WORKS!	
@@ -26,6 +31,7 @@ public class FindToken : MonoBehaviour {
 	//get the object 
 	void Awake (){
 		sceneController = GameObject.Find ("SceneController"); //että löytää
+
 	}
 
 	// Use this for initialization
@@ -36,6 +42,11 @@ public class FindToken : MonoBehaviour {
 		//player 1
 		//player1Token = player1.GetComponent<Image> (); //toimii - että tietää minkä kuva komponentin
 		//player1Token.sprite = sceneControllerScript.tokenSprite; //toimii - currentSprite(TokenControl)= tokenSprite(SceneChanges - SceneControllerScript)= player1Token(FindToken)
+
+		//player1 new script testing
+		sceneControllerScript.currentToken.transform.parent = player1.transform; 
+
+
 		//player 2 -atm random
 		//player2RandomToken = player2TokenTest.GetComponent<Image> ();
 		//player2RandomToken.sprite = sceneControllerScript.randomTokenSprite;
