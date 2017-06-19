@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StatusEffects : MonoBehaviour
 {
-
+	public GameObject tickPoison;
 	public GameObject PoisonCounterObject;
 	private int tl;
 
@@ -30,6 +30,7 @@ public class StatusEffects : MonoBehaviour
 
 	public void tick () {
 		if (turnsLeft > 0) {
+			tickPoison.GetComponent <Animator> ().SetTrigger ( "tickPoison");
 			GetComponent <HealthController> ().TakeDamage (1);
 			turnsLeft--;
 		}
