@@ -54,23 +54,7 @@ public class DynamicParticle : MonoBehaviour {
 		}		
 	}
 	void Update () {
-		switch(currentState){
-			case STATES.WATER: //Water and lava got the same behaviour
-				MovementAnimation(); 
-				ScaleDown();
-			break;
-			case STATES.LAVA:
-				MovementAnimation();
-				ScaleDown();
-			break;
-			case STATES.GAS:
-				if(GetComponent<Rigidbody2D>().velocity.y<50){ //Limits the speed in Y to avoid reaching mach 7 in speed
-					GetComponent<Rigidbody2D>().AddForce (new Vector2(0,GAS_FLOATABILITY)); // Gas always goes upwards
-				}
-				ScaleDown();
-			break;
-
-		}	
+		MovementAnimation(); 
 	}
 	// This scales the particle image acording to its velocity, so it looks like its deformable... but its not ;)
 	void MovementAnimation(){
@@ -81,17 +65,6 @@ public class DynamicParticle : MonoBehaviour {
 		currentImage.gameObject.transform.localScale=movementScale;
 	}
 	// The effect for the particle to seem to fade away
-	void ScaleDown(){ 
-		float scaleValue = 1.0f-((Time.time-startTime)/particleLifeTime);
-		Vector2 particleScale=Vector2.one;
-		if (scaleValue <= 0) {
-						Destroy (gameObject);
-		} else{
-			particleScale.x=scaleValue;
-			particleScale.y=scaleValue;
-			transform.localScale=particleScale;
-		}
-	}
 
 	// To change particles lifetime externally (like the particle generator)
 	public void SetLifeTime(float time){
