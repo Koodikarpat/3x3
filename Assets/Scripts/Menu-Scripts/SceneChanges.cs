@@ -48,7 +48,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this and Scen
 		//sceneControllerScript.randomTokenSprite = randomSprite;
 			
 		//and go to the right scene
-		SceneManager.LoadScene ("tommin scene");
+		SceneManager.LoadScene ("mirkan scene");
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version

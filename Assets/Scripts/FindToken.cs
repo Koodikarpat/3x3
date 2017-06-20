@@ -9,22 +9,20 @@ public class FindToken : MonoBehaviour {
 	//pysyvä objecti
 	GameObject sceneController;
 
-	//player1: toimi
+	//player1: toimi -ei enää
 	//Image player1Token; 
-	public GameObject player1;
+	public GameObject player1; //don't touch this, important
 
-	//player1 testing script
-	//public GameObject currentToken;
-
-
-
-	//player2
+	//player2: old
 	//Image player2RandomToken;//test -	WORKS!	
 	//public GameObject player2TokenTest; //test WORKS!	
 
 	//health-images
-	//Image player1HealthImage;
-	//public GameObject player1Health;
+	Image player1HealthImage;
+	public GameObject player1Health;
+	//testing
+	Sprite token1Image;
+
 	//Image player2HealthImage;
 	//public GameObject player2Health;
 
@@ -39,22 +37,29 @@ public class FindToken : MonoBehaviour {
 		//get the script
 		SceneControllerScript sceneControllerScript = sceneController.GetComponent<SceneControllerScript> (); //toimii - kerro että tämä on tämä
 
-		//player 1
-		//player1Token = player1.GetComponent<Image> (); //toimii - että tietää minkä kuva komponentin
-		//player1Token.sprite = sceneControllerScript.tokenSprite; //toimii - currentSprite(TokenControl)= tokenSprite(SceneChanges - SceneControllerScript)= player1Token(FindToken)
-
-		//player1 new script testing
+		//player1 new script works
 		sceneControllerScript.currentToken.transform.parent = player1.transform; 
 
+			//player 1 -old
+			//player1Token = player1.GetComponent<Image> (); //toimii - että tietää minkä kuva komponentin
+			//player1Token.sprite = sceneControllerScript.tokenSprite; //toimii - currentSprite(TokenControl)= tokenSprite(SceneChanges - SceneControllerScript)= player1Token(FindToken)
 
-		//player 2 -atm random
-		//player2RandomToken = player2TokenTest.GetComponent<Image> ();
-		//player2RandomToken.sprite = sceneControllerScript.randomTokenSprite;
 
-		//health-images - player1
-		//player1HealthImage = player1Health.GetComponent<Image> ();
-		//player1HealthImage.sprite = sceneControllerScript.tokenSprite;
-		//health-images - player2
+			//player 2 -atm random - old
+			//player2RandomToken = player2TokenTest.GetComponent<Image> ();
+			//player2RandomToken.sprite = sceneControllerScript.randomTokenSprite;
+
+			//health-images - player1 - old
+			//player1HealthImage = player1Health.GetComponent<Image> ();
+			//player1HealthImage = sceneControllerScript.currentToken; NOT THE OLD WHAT WAS THIS
+
+		//health-images - player1 - new, UNDER CONSTRUCTION
+		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component
+
+		token1Image = sceneControllerScript.currentToken.GetComponent<Sprite> ();
+		player1HealthImage.sprite = token1Image;
+
+		//health-images - player2 - old
 		//player2HealthImage = player2Health.GetComponent<Image> ();
 		//player2HealthImage.sprite = sceneControllerScript.randomTokenSprite;
 	}
