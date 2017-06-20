@@ -1,3 +1,4 @@
+
 P# 3x3
 Android game
 
@@ -33,3 +34,12 @@ Ja esimerkiksi esnimmäisten 10 kierroksen jälkeen laudalle tulee pommeja jotka
 joihin se osuu, eli esimerkiksi satunnaisesti arvotut kaksi pommin viereistä laattaa tai jotain muuta vastaavaa.
 Jotta peli kuitenkin saataisiin normaalia nopeammin loppumaan, pelaajat ottavat vain kolme korttia ARCADE -peliin mukaan. 
 Pelaajat saavat kortin kerrallaan, ja uusi tulee sen jälkeen kun ensimmäinen on käytetty, mutta vain kahdesti.
+
+
+Kommunikointi
+
+Pelaajat voivat keskustella kuninkaan päätä napauttamalla ja valitsemalla jonkin lausahduksista ja/tai emoteista.
+Esimerkiksi GG, Well Played, Gongratz, Suck It, Wrong Move jne...
+Emoteissa voisi olla esimerkiksi kaljatuopista juominen, blurratun keskisormen näyttäminen, pöydän lyöminen ja nyrkin heristäminen.
+
+Mallia tekstien ja emotejen esittämiseen valitsemis kohdassa voi ottaa esimerkiksi Heartstonesta.
