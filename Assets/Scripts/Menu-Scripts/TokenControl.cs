@@ -14,6 +14,10 @@ public class TokenControl : MonoBehaviour {
 	//public GameObject randomSprite; 
 	//int randomPrefabIndex; 
 
+	//player2 random new
+	public GameObject randomToken;
+	int randomPrefabIndex;
+
 	//starting point for array - can change freely
 	int tokenCounter = 1; 
 
@@ -29,6 +33,9 @@ public class TokenControl : MonoBehaviour {
 		//randomSprite - player2 UNDER CONSTRUCTION - makes extra object on mainmenu
 		//randomPrefabIndex = Random.Range(0, prefabArray.Length); 
 		//randomSprite = SetPrefab(randomPrefabIndex); 
+
+		//player2 new
+		//random
 
 		//buttons - left
 		Button lbtn = leftButton.GetComponent<Button>(); //works, do not touch

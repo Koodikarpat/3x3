@@ -21,7 +21,7 @@ public class FindToken : MonoBehaviour {
 	Image player1HealthImage;
 	public GameObject player1Health;
 	//testing
-	Sprite token1Image;
+	SpriteRenderer token1Image;
 
 	//Image player2HealthImage;
 	//public GameObject player2Health;
@@ -54,10 +54,10 @@ public class FindToken : MonoBehaviour {
 			//player1HealthImage = sceneControllerScript.currentToken; NOT THE OLD WHAT WAS THIS
 
 		//health-images - player1 - new, UNDER CONSTRUCTION
-		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component
+		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component of the object
 
-		token1Image = sceneControllerScript.currentToken.GetComponent<Sprite> ();
-		player1HealthImage.sprite = token1Image;
+		token1Image = sceneControllerScript.currentToken.GetComponent<SpriteRenderer> (); //is the image component of currentToken
+		player1HealthImage.sprite = token1Image.sprite;
 
 		//health-images - player2 - old
 		//player2HealthImage = player2Health.GetComponent<Image> ();
