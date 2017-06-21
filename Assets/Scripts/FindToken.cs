@@ -8,23 +8,21 @@ public class FindToken : MonoBehaviour {
 
 	//pysyvä objecti
 	GameObject sceneController;
-
-	//player1: toimi -ei enää
-	//Image player1Token; 
+ 
+	//players
 	public GameObject player1; //don't touch this, important
+	public GameObject player2;
 
-	//player2: old
-	//Image player2RandomToken;//test -	WORKS!	
-	//public GameObject player2TokenTest; //test WORKS!	
-
-	//health-images
+	//health-images -1
 	Image player1HealthImage;
 	public GameObject player1Health;
-	//testing
 	SpriteRenderer token1Image;
 
-	//Image player2HealthImage;
-	//public GameObject player2Health;
+	//health-images -2
+	Image player2HealthImage;
+	public GameObject player2Health;
+	SpriteRenderer token2Image;
+
 
 	//get the object 
 	void Awake (){
@@ -40,28 +38,19 @@ public class FindToken : MonoBehaviour {
 		//player1 new script works
 		sceneControllerScript.currentToken.transform.parent = player1.transform; 
 
-			//player 1 -old
-			//player1Token = player1.GetComponent<Image> (); //toimii - että tietää minkä kuva komponentin
-			//player1Token.sprite = sceneControllerScript.tokenSprite; //toimii - currentSprite(TokenControl)= tokenSprite(SceneChanges - SceneControllerScript)= player1Token(FindToken)
+		//player2 new script, WORKS
+		sceneControllerScript.randomToken.transform.parent = player2.transform; 
 
 
-			//player 2 -atm random - old
-			//player2RandomToken = player2TokenTest.GetComponent<Image> ();
-			//player2RandomToken.sprite = sceneControllerScript.randomTokenSprite;
-
-			//health-images - player1 - old
-			//player1HealthImage = player1Health.GetComponent<Image> ();
-			//player1HealthImage = sceneControllerScript.currentToken; NOT THE OLD WHAT WAS THIS
-
-		//health-images - player1 - new, UNDER CONSTRUCTION
+		//health-images - player1 - new, IT WORKS FINALLY
 		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component of the object
-
 		token1Image = sceneControllerScript.currentToken.GetComponent<SpriteRenderer> (); //is the image component of currentToken
 		player1HealthImage.sprite = token1Image.sprite;
 
-		//health-images - player2 - old
-		//player2HealthImage = player2Health.GetComponent<Image> ();
-		//player2HealthImage.sprite = sceneControllerScript.randomTokenSprite;
+		//health-images - player2 - new, writing
+		player2HealthImage = player2Health.GetComponent<Image> ();
+		token2Image = sceneControllerScript.randomToken.GetComponent<SpriteRenderer> ();
+		player2HealthImage.sprite = token2Image.sprite;
 	}
 	
 	// Update is called once per frame

@@ -9,19 +9,16 @@ public class SceneControllerScript : MonoBehaviour { //might need renaming, this
 	//token choosing script
 	TokenControl tokenControl; 
 
-		//player1 (currentSprite = tokenSprite)
-	//public Sprite tokenSprite; 
-
-		//player1 - testing script
+	//player1 - new, works
 	public GameObject currentToken;
 
-		//player 2: randomSprite = randomTokenSprite --UNDER CONSTRUCTION
-	//public Sprite randomTokenSprite; --UNDER CONSTRUCTION
+	//player2 - new, writing
+	public GameObject randomToken;
 
 	//keep this object
 	void Awake () {
 		DontDestroyOnLoad(gameObject);
-		//DontDestroyOnLoad (currentToken1);
+
 	}
 	// Use this for initialization
 	void Start () {
