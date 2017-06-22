@@ -11,21 +11,17 @@ public static class TilePlacements
 	public static TileEffects GetRandom()
 	{
 			int random = Random.Range (0, 3); 
-
-
-
 			int strength = (Random.Range (1, 5));
-
 
 			switch (random) 
 			{
-			case 2:
+			case TileEffects.POISON:
 				return new Poison(strength);
 
-			case 1:
+			case TileEffects.HEAL:
 				return new Heal (strength);
 
-			case 0:
+			case TileEffects.ATTACK:
 				return new Attack (strength);
 
 			default:

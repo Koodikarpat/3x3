@@ -5,7 +5,7 @@ public class Heal : TileEffects
 {
 	public Heal(int strength) : base(strength)
 	{
-		color = Palette.GREEN;
+		color = TileEffects.HEAL;
 		//hakee värin paletista
 
 	}
