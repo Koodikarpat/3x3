@@ -7,7 +7,7 @@ public class FindToken : MonoBehaviour {
 	//path= TokenControl - KeepTheseScript - SceneChanges
 
 	//pysyvä objecti
-	GameObject sceneController;
+	GameObject objectKeeper;
  
 	//players
 	public GameObject player1; //don't touch this, important
@@ -26,14 +26,14 @@ public class FindToken : MonoBehaviour {
 
 	//get the object 
 	void Awake (){
-		sceneController = GameObject.Find ("SceneController"); //että löytää
+		objectKeeper = GameObject.Find ("ObjectKeeper"); //että löytää
 
 	}
 
 	// Use this for initialization
 	void Start () {
 		//get the script
-		KeepTheseScript keepTheseScript = sceneController.GetComponent<KeepTheseScript> (); //toimii - kerro että tämä on tämä
+		KeepTheseScript keepTheseScript = objectKeeper.GetComponent<KeepTheseScript> (); //toimii - kerro että tämä on tämä
 
 		//player1 new script works
 		keepTheseScript.currentToken.transform.parent = player1.transform; 

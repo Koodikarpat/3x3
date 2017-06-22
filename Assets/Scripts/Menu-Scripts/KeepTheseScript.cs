@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class KeepTheseScript : MonoBehaviour { //renamed from SceneControllerScript, SceneChanges might also need renaming
-	//permanent object = keeps the Object SceneController in all scenes - (TokenControl - SceneChange - (FindToken))
+	//permanent object = keeps the Object ObjectKeeper in all scenes - (TokenControl - SceneChange - (FindToken))
 
 	//to move the player tokens to next scene:
 

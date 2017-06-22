@@ -12,7 +12,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	public Button Online;
 
 	//for moving the player tokens (KeepTheseScriptScript, (TokenControl script))
-	public GameObject SceneController;
+	public GameObject ObjectKeeper;
 
 	//player1 - new, works again
 	public GameObject TokenControl;
@@ -34,10 +34,10 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	public void ChangeSceneLocalMultiplayer () //go to play scene (local multiplayer)
 	{
 		//move the right token to the play scene
-		KeepTheseScript keepTheseScript = SceneController.GetComponent<KeepTheseScript> ();//get script
+		KeepTheseScript keepTheseScript = ObjectKeeper.GetComponent<KeepTheseScript> ();//get script
 
 			//player1 - works again, new
-		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = SceneController.transform; 
+		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = ObjectKeeper.transform; 
 		keepTheseScript.currentToken = TokenControl.GetComponent<TokenControl>().currentToken;
 		//because the shade-cursed thing moves. doesn't work completely yet
 	
@@ -59,7 +59,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 				
 
 		//player2 -DO NOT TOUCH, it works
-		randomToken.transform.parent = keepTheseScript.transform; //PARENT = SCENECONTROLLER
+		randomToken.transform.parent = keepTheseScript.transform; //PARENT = ObjectKeeper
 		keepTheseScript.randomToken = randomToken;
 		//because the shade-cursed thing moves. doesn't work completely yet
 		randomToken.transform.position = Vector3.zero; 
