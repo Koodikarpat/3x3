@@ -4,9 +4,8 @@ using System.Threading;
 using System.Reflection;
 using System.Net.Sockets;
 using System.ComponentModel;
-using Networking;
 
-namespace Application
+namespace Networking
 {
 	public class Client
 	{
