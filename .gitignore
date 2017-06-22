@@ -14,6 +14,7 @@ ExportedObj/
 *.csproj
 *.unityproj
 *.sln
+!Assets/Server/Server.sln
 *.suo
 *.tmp
 *.user
