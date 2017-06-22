@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class FindToken : MonoBehaviour {
-	//path= TokenControl - SceneControllerScript - SceneChanges
+	//path= TokenControl - KeepTheseScript - SceneChanges
 
 	//pysyvä objecti
 	GameObject sceneController;
@@ -33,23 +33,23 @@ public class FindToken : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//get the script
-		SceneControllerScript sceneControllerScript = sceneController.GetComponent<SceneControllerScript> (); //toimii - kerro että tämä on tämä
+		KeepTheseScript keepTheseScript = sceneController.GetComponent<KeepTheseScript> (); //toimii - kerro että tämä on tämä
 
 		//player1 new script works
-		sceneControllerScript.currentToken.transform.parent = player1.transform; 
+		keepTheseScript.currentToken.transform.parent = player1.transform; 
 
 		//player2 new script, WORKS
-		sceneControllerScript.randomToken.transform.parent = player2.transform; 
+		keepTheseScript.randomToken.transform.parent = player2.transform; 
 
 
 		//health-images - player1 - new, IT WORKS FINALLY
 		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component of the object
-		token1Image = sceneControllerScript.currentToken.GetComponent<SpriteRenderer> (); //is the image component of currentToken
+		token1Image = keepTheseScript.currentToken.GetComponent<SpriteRenderer> (); //is the image component of currentToken
 		player1HealthImage.sprite = token1Image.sprite;
 
 		//health-images - player2 - new, writing
 		player2HealthImage = player2Health.GetComponent<Image> ();
-		token2Image = sceneControllerScript.randomToken.GetComponent<SpriteRenderer> ();
+		token2Image = keepTheseScript.randomToken.GetComponent<SpriteRenderer> ();
 		player2HealthImage.sprite = token2Image.sprite;
 	}
 	

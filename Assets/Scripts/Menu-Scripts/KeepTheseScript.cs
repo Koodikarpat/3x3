@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SceneControllerScript : MonoBehaviour { //might need renaming, this and SceneChanges
+public class KeepTheseScript : MonoBehaviour { //renamed from SceneControllerScript, SceneChanges might also need renaming
 	//permanent object = keeps the Object SceneController in all scenes - (TokenControl - SceneChange - (FindToken))
 
 	//to move the player tokens to next scene:
+
 	//token choosing script
 	TokenControl tokenControl; 
 
@@ -14,6 +15,8 @@ public class SceneControllerScript : MonoBehaviour { //might need renaming, this
 
 	//player2 - new, writing
 	public GameObject randomToken;
+
+	//-------------------------------------
 
 	//keep this object
 	void Awake () {

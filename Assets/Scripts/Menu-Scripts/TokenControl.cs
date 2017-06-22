@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class TokenControl : MonoBehaviour {
-	//SceneChanges, SceneControllerScript and FindToken all pull from here
+	//SceneChanges, KeepTheseScript and FindToken all pull from here
 
 	//player1 - pulls from array, works again
 	public GameObject currentToken; //current token - (currentToken GameObject and other scripts pull from here)
