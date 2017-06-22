@@ -5,7 +5,7 @@ public class Attack : TileEffects
 {
 	public Attack(int strength) : base(strength)
 	{
-		color = Palette.RED;
+		color = TileEffects.ATTACK;
 		//hakee värin paletista
 	
 	}

@@ -5,7 +5,7 @@ public class Poison : TileEffects
 {
 	public Poison(int strength) : base(strength)
 	{
-		color = Palette.PURPLE;
+		color = TileEffects.POISON;
 		//hakee värin paletista
 	
 	}
