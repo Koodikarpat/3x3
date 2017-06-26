@@ -4,6 +4,7 @@ using System.Threading;
 using System.Reflection;
 using System.Net.Sockets;
 using System.ComponentModel;
+using UnityEngine;
 
 namespace Networking
 {
@@ -43,6 +44,8 @@ namespace Networking
 				Log("Connecting to: " + serverName + ":" + PORT + " failed.");
 				return 1;
 			}
+
+			Log ("yhdistetty");
 
 			serverStream = server.GetStream();
 			serverWriter = new BinaryWriter(server.GetStream());
@@ -94,7 +97,7 @@ namespace Networking
 
 		private void Log(string msg)
 		{
-			Console.WriteLine(msg);
+			Debug.Log(msg);
 		}
 	}
 }

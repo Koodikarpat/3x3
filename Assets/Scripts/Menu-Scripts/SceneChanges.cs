@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Networking;
 
 public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepTheseScriptScript = SceneControllerScript, renamed to something more fitting.
 	//connected to - Buttons, will include all the scene change button functions
@@ -40,7 +41,6 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = ObjectKeeper.transform; 
 		keepTheseScript.currentToken = TokenControl.GetComponent<TokenControl>().currentToken;
 		//because the shade-cursed thing moves. doesn't work completely yet
-	
 		Vector3 currentPosition = keepTheseScript.currentToken.transform.position;
 		currentPosition.z = 0f;
 		keepTheseScript.currentToken.transform.position = currentPosition;
@@ -65,13 +65,20 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		randomToken.transform.position = Vector3.zero; 
 			
 		//and go to the right scene
-		SceneManager.LoadScene ("mirkan scene");
+		//SceneManager.LoadScene ("mirkan scene");
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version
 	{
-		SceneManager.LoadScene ("LoadingScreen"); //loading screen
+		
+		Debug.Log ("yhdistetään");
+			//SceneManager.LoadScene ("LoadingScreen"); //loading screen
+		Client client = new Client("172.20.146.40");
+		client.Connect ();
+		Debug.Log ("yhdistetty");
+
 	}
+
 	//player2 - makes an object out of the prefab
 	GameObject SetPrefab2 (int randomPrefabIndex) //IT WORKS
 	{
