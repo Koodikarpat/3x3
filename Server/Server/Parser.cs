@@ -7,7 +7,8 @@ namespace Networking
 	public class Parser
 	{
 		private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings() { 
-			TypeNameHandling = TypeNameHandling.All
+			TypeNameHandling = TypeNameHandling.All,
+			TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
 		};
 
 		public Parser()
@@ -27,14 +28,20 @@ namespace Networking
 
 		public int RecvObject(BinaryReader reader, Action<object> callback) { // returns 0 if succesfull
 			string json;
+
+
 			try {
 				json = reader.ReadString();
+				Console.WriteLine("phew");
+
+				Console.WriteLine (json);
 
 				Object message = JsonConvert.DeserializeObject(json, jsonSerializerSettings);
+				Console.WriteLine("phew");
 
 				callback(message);
-			} catch {
-				Console.WriteLine("fail");
+			} catch (Exception e) {
+				Console.WriteLine(e);
 				return 1;
 			}
 			return 0;

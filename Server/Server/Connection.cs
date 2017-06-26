@@ -64,7 +64,7 @@ namespace Server
 		{
 			while (connected && client.Connected) {
 				parser.RecvObject(clientReader, OnRequest); // this blocks until a request has been received
-				PollClient();
+				//PollClient();
 			}
 			Stop();
 		}
@@ -87,6 +87,7 @@ namespace Server
 
 		private void OnAuthenticationRequest(object req)
 		{
+			Log("Parsing authentication request");
 			if (req.Equals(typeof(Message.AuthenticationRequest))) {
 				Message.AuthenticationRequest authenticationRequest = (Message.AuthenticationRequest)req;
 
@@ -107,6 +108,7 @@ namespace Server
 				}
 			} else {
 				Message.Status res = Message.Status.Fail;
+				SendObject(res);
 			}
 		}
 
