@@ -42,7 +42,7 @@ namespace Networking
 			public string playTileAnimation;
 		}
 
-		public class AuthenticationRequest
+		public struct AuthenticationRequest
 		{
 			public string username;
 			public string token;
