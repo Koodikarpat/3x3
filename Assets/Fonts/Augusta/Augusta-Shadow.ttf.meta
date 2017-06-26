@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 4b9f166888c60ba47983abd0b11944d2
+timeCreated: 1498474163
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Augusta Shadow
+  fontNames:
+  - Augusta Shadow
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
