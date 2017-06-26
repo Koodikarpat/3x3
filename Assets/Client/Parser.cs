@@ -6,18 +6,20 @@ namespace Networking
 {
 	public class Parser
 	{
-		private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings() { 
-			TypeNameHandling = TypeNameHandling.All,
-			TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
-		};
-
 		public Parser()
 		{
 		}
 
 		public bool SendObject(BinaryWriter writer, object message) // returns connected status
 		{
-			string json = JsonConvert.SerializeObject(message, jsonSerializerSettings);
+			string objectType = message.ToString();
+
+			var serializable = new Message ();
+			serializable.messageType = objectType;
+			serializable.message = message;
+
+			string json = JsonConvert.SerializeObject(serializable);
+
 			try {
 				writer.Write(json);
 			} catch {
@@ -27,15 +29,31 @@ namespace Networking
 		}
 
 		public int RecvObject(BinaryReader reader, Action<object> callback) { // returns 0 if succesfull
-			string json;
+			string json = "{}";
+
 			try {
-				json = reader.ReadString();
-
-				Object message = JsonConvert.DeserializeObject(json, jsonSerializerSettings);
-
-				callback(message);
+				json = reader.ReadString ();
 			} catch {
-				Console.WriteLine("fail");
+			}
+
+			Console.WriteLine ("phew");
+			Console.WriteLine (json);
+
+			try {
+				var deserialised = (Message)JsonConvert.DeserializeObject(json);
+
+				switch (deserialised.messageType)
+				{
+					case "Networking.AuthenticationRequest":
+						var message = (AuthenticationRequest)deserialised.message;
+						callback(message);
+						break;
+				}
+
+				Console.WriteLine("phe2");
+
+			} catch (Exception e) {
+				Console.WriteLine(e);
 				return 1;
 			}
 			return 0;

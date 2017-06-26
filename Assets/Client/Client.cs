@@ -67,10 +67,10 @@ namespace Networking
 		}
 
 		private void Authenticate() {
-			var request = new {
-				type = "Authentication Request"
-
-			};
+			var request = new AuthenticationRequest();
+			request.protocolVersion = PROTO_VERSION;
+			request.username = serverUsername;
+			request.token = serverAuthToken;
 
 			SendObject(request);
 		}

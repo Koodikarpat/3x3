@@ -64,7 +64,7 @@ namespace Server
 		{
 			while (connected && client.Connected) {
 				parser.RecvObject(clientReader, OnRequest); // this blocks until a request has been received
-				//PollClient();
+				PollClient();
 			}
 			Stop();
 		}
@@ -88,26 +88,25 @@ namespace Server
 		private void OnAuthenticationRequest(object req)
 		{
 			Log("Parsing authentication request");
-			if (req.Equals(typeof(Message.AuthenticationRequest))) {
-				Message.AuthenticationRequest authenticationRequest = (Message.AuthenticationRequest)req;
-
-				if (authenticationRequest.ProtocolVersion != PROTO_VERSION) {
-					Log("Protocol version mismatch");
+			if (req.GetType() == typeof(AuthenticationRequest)) {
+				var authenticationRequest = (AuthenticationRequest)req;
+				if (authenticationRequest.protocolVersion != PROTO_VERSION) {
+					Log ("Protocol version mismatch");
 				}
 
 				user = new User (authenticationRequest.username);
 				user.Authenticate (authenticationRequest.token);
 				if (user.IsAuthenticated ()) {
-					Message.AuthenticationResponse res = new Message.AuthenticationResponse ();
-					res.status = Message.Status.Ok;
+					var res = new AuthenticationResponse ();
+					res.status = Networking.Status.Ok;
 					SendObject(res);
 				} else {
-					Message.AuthenticationResponse res = new Message.AuthenticationResponse ();
-					res.status = Message.Status.Fail;
+					var res = new AuthenticationResponse ();
+					res.status = Status.Fail;
 					SendObject(res);
 				}
 			} else {
-				Message.Status res = Message.Status.Fail;
+				Status res = Status.Fail;
 				SendObject(res);
 			}
 		}
@@ -118,8 +117,7 @@ namespace Server
 			if (pollTimer.ElapsedMilliseconds > POLL_INTERVAL) {
 				pollTimer.Restart();
 
-				Message message = new Message();
-				message.Response = Message.Status.Ok;
+				var message = Status.Ok; 
 
 				// are you still there?
 				SendObject(message);

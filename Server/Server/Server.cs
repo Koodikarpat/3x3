@@ -44,8 +44,7 @@ namespace Server
 		{
 			Console.WriteLine("A request just flew by!");
 
-			Message message = new Message();
-			message.Response = Message.Status.Ok;
+			var message = Status.Ok;
 
 			connections[connections.Count - 1].SendObject(message);
 		}
