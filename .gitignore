@@ -36,9 +36,9 @@ sysinfo.txt
 *.unitypackage
 
 # Misbehaving meta files in Server
-Assets/Server/**.meta
+Assets/Client/**.meta
 
 # Builds in Server
-Assets/Server/**.exe
-Assets/Server/**.mdb
+Assets/Client/**.exe
+Assets/Client/**.mdb
 
