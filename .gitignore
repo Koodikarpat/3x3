@@ -35,10 +35,10 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-# Misbehaving meta files in Server
+# Misbehaving meta files in Client
 Assets/Client/**.meta
 
-# Builds in Server
-Assets/Client/**.exe
-Assets/Client/**.mdb
-
+# Builds in Client
+Server/**.exe
+Server/**.mdb
+Server/**.meta
