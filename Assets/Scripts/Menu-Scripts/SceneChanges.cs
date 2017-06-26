@@ -66,7 +66,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		randomToken.transform.position = Vector3.zero; 
 			
 		//and go to the right scene
-		//SceneManager.LoadScene ("mirkan scene");
+		SceneManager.LoadScene ("mirkan scene");
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version
