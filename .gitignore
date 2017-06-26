@@ -35,9 +35,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-# Misbehaving meta files in Client
-Assets/Client/**.meta
-
 # Builds in Client
 Server/**.exe
 Server/**.mdb
