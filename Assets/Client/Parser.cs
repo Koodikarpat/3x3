@@ -7,7 +7,8 @@ namespace Networking
 	public class Parser
 	{
 		private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings() { 
-			TypeNameHandling = TypeNameHandling.All
+			TypeNameHandling = TypeNameHandling.All,
+			TypeNameAssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple
 		};
 
 		public Parser()

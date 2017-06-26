@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Networking;
+using System.Threading;
 
 public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepTheseScriptScript = SceneControllerScript, renamed to something more fitting.
 	//connected to - Buttons, will include all the scene change button functions
@@ -71,12 +72,11 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	public void ChangeSceneOnline () //loading Screen for Online version
 	{
 		
-		Debug.Log ("yhdistetään");
 			//SceneManager.LoadScene ("LoadingScreen"); //loading screen
 		Client client = new Client("172.20.146.40");
 		client.Connect ();
-		Debug.Log ("yhdistetty");
-
+		Thread.Sleep (1000);
+		client.Disconnect ();
 	}
 
 	//player2 - makes an object out of the prefab
