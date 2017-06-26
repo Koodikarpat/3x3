@@ -5,8 +5,6 @@ namespace Networking
 {
 	public class Message
 	{
-		private const uint PROTO_VERSION = 0; // Every time you make chance that breaks the interface, aka edit this file, you should increment this
-
 		// types used in messages
 		public struct Position
 		{

@@ -10,8 +10,6 @@ namespace Networking
 			TypeNameHandling = TypeNameHandling.All
 		};
 
-		public readonly byte[] NEWLINE = { 0xd, 0xa }; // CRLF
-
 		public Parser()
 		{
 		}

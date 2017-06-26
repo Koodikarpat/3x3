@@ -87,8 +87,13 @@ namespace Server
 
 		private void OnAuthenticationRequest(object req)
 		{
-			if (req.Equals (typeof(Message.AuthenticationRequest))) {
+			if (req.Equals(typeof(Message.AuthenticationRequest))) {
 				Message.AuthenticationRequest authenticationRequest = (Message.AuthenticationRequest)req;
+
+				if (authenticationRequest.ProtocolVersion != PROTO_VERSION) {
+					Log("Protocol version mismatch");
+				}
+
 				user = new User (authenticationRequest.username);
 				user.Authenticate (authenticationRequest.token);
 				if (user.IsAuthenticated ()) {
@@ -100,6 +105,8 @@ namespace Server
 					res.status = Message.Status.Fail;
 					SendObject(res);
 				}
+			} else {
+				Message.Status res = Message.Status.Fail;
 			}
 		}
 
@@ -115,6 +122,11 @@ namespace Server
 				// are you still there?
 				SendObject(message);
 			}
+		}
+
+		private void Log(string msg)
+		{
+			Console.WriteLine(msg);
 		}
 	}
 }

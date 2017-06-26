@@ -9,6 +9,7 @@ namespace Networking
 {
 	public class Client
 	{
+		private const uint PROTO_VERSION = 0; // Every time you make chance that breaks the interface, you should increment this
 		public const int PORT = 2500;
 
 		private readonly string serverName;
@@ -41,7 +42,7 @@ namespace Networking
 			try {
 				server.Connect(serverName, serverPort);
 			} catch {
-				log("Connecting to: " + serverName + ":" + serverPort + " failed.");
+				Log("Connecting to: " + serverName + ":" + serverPort + " failed.");
 				return 1;
 			}
 
@@ -83,7 +84,7 @@ namespace Networking
 			parser.SendObject(serverWriter, msg);
 		}
 
-		private void log(string msg)
+		private void Log(string msg)
 		{
 			Console.WriteLine(msg);
 		}

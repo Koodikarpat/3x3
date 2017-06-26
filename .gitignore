@@ -37,3 +37,8 @@ sysinfo.txt
 
 # Misbehaving meta files in Server
 Assets/Server/**.meta
+
+# Builds in Server
+Assets/Server/**.exe
+Assets/Server/**.mdb
+
