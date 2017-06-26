@@ -67,9 +67,10 @@ namespace Networking
 		}
 
 		private void Authenticate() {
-			Message.AuthenticationRequest request = new Message.AuthenticationRequest();
-			request.username = serverUsername;
-			request.token = serverAuthToken;
+			var request = new {
+				type = "Authentication Request"
+
+			};
 
 			SendObject(request);
 		}
