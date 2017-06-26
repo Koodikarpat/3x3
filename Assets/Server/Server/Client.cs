@@ -13,7 +13,6 @@ namespace Networking
 		public const int PORT = 2500;
 
 		private readonly string serverName;
-		private readonly int serverPort;
 
 		private readonly string serverUsername;
 		private readonly string serverAuthToken;
@@ -25,10 +24,9 @@ namespace Networking
 
 		private Parser parser;
 
-		public Client(string name, int port = PORT, string username = "player", string token = "password")
+		public Client(string name, string username = "player", string token = "password")
 		{
 			serverName = name;
-			serverPort = port;
 			serverUsername = username;
 			serverAuthToken = token;
 		}
@@ -40,9 +38,9 @@ namespace Networking
 			parser = new Parser();
 
 			try {
-				server.Connect(serverName, serverPort);
+				server.Connect(serverName, PORT);
 			} catch {
-				Log("Connecting to: " + serverName + ":" + serverPort + " failed.");
+				Log("Connecting to: " + serverName + ":" + PORT + " failed.");
 				return 1;
 			}
 
@@ -54,13 +52,19 @@ namespace Networking
 			BackgroundWorker waiter = new BackgroundWorker();
 			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForUpdate();
 			waiter.RunWorkerAsync();
-			
+
+			Authenticate();
+
 			return 0;
 		}
 
 		public void Disconnect()
 		{
 			server.Close();
+		}
+
+		private void Authenticate() {
+			Message.AuthenticationRequest
 		}
 
 		private void WaitForUpdate()
