@@ -13,12 +13,14 @@ public class PlayerAbilities : MonoBehaviour
 	public GameObject enemy;
 
 	ButtonSelection buttons;
+    TilePlacements tilePlacements;
 
 
 
 	void Start () 
 	{
 		buttons = buttonGroup.GetComponent<ButtonSelection> ();
+        tilePlacements = buttonGroup.GetComponent<TilePlacements> ();
 	}
 
 	void Update () 
@@ -36,14 +38,9 @@ public class PlayerAbilities : MonoBehaviour
 			TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
 			turncontrol.ChangeTurn ();
 
-			//Changing the buttons in the beginnning and when the player leaves a tile.
-			/*buttons.tiles[currentButton].type = TilePlacements.GetRandom ();
-			buttons.tiles[currentButton].gameObject.GetComponentInChildren<Text> ().text = ""+buttons.tiles[currentButton].type.strength;
-			ColorBlock buttonColors = buttons.tiles[currentButton].gameObject.GetComponent<Button> ().colors;
-			buttonColors.normalColor = buttons.tiles[currentButton].type.color;
-			buttons.tiles[currentButton].gameObject.GetComponent<Button> ().colors = buttonColors;*/
-
-	
+            buttons.tiles[currentButton].type = tilePlacements.GetRandom();
+            tilePlacements.CreateTile(buttons.tiles[currentButton], currentButton);
+  
 			transform.position = buttons.tiles[button].position;
 			currentButton = button;
 
