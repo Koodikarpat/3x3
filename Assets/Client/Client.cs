@@ -53,7 +53,7 @@ namespace Networking
 
 			// create a new worker that will handle the connection
 			BackgroundWorker waiter = new BackgroundWorker();
-			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForUpdate();
+			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForMessage();
 			waiter.RunWorkerAsync();
 
 			Authenticate();
@@ -75,16 +75,18 @@ namespace Networking
 			SendObject(request);
 		}
 
-		private void WaitForUpdate()
+		private void WaitForMessage()
 		{
 			while (server.Connected) {
-				parser.RecvObject (serverReader, OnUpdate); // blocks until a message is received
+				parser.RecvObject (serverReader, OnMessage); // blocks until a message is received
 				// the callback should be run in the main thread, currently that doesn't happen 
 			}
 		}
 		
-		private void OnUpdate(object msg)
+		private void OnMessage(object msg)
 		{
+			Log("A message was received");
+			Log(msg.ToString());
 		}
 
 		private void Request(object req)

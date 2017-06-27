@@ -18,7 +18,7 @@ namespace Server
 		private BinaryWriter clientWriter;
 		private BinaryReader clientReader;
 
-		private Action<object> OnStatusCallback;
+		private Action<object> onStatusCallback;
 
 		private Stopwatch pollTimer;
 
@@ -65,7 +65,7 @@ namespace Server
 		{
 			while (connected && client.Connected) {
 				var didUnderstand = parser.RecvObject(clientReader, OnRequest); // this blocks until a request has been received
-				if (!didUnderstand) {
+				if (didUnderstand != 0) {
 					Log("Client communication failed");
 
 					var message = new Status();
@@ -111,7 +111,7 @@ namespace Server
 						}
 					} },
 				{ typeof(Status), () => {
-						onStatusCallback(req);
+						onStatusCallback(req); // this callback should take place on the main thread, currently that doesn't happen
 					} }
 			};
 
