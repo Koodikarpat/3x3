@@ -38,13 +38,21 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		//move the right token to the play scene
 		KeepTheseScript keepTheseScript = ObjectKeeper.GetComponent<KeepTheseScript> ();//get script
 
+		//----------------------------------------------------------------------------------
+
 			//player1 - works again, new
+		//Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
+
 		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = ObjectKeeper.transform; 
 		keepTheseScript.currentToken = TokenControl.GetComponent<TokenControl>().currentToken;
 		//because the shade-cursed thing moves. doesn't work completely yet
+
 		Vector3 currentPosition = keepTheseScript.currentToken.transform.position;
-		currentPosition.z = 0f;
+		//Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
+		//currentPosition.z = 0f;
 		keepTheseScript.currentToken.transform.position = currentPosition;
+
+		//-----------------------------------------------------------------------------
 
 		//player2 random -new, MOVING THIS TO SCENECHANGES lets see what breaks
 		TokenControl tokenControl = TokenControl.GetComponent<TokenControl> (); //get script
@@ -60,13 +68,16 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 				
 
 		//player2 -DO NOT TOUCH, it works
+		Vector3 localPositionNow = randomToken.transform.localPosition; //NEW
 		randomToken.transform.parent = keepTheseScript.transform; //PARENT = ObjectKeeper
 		keepTheseScript.randomToken = randomToken;
 		//because the shade-cursed thing moves. doesn't work completely yet
-		randomToken.transform.position = Vector3.zero; 
-			
+		randomToken.transform.position = localPositionNow; //NEW
+
+		//------------------------------------------------------------------------------------
+
 		//and go to the right scene
-		SceneManager.LoadScene ("mirkan scene");
+		//SceneManager.LoadScene ("mirkan scene");
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version
