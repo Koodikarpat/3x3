@@ -36,16 +36,17 @@ namespace Networking
 			} catch {
 			}
 
-			Console.WriteLine ("phew");
 			Console.WriteLine (json);
 
 			try {
-				var deserialised = (Message)JsonConvert.DeserializeObject(json);
+				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
 				switch (deserialised.messageType)
 				{
 					case "Networking.AuthenticationRequest":
-						var message = (AuthenticationRequest)deserialised.message;
+						Console.WriteLine("Will now cast type: " + deserialised.message.GetType() + " as type object");
+						var jsonObject = (Newtonsoft.Json.Linq.JObject)deserialised.message;
+						var message = (AuthenticationRequest)jsonObject.ToObject(object);
 						callback(message);
 						break;
 				}
