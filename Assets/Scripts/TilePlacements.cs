@@ -29,7 +29,7 @@ public class TilePlacements : MonoBehaviour
 				return null;
 			}	
 	}
-
+    //tekee uuden tilen
     public void CreateTile(Tile tile, int i)
     {
         GameObject newtile;

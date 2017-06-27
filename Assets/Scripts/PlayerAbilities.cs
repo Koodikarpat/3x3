@@ -11,7 +11,7 @@ public class PlayerAbilities : MonoBehaviour
 	public int currentButton;
 	public GameObject turnControlObject;
 	public GameObject enemy;
-
+    public GameObject puff;
 	ButtonSelection buttons;
     TilePlacements tilePlacements;
 
@@ -43,8 +43,13 @@ public class PlayerAbilities : MonoBehaviour
 			currentButton = button;
 
 			buttons.tiles[currentButton].type.Action (gameObject, enemy);
+            Animator Animator = buttons.tiles[currentButton].gameObject.GetComponentInChildren<Animator>();
+            Animator.SetTrigger("Step on");
 
-		}
+            puff.GetComponent<ParticleSystem>().Play();
+            puff.transform.position = buttons.tiles[button].position;
+
+        }
 
 
 	}
