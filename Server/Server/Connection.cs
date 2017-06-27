@@ -77,38 +77,31 @@ namespace Server
 
 		private void OnRequest(object req)
 		{
-			// every new connection has to be authenticated
-			if (user.IsAuthenticated()) {
-				serverCallback(req);
-			} else {
-				OnAuthenticationRequest(req);
-			}
-		}
+			var @switch = new Dictionary<Type, Action> {
+				{ typeof(AuthenticationRequest), () => {
+					var authReq = (AuthenticationRequest)req;
+					if (authReq.protocolVersion != PROTO_VERSION) {
+						Log ("Protocol version mismatch");
+					}
+					
+					user = new User (authReq.username);
+					user.Authenticate (authReq.token);
+					if (user.IsAuthenticated ()) {
+						var res = new AuthenticationResponse ();
+						res.status = Networking.Status.Ok;
+						SendObject(res);
+					} else {
+						var res = new AuthenticationResponse ();
+						res.status = Status.Fail;
+						SendObject(res);
+					}
+					} },
+				{ typeof(Status), () => {
+						serverCallback(req);
+					} }
+			};
 
-		private void OnAuthenticationRequest(object req)
-		{
-			Log("Parsing authentication request");
-			if (req.GetType() == typeof(AuthenticationRequest)) {
-				var authenticationRequest = (AuthenticationRequest)req;
-				if (authenticationRequest.protocolVersion != PROTO_VERSION) {
-					Log ("Protocol version mismatch");
-				}
-
-				user = new User (authenticationRequest.username);
-				user.Authenticate (authenticationRequest.token);
-				if (user.IsAuthenticated ()) {
-					var res = new AuthenticationResponse ();
-					res.status = Networking.Status.Ok;
-					SendObject(res);
-				} else {
-					var res = new AuthenticationResponse ();
-					res.status = Status.Fail;
-					SendObject(res);
-				}
-			} else {
-				Status res = Status.Fail;
-				SendObject(res);
-			}
+			@switch[req.GetType()]();
 		}
 
 		// polls the client every POLL_INTERVAL

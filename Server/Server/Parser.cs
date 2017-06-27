@@ -51,13 +51,9 @@ namespace Networking
 				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
 				if (deserialised.authenticationRequest != null) { // only one of the Message fields can be populated in one message
-					var message = new AuthenticationRequest();
-					message = deserialised.authenticationRequest;
-					callback(message);
+					callback((AuthenticationRequest)deserialised.authenticationRequest);
 				} else if (deserialised.authenticationResponse != null) {
-					var message = new AuthenticationResponse();
-					message = deserialised.authenticationResponse;
-					callback(message);
+					callback((AuthenticationResponse)deserialised.authenticationResponse);
 				} else {
 					// Parsing message failed
 				}

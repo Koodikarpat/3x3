@@ -5,12 +5,12 @@ namespace Networking
 {
 	public class Message // never send a Message using SendObject
 	{
-		public Status status;
+		public Status status; // status can be sent from either the server or the client
 
-		public AuthenticationRequest authenticationRequest;
-		public AuthenticationResponse authenticationResponse;
+		public AuthenticationRequest authenticationRequest; // can be sent by the client
+		public AuthenticationResponse authenticationResponse; // can be sent by the server
 
-		public OnMove onMove;
+		public OnMove onMove; // can be sent by the server
 	}
 
 	// types used in messages, do not send these
