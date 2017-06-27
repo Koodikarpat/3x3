@@ -85,7 +85,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	{
 		
 			//SceneManager.LoadScene ("LoadingScreen"); //loading screen
-		Client client = new Client("172.20.146.40");
+		Client client = new Client("172.20.147.12");
 		client.Connect ();
 		Thread.Sleep (1000);
 		client.Disconnect ();
