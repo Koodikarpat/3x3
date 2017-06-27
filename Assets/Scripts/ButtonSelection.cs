@@ -11,7 +11,7 @@ public class ButtonSelection : MonoBehaviour
 
 	public Tile[] tiles = new Tile[9];
 
-	void Start () 
+	void Awake () 
 	{
 
         for (int i = 0; i < 9; i++)

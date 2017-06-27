@@ -36,16 +36,18 @@ public class FindToken : MonoBehaviour {
 		KeepTheseScript keepTheseScript = objectKeeper.GetComponent<KeepTheseScript> (); //toimii - kerro että tämä on tämä
 
 		//player1 new script works
+		Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
 		keepTheseScript.currentToken.transform.parent = player1.transform; 
 
 		//position
-		Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
-		//currentPosition.z = 0f;
-		keepTheseScript.currentToken.transform.position = currentPosition;
+
+		keepTheseScript.currentToken.transform.localPosition = currentPosition;
+
 
 		//player2 new script, WORKS
 		keepTheseScript.randomToken.transform.parent = player2.transform; 
 
+		//------------------------------------------------------------------------------------------------------------------
 
 		//health-images - player1 - new, IT WORKS FINALLY
 		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component of the object

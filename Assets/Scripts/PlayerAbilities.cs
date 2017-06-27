@@ -21,6 +21,11 @@ public class PlayerAbilities : MonoBehaviour
 	{
 		buttons = buttonGroup.GetComponent<ButtonSelection> ();
         tilePlacements = buttonGroup.GetComponent<TilePlacements> ();
+
+		//startin locations
+		//Debug.Log (transform.name + " " + buttons.tiles[currentButton].position);
+		transform.position = buttons.tiles[currentButton].gameObject.transform.position;
+
 	}
 
 	void Update () 
