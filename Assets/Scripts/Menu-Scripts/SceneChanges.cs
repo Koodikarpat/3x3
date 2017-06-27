@@ -41,14 +41,15 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		//----------------------------------------------------------------------------------
 
 			//player1 - works again, new
-		//Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
+
 
 		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = ObjectKeeper.transform; 
 		keepTheseScript.currentToken = TokenControl.GetComponent<TokenControl>().currentToken;
+	
 		//because the shade-cursed thing moves. doesn't work completely yet
 
-		Vector3 currentPosition = keepTheseScript.currentToken.transform.position;
-		//Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
+		//Vector3 currentPosition = keepTheseScript.currentToken.transform.position;
+		Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
 		//currentPosition.z = 0f;
 		keepTheseScript.currentToken.transform.position = currentPosition;
 
@@ -77,7 +78,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		//------------------------------------------------------------------------------------
 
 		//and go to the right scene
-		//SceneManager.LoadScene ("mirkan scene");
+		SceneManager.LoadScene ("mirkan scene");
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version

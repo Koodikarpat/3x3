@@ -30,11 +30,9 @@ public class PlayerAbilities : MonoBehaviour
 
 	public void MoveButton(int button)
 	{
-
-		//The movement itself.
+		//The movement itself
 		if (isLegalMove (currentButton, button)) 
 		{
-
 			TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
 			turncontrol.ChangeTurn ();
 

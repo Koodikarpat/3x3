@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class TurnControl : MonoBehaviour {
 	//kumman vuoro?
-	public bool Player1 = true;
-	public bool Player2 = false;
+	public bool Player1{get;private set;}
+	public bool Player2{get;private set;}
+
+
 	//timer test- works!
 	float timeLeft = 20.99f;
 	//ajankääntö- works!
@@ -25,6 +27,9 @@ public class TurnControl : MonoBehaviour {
 		timer = timerText.GetComponent<Text> ();
 		turnTime = timeLeft;
 		playerTurn = playerTurnText.GetComponent<Text> ();
+
+		Player1 = true;
+		Player2 = false;
 	}
 	
 	// Update is called once per frame

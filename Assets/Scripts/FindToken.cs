@@ -38,6 +38,11 @@ public class FindToken : MonoBehaviour {
 		//player1 new script works
 		keepTheseScript.currentToken.transform.parent = player1.transform; 
 
+		//position
+		Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
+		//currentPosition.z = 0f;
+		keepTheseScript.currentToken.transform.position = currentPosition;
+
 		//player2 new script, WORKS
 		keepTheseScript.randomToken.transform.parent = player2.transform; 
 
