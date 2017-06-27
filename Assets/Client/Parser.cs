@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Networking
@@ -12,11 +13,19 @@ namespace Networking
 
 		public bool SendObject(BinaryWriter writer, object message) // returns connected status
 		{
-			string objectType = message.ToString();
 
-			var serializable = new Message ();
-			serializable.messageType = objectType;
-			serializable.message = message;
+			var serializable = new Message();
+
+			var @switch = new Dictionary<Type, Action> {
+				{ typeof(AuthenticationRequest), () => {
+						serializable.authenticationRequest = (AuthenticationRequest)message;
+					} },
+				{ typeof(AuthenticationResponse), () => {
+						serializable.authenticationResponse = (AuthenticationResponse)message;
+					} }
+			};
+
+			@switch[message.GetType()]();
 
 			string json = JsonConvert.SerializeObject(serializable);
 
@@ -36,23 +45,24 @@ namespace Networking
 			} catch {
 			}
 
-			Console.WriteLine ("phew");
 			Console.WriteLine (json);
 
 			try {
-				var deserialised = (Message)JsonConvert.DeserializeObject(json);
+				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
-				switch (deserialised.messageType)
-				{
-					case "Networking.AuthenticationRequest":
-						var message = (AuthenticationRequest)deserialised.message;
-						callback(message);
-						break;
+				if (deserialised.authenticationRequest != null) { // Only one of the Message fields can be populated in one message
+					var message = new AuthenticationRequest();
+					message = deserialised.authenticationRequest;
+					callback(message);
+				} else if (deserialised.authenticationResponse != null) {
+					var message = new AuthenticationResponse();
+					message = deserialised.authenticationResponse;
+					callback(message);
+				} else {
+					// Parsing message failed
 				}
-
-				Console.WriteLine("phe2");
-
 			} catch (Exception e) {
+				// Most likely deserialisation failed
 				Console.WriteLine(e);
 				return 1;
 			}

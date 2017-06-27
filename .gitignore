@@ -35,7 +35,3 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-# Builds in Client
-/Server/**.exe
-/Server/**.mdb
-/Server/**.meta

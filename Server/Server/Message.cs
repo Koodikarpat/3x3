@@ -3,32 +3,36 @@ using System.Collections.Generic;
 
 namespace Networking
 {
-	public class Message
+	public class Message // never send a Message using SendObject
 	{
-		public string messageType;
-		public object message;
+		public Status status;
+
+		public AuthenticationRequest authenticationRequest;
+		public AuthenticationResponse authenticationResponse;
+
+		public OnMove onMove;
 	}
 
-	// types used in messages
+	// types used in messages, do not send these
 
-	public struct Position
+	public class Position
 	{
 		public uint x;
 		public uint y;
 	}
 
-	public struct Player
+	public class Player
 	{
 		public string profileId;
 		public Position position;
 	}
 
-	public struct Inventory
+	public class Inventory
 	{
 		public string selectedSkin;
 	}
 
-	public struct Profile
+	public class Profile
 	{
 		public string profileId;
 		public string username;
@@ -38,8 +42,8 @@ namespace Networking
 	public enum Status { Ok, Fail };
 	public enum GameStatus { None, Waiting, YourTurn, RemoteTurn, Ended };
 
-	// message types
-	public struct OnMove
+	// message types, use these to send messages
+	public class OnMove
 	{
 		public GameStatus gameStatus;
 		public Player localPlayer;
@@ -54,7 +58,7 @@ namespace Networking
 		public uint protocolVersion;
 	}
 
-	public struct AuthenticationResponse
+	public class AuthenticationResponse
 	{
 		public Status status;
 	}
