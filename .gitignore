@@ -12,10 +12,10 @@
 ExportedObj/
 .consulo/
 *.csproj
-!Assets/Server/Server/Server.csproj
+!Server/Server/Server.csproj
 *.unityproj
 *.sln
-!Assets/Server/Server.sln
+!Server/Server.sln
 *.suo
 *.tmp
 *.user
