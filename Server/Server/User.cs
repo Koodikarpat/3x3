@@ -1,4 +1,5 @@
 ﻿using System;
+using Networking;
 
 namespace Server
 {
@@ -8,6 +9,8 @@ namespace Server
 		private readonly string correctToken;
 
 		private bool authenticated;
+
+		public Player player;
 
 		public User(String name)
 		{

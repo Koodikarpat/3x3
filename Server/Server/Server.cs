@@ -13,6 +13,7 @@ namespace Server
 		private Thread listenThread;
 
 		private List<Connection> connections = new List<Connection>();
+		private List<Game> games = new List<Game>();
 
 		public Server(int port)
 		{
@@ -33,19 +34,39 @@ namespace Server
 				TcpClient client = listener.AcceptTcpClient();
 
 				connections.Add(new Connection());
-				connections[connections.Count - 1].Start(client,OnRequest);
+				var thisConnection = connections[connections.Count - 1];
+				thisConnection.Start(thisConnection, client, OnMessage, OnConnectionClose);
 
 				Console.WriteLine ("There are now " + connections.Count + " connections in the list");
+
+				if (connections.Count % 2 == 0) {
+					games.Add(new Game(connections[connections.Count - 2], connections[connections.Count - 1]));
+				}
 			}
 		}
 
-		private void OnRequest(object request)
+		private void OnMessage(Connection thisConnection, object message)
 		{
-			Console.WriteLine("A request just flew by!");
+			if (games.Contains(GameOfUser(thisConnection))) {
+				games[games.IndexOf(GameOfUser(thisConnection))].OnMessage(thisConnection, message);
+			} else {
+				Console.WriteLine ("A request just flew by, but this connection is not in a room");
 
-			var message = Status.Ok;
+				var res = new Status ();
+				res = Status.Ok;
+				thisConnection.SendObject(res);
+			}
+		}
 
-			connections[connections.Count - 1].SendObject(message);
+		private void OnConnectionClose(Connection thisConnection)
+		{
+			if (connections.Remove(thisConnection)) Console.WriteLine("Connection removed succesfully");
+			thisConnection = null;
+		}
+
+		private Game GameOfUser(Connection findConnection)
+		{
+			return games[0]; // TODO: implement more than one game
 		}
 	}
 }

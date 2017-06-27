@@ -18,7 +18,10 @@ namespace Server
 		private BinaryWriter clientWriter;
 		private BinaryReader clientReader;
 
-		private Action<object> onStatusCallback;
+		private Action<Connection, object> onMessageCallback;
+		private Action<Connection> onStopCallback;
+
+		private Connection thisConnection;
 
 		private Stopwatch pollTimer;
 
@@ -32,14 +35,16 @@ namespace Server
 		{
 		}
 
-		public void Start(object socket, Action<object> callback) 
+		public void Start(Connection conn, object socket, Action<Connection,object> onMessage, Action<Connection> onClose) 
 		{
 			pollTimer = new Stopwatch ();
 			pollTimer.Start();
 
 			parser = new Parser();
 
-			onStatusCallback = callback;
+			thisConnection = conn;
+			onMessageCallback = onMessage;
+			onStopCallback = onClose;
 
 			client = (TcpClient)socket;
 
@@ -59,6 +64,7 @@ namespace Server
 			Log ("Closing connection");
 			user = null;
 			client.Close();
+			onStopCallback(thisConnection); // this callback should take place on the main thread, currently that doesn't happen
 		}
 
 		private void WaitForRequest()
@@ -104,6 +110,7 @@ namespace Server
 							res.status = Networking.Status.Ok;
 							SendObject(res);
 						} else {
+							user = null;
 							Log("Authentication failed");
 							var res = new AuthenticationResponse ();
 							res.status = Status.Fail;
@@ -111,7 +118,7 @@ namespace Server
 						}
 					} },
 				{ typeof(Status), () => {
-						onStatusCallback(req); // this callback should take place on the main thread, currently that doesn't happen
+						onMessageCallback(thisConnection, req); // this callback should take place on the main thread, currently that doesn't happen
 					} }
 			};
 

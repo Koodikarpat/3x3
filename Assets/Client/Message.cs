@@ -10,6 +10,7 @@ namespace Networking
 		public AuthenticationRequest authenticationRequest; // can be sent by the client
 		public AuthenticationResponse authenticationResponse; // can be sent by the server
 
+		public Move move;
 		public OnMove onMove; // can be sent by the server
 	}
 
@@ -19,12 +20,19 @@ namespace Networking
 	{
 		public uint x;
 		public uint y;
+
+		public Position(uint lx, uint ly)
+		{
+			x = lx;
+			y = ly;
+		}
 	}
 
 	public class Player
 	{
 		public string profileId;
 		public Position position;
+		public bool turn;
 	}
 
 	public class Inventory
@@ -50,6 +58,11 @@ namespace Networking
 		public Player localPlayer;
 		public Player remotePlayer;
 		public string playTileAnimation;
+	}
+
+	public class Move
+	{
+		public Player player;
 	}
 
 	public class AuthenticationRequest

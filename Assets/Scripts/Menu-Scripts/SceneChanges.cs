@@ -81,7 +81,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	public void ChangeSceneOnline () //loading Screen for Online version
 	{
 		
-			//SceneManager.LoadScene ("LoadingScreen"); //loading screen
+		//SceneManager.LoadScene ("LoadingScreen"); //loading screen
 		Client client = new Client("172.20.147.12");
 		client.Connect ();
 		Thread.Sleep (1000);
