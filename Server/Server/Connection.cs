@@ -18,7 +18,7 @@ namespace Server
 		private BinaryWriter clientWriter;
 		private BinaryReader clientReader;
 
-		private Action<object> serverCallback;
+		private Action<object> OnStatusCallback;
 
 		private Stopwatch pollTimer;
 
@@ -39,7 +39,7 @@ namespace Server
 
 			parser = new Parser();
 
-			serverCallback = callback;
+			onStatusCallback = callback;
 
 			client = (TcpClient)socket;
 
@@ -56,6 +56,7 @@ namespace Server
 
 		public void Stop()
 		{
+			Log ("Closing connection");
 			user = null;
 			client.Close();
 		}
@@ -63,7 +64,16 @@ namespace Server
 		private void WaitForRequest()
 		{
 			while (connected && client.Connected) {
-				parser.RecvObject(clientReader, OnRequest); // this blocks until a request has been received
+				var didUnderstand = parser.RecvObject(clientReader, OnRequest); // this blocks until a request has been received
+				if (!didUnderstand) {
+					Log("Client communication failed");
+
+					var message = new Status();
+					message = Status.Fail;
+					SendObject(message);
+
+					Stop();
+				}
 				PollClient();
 			}
 			Stop();
@@ -77,27 +87,31 @@ namespace Server
 
 		private void OnRequest(object req)
 		{
+			Log("New request");
 			var @switch = new Dictionary<Type, Action> {
 				{ typeof(AuthenticationRequest), () => {
-					var authReq = (AuthenticationRequest)req;
-					if (authReq.protocolVersion != PROTO_VERSION) {
-						Log ("Protocol version mismatch");
-					}
-					
-					user = new User (authReq.username);
-					user.Authenticate (authReq.token);
-					if (user.IsAuthenticated ()) {
-						var res = new AuthenticationResponse ();
-						res.status = Networking.Status.Ok;
-						SendObject(res);
-					} else {
-						var res = new AuthenticationResponse ();
-						res.status = Status.Fail;
-						SendObject(res);
-					}
+						Log("It's an AuthenticationRequest");
+						var authReq = (AuthenticationRequest)req;
+						if (authReq.protocolVersion != PROTO_VERSION) {
+							Log ("Protocol version mismatch");
+						}
+						
+						user = new User (authReq.username);
+						user.Authenticate (authReq.token);
+						if (user.IsAuthenticated ()) {
+							Log("Authentication succeeded");
+							var res = new AuthenticationResponse ();
+							res.status = Networking.Status.Ok;
+							SendObject(res);
+						} else {
+							Log("Authentication failed");
+							var res = new AuthenticationResponse ();
+							res.status = Status.Fail;
+							SendObject(res);
+						}
 					} },
 				{ typeof(Status), () => {
-						serverCallback(req);
+						onStatusCallback(req);
 					} }
 			};
 
@@ -110,8 +124,8 @@ namespace Server
 			if (pollTimer.ElapsedMilliseconds > POLL_INTERVAL) {
 				pollTimer.Restart();
 
-				var message = Status.Ok; 
-
+				var message = new Status();
+				message = Status.Ok;
 				// are you still there?
 				SendObject(message);
 			}

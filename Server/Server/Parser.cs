@@ -45,8 +45,6 @@ namespace Networking
 			} catch {
 			}
 
-			Console.WriteLine (json);
-
 			try {
 				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
