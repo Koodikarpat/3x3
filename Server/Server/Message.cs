@@ -43,6 +43,7 @@ namespace Networking
 	public enum GameStatus { None, Waiting, YourTurn, RemoteTurn, Ended };
 
 	// message types, use these to send messages
+
 	public class OnMove
 	{
 		public GameStatus gameStatus;

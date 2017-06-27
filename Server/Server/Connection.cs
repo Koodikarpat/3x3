@@ -12,7 +12,7 @@ namespace Server
 	public class Connection
 	{
 		private const int POLL_INTERVAL = 5000;
-		private const uint PROTO_VERSION = 0; // Every time you make chance that breaks the interface, you should increment this
+		private const uint PROTO_VERSION = 0; // every time you make chance that breaks the interface, you should increment this
 
 		private TcpClient client;
 		private BinaryWriter clientWriter;

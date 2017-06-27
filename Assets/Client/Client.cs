@@ -45,7 +45,7 @@ namespace Networking
 				return 1;
 			}
 
-			Log ("server connected");
+			Log("Server connected")
 
 			serverStream = server.GetStream();
 			serverWriter = new BinaryWriter(server.GetStream());

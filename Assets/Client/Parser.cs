@@ -50,7 +50,7 @@ namespace Networking
 			try {
 				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
-				if (deserialised.authenticationRequest != null) { // Only one of the Message fields can be populated in one message
+				if (deserialised.authenticationRequest != null) { // only one of the Message fields can be populated in one message
 					var message = new AuthenticationRequest();
 					message = deserialised.authenticationRequest;
 					callback(message);
@@ -62,7 +62,7 @@ namespace Networking
 					// Parsing message failed
 				}
 			} catch (Exception e) {
-				// Most likely deserialisation failed
+				// most likely deserialisation failed
 				Console.WriteLine(e);
 				return 1;
 			}

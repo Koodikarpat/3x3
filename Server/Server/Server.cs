@@ -32,11 +32,10 @@ namespace Server
 				// wait for a connection
 				TcpClient client = listener.AcceptTcpClient();
 
-				// new thread for this connection
 				connections.Add(new Connection());
 				connections[connections.Count - 1].Start(client,OnRequest);
 
-				Console.WriteLine ("there are now " + connections.Count + " connections in the list");
+				Console.WriteLine ("There are now " + connections.Count + " connections in the list");
 			}
 		}
 
