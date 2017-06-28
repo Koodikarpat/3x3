@@ -4,6 +4,7 @@ using System.Threading;
 using System.Reflection;
 using System.Net.Sockets;
 using System.ComponentModel;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Networking
@@ -25,11 +26,18 @@ namespace Networking
 
 		private Parser parser;
 
+		private Action<object> gameUpdateCallback;
+		private bool inGame;
+		private bool localAuthenticated;
+
 		public Client(string name, string username = "player", string token = "password")
 		{
 			serverName = name;
 			serverUsername = username;
 			serverAuthToken = token;
+
+			inGame = false;
+			localAuthenticated = false;
 		}
 
 		public int Connect()
@@ -53,9 +61,13 @@ namespace Networking
 
 			// create a new worker that will handle the connection
 			BackgroundWorker waiter = new BackgroundWorker();
-			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForMessage();
+			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForMessage(e);
+			waiter.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+				OnMessage(e);
+				if (server.Connected) waiter.RunWorkerAsync();
+			};
+				
 			waiter.RunWorkerAsync();
-
 			Authenticate();
 
 			return 0;
@@ -64,6 +76,19 @@ namespace Networking
 		public void Disconnect()
 		{
 			server.Close();
+		}
+
+		public void StartGame(Action<object> onGameUpdate)
+		{
+			gameUpdateCallback = onGameUpdate;
+		}
+
+		public void Move(Player player)
+		{
+			var message = new Move();
+			message.player = player;
+
+			SendObject(message);
 		}
 
 		private void Authenticate() {
@@ -75,22 +100,29 @@ namespace Networking
 			SendObject(request);
 		}
 
-		private void WaitForMessage()
+		private void WaitForMessage(DoWorkEventArgs e)
 		{
-			while (server.Connected) {
-				parser.RecvObject (serverReader, OnMessage); // blocks until a message is received
-				// the callback should be run in the main thread, currently that doesn't happen 
+			object msg = parser.RecvObject(serverReader); // blocks until a message is received
+			if (msg != null) {
+				e.Result = msg;
 			}
 		}
 		
-		private void OnMessage(object msg)
+		private void OnMessage(RunWorkerCompletedEventArgs e)
 		{
-			Log("A message was received");
-			Log(msg.ToString());
-		}
+			object message = e.Result;
 
-		private void Request(object req)
-		{
+			var @switch = new Dictionary<Type, Action> {
+				{ typeof(AuthenticationResponse), () => {
+						localAuthenticated = true;
+						Log("Authentication successfull");
+					} },
+				{ typeof(OnMove), () => {
+						gameUpdateCallback(message);
+					} }
+			};
+
+			@switch[message.GetType()]();
 		}
 
 		private void SendObject(object msg)

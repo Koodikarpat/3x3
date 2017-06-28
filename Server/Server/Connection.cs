@@ -53,36 +53,32 @@ namespace Server
 
 			connected = true;
 
+			user = null;
+
 			// create a new worker that will handle the connection
 			BackgroundWorker waiter = new BackgroundWorker();
-			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForRequest();
+			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForRequest(e);
+			waiter.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
+				OnRequest(e);
+				if (client.Connected) waiter.RunWorkerAsync();
+			};
 			waiter.RunWorkerAsync();
 		}
 
 		public void Stop()
 		{
-			Log ("Closing connection");
+			Log("Closing connection");
 			user = null;
 			client.Close();
-			onStopCallback(thisConnection); // this callback should take place on the main thread, currently that doesn't happen
+			onStopCallback(thisConnection);
 		}
 
-		private void WaitForRequest()
+		private void WaitForRequest(DoWorkEventArgs e)
 		{
-			while (connected && client.Connected) {
-				var didUnderstand = parser.RecvObject(clientReader, OnRequest); // this blocks until a request has been received
-				if (didUnderstand != 0) {
-					Log("Client communication failed");
-
-					var message = new Status();
-					message = Status.Fail;
-					SendObject(message);
-
-					Stop();
-				}
-				PollClient();
+			object req = parser.RecvObject (clientReader); // this blocks until a request has been received
+			if (req != null) {
+				e.Result = req;
 			}
-			Stop();
 		}
 
 		// sends any object
@@ -91,38 +87,41 @@ namespace Server
 			connected = parser.SendObject (clientWriter, msg);
 		}
 
-		private void OnRequest(object req)
+		private void OnRequest(RunWorkerCompletedEventArgs e)
 		{
-			Log("New request");
-			var @switch = new Dictionary<Type, Action> {
-				{ typeof(AuthenticationRequest), () => {
-						Log("It's an AuthenticationRequest");
+			object req = e.Result;
+
+			var @switch = new Dictionary<Type, Action> { { typeof(AuthenticationRequest), () => {
 						var authReq = (AuthenticationRequest)req;
 						if (authReq.protocolVersion != PROTO_VERSION) {
 							Log ("Protocol version mismatch");
 						}
-						
+
 						user = new User (authReq.username);
 						user.Authenticate (authReq.token);
 						if (user.IsAuthenticated ()) {
-							Log("Authentication succeeded");
+							Log("Authentication Succesfull");
 							var res = new AuthenticationResponse ();
 							res.status = Networking.Status.Ok;
-							SendObject(res);
+							SendObject (res);
 						} else {
 							user = null;
-							Log("Authentication failed");
+							Log ("Authentication failed");
 							var res = new AuthenticationResponse ();
 							res.status = Status.Fail;
-							SendObject(res);
+							SendObject (res);
 						}
-					} },
-				{ typeof(Status), () => {
-						onMessageCallback(thisConnection, req); // this callback should take place on the main thread, currently that doesn't happen
-					} }
+					}
+				}, { typeof(Status), () => {
+						onMessageCallback (thisConnection, req);
+					}
+				}, { typeof(Move), () => {
+						onMessageCallback (thisConnection, req);
+					}
+				}
 			};
 
-			@switch[req.GetType()]();
+			if (req != null) @switch[req.GetType()]();
 		}
 
 		// polls the client every POLL_INTERVAL
@@ -140,7 +139,7 @@ namespace Server
 
 		private void Log(string msg)
 		{
-			Console.WriteLine(msg);
+			Console.WriteLine("Anonymous connection: " + msg);
 		}
 	}
 }

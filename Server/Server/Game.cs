@@ -14,10 +14,18 @@ namespace Server
 			player1 = p1;
 			player2 = p2;
 
+			while (player1.user == null || player2.user == null)
+			{
+			}
+
+			player1.user.player = new Player();
+			player2.user.player = new Player();
+
 			player1.user.player.turn = true;
 			player2.user.player.turn = false;
 
 			player1.user.player.position = new Position(0, 0);
+			player2.user.player.position = new Position(0, 0);
 		}
 
 		public void OnMessage(Connection messageConnection, object message)

@@ -37,30 +37,30 @@ namespace Networking
 			return true;
 		}
 
-		public int RecvObject(BinaryReader reader, Action<object> callback) { // returns 0 if succesfull
+		public object RecvObject(BinaryReader reader) { // returns null if failed
 			string json = "{}";
 
 			try {
 				json = reader.ReadString ();
 			} catch {
+				
 			}
 
 			try {
 				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
 				if (deserialised.authenticationRequest != null) { // only one of the Message fields can be populated in one message
-					callback((AuthenticationRequest)deserialised.authenticationRequest);
+					return (AuthenticationRequest)deserialised.authenticationRequest;
 				} else if (deserialised.authenticationResponse != null) {
-					callback((AuthenticationResponse)deserialised.authenticationResponse);
+					return (AuthenticationResponse)deserialised.authenticationResponse;
 				} else {
-					// Parsing message failed
+					// parsing message failed
+					return null;
 				}
-			} catch (Exception e) {
-				// most likely deserialisation failed
-				Console.WriteLine(e);
-				return 1;
+			} catch {
+				// deserialisation failed
+				return null;
 			}
-			return 0;
 		}
 	}	
 }

@@ -17,9 +17,9 @@ namespace Server
 
 		public Server(int port)
 		{
-			listener = new TcpListener (IPAddress.Any, port);
-			listenThread = new Thread (new ThreadStart (ListenForConnection));
-			listenThread.Start ();
+			listener = new TcpListener(IPAddress.Any, port);
+			listenThread = new Thread(new ThreadStart (ListenForConnection));
+			listenThread.Start();
 		}
 
 		private void ListenForConnection()
@@ -37,7 +37,7 @@ namespace Server
 				var thisConnection = connections[connections.Count - 1];
 				thisConnection.Start(thisConnection, client, OnMessage, OnConnectionClose);
 
-				Console.WriteLine ("There are now " + connections.Count + " connections in the list");
+				Console.WriteLine("There are now " + connections.Count + " connections in the list");
 
 				if (connections.Count % 2 == 0) {
 					games.Add(new Game(connections[connections.Count - 2], connections[connections.Count - 1]));
@@ -66,7 +66,7 @@ namespace Server
 
 		private Game GameOfUser(Connection findConnection)
 		{
-			return games[0]; // TODO: implement more than one game
+			return games[0]; // TODO: implement more than one game Warning: more than two connections made to the server will cause a race condition
 		}
 	}
 }
