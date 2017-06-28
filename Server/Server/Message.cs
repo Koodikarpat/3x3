@@ -16,22 +16,10 @@ namespace Networking
 
 	// types used in messages, do not send these
 
-	public class Position
-	{
-		public uint x;
-		public uint y;
-
-		public Position(uint lx, uint ly)
-		{
-			x = lx;
-			y = ly;
-		}
-	}
-
 	public class Player
 	{
 		public string profileId;
-		public Position position;
+		public int position;
 		public bool turn;
 	}
 

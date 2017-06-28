@@ -8,6 +8,7 @@ public class ButtonSelection : MonoBehaviour
 	public GameObject player1;
 	public GameObject player2;
 	public GameObject TurnController;
+	public GameObject multiplayerController;
 
 	public Tile[] tiles = new Tile[9];
 
@@ -26,7 +27,6 @@ public class ButtonSelection : MonoBehaviour
             
             tilePlacements.CreateTile(tiles[i], i);
         }
-
 	}
     
 	void Update () 
@@ -39,17 +39,27 @@ public class ButtonSelection : MonoBehaviour
 		//Moving player to a selected location.
 		GameObject currentPlayer;
 		TurnControl turnControl = TurnController.GetComponent<TurnControl> ();
-
-		if (turnControl.Player1) {
-			currentPlayer = player1;
-		} else if (turnControl.Player2) {
-			currentPlayer = player2;
-		} else {
-			Debug.Log ("Virhe - Molempien Vuoro");
-			return;
+		if (multiplayerController.GetComponent<Multiplayer>().isOnline) { // online game
+			if (turnControl.Player1) {
+				currentPlayer = player1;
+			} else if (turnControl.Player2) {
+				// TODO: ilmoita vastustajan vuoro
+				return;
+			} else {
+				Debug.Log ("Virhe - Molempien Vuoro");
+				return;
+			}
+		} else { // local multiplayer
+			if (turnControl.Player1) {
+				currentPlayer = player1;
+			} else if (turnControl.Player2) {
+				currentPlayer = player2;
+			} else {
+				Debug.Log ("Virhe - Molempien Vuoro");
+				return;
+			}
 		}
 		PlayerAbilities pa = currentPlayer.GetComponent<PlayerAbilities> ();
 		pa.MoveButton (button);
 	}
-
 }

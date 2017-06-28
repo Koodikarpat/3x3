@@ -18,6 +18,7 @@ namespace Server
 			{
 			}
 
+			// this should be moved to Start() and become proper initialisation and also initialise clients
 			player1.user.player = new Player();
 			player2.user.player = new Player();
 

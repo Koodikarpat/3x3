@@ -53,7 +53,7 @@ namespace Networking
 				return 1;
 			}
 
-			Log ("Connected to server: " + serverName);
+			Log("Connected to server: " + serverName);
 
 			serverStream = server.GetStream();
 			serverWriter = new BinaryWriter(server.GetStream());

@@ -80,12 +80,8 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version
 	{
-		
-		//SceneManager.LoadScene ("LoadingScreen"); //loading screen
-		Client client = new Client("172.20.147.12");
-		client.Connect ();
-		Thread.Sleep (1000);
-		client.Disconnect ();
+		// TODO: Initialize Multiplayer Controller object with multiplayer.isOnline = true
+		SceneManager.LoadScene("mirkan scene"); //TODO: there should be a lobby/waiting for game scene or the mirkan scene should have a "waiting for game" dialog
 	}
 
 	//player2 - makes an object out of the prefab
