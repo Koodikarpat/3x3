@@ -24,11 +24,22 @@ namespace Server
 			user1.player = new Player();
 			user2.player = new Player();
 
-			//TODO initialise clients
-
 			user1.player.position = 7;
 			user2.player.position = 1;
 
+			var message = new GameInit();
+			message.gameStatus = GameStatus.YourTurn;
+			message.localPlayer = user1.player;
+			message.remotePlayer = user2.player;
+			//message.tiles = TODO: implement tile init
+
+			ConnectionOfUser(user1).SendObject(message);
+
+			message.gameStatus = GameStatus.RemoteTurn;
+			message.localPlayer = user2.player;
+			message.remotePlayer = user1.player;
+
+			ConnectionOfUser(user2).SendObject(message);
 
 		}
 

@@ -56,7 +56,7 @@ namespace Server
 		{
 			users.Add(user);
 
-			// if two users, connect them to a game
+			// if two users, connect them to a game TODO: implement better matchmaking
 
 			if (users.Count % 2 == 0) {
 				if (GameOfUser (user) != null) { // if this user is not aleready in a game
@@ -92,11 +92,11 @@ namespace Server
 			}
 		}
 
-		private Connection ConnectionOfUser(User findUser) { // should? return null if not connected
+		private Connection ConnectionOfUser(User findUser) { // returns null if not connected
 			return connections.Find(connection => connection.user == findUser); 
 		}
 
-		private Game GameOfUser(User findUser) // should? return null if not in game
+		private Game GameOfUser(User findUser) // returns null if not in game
 		{
 			return games.Find(game => (game.user1 == findUser) && (game.user2 == findUser));
 		}
