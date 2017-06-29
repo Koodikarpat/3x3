@@ -57,6 +57,8 @@ namespace Server
 							res.player = move.player;
 							// TODO new tile
 
+							// TODO: flip game board
+
 							// TODO ConnectionOfUser may return null
 							ConnectionOfUser(messageUser).SendObject(res);
 							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);

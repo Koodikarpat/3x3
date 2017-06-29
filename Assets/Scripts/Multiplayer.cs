@@ -15,7 +15,6 @@ public class Multiplayer : MonoBehaviour {
 
 	public GameObject localPlayerObject;
 	public GameObject remotePlayerObject;
-	public GameObject playerAbilitiesObject;
 
 	// use this for initialization
 	void Start()
@@ -39,7 +38,7 @@ public class Multiplayer : MonoBehaviour {
 		client.StartGame(GameUpdate);
 	}
 
-	public void MovePiece(int button)
+	public void MovePiece(int button) // call this when local player moves their piece
 	{
 		var msg = new Player();
 		msg = localPlayer;
@@ -50,18 +49,31 @@ public class Multiplayer : MonoBehaviour {
 	private void GameUpdate(object message)
 	{
 		var @switch = new Dictionary<Type, Action> {
-			{ typeof(OnMove), () => {
-					var onMove = (OnMove)message;
-					localPlayerObject.GetComponent<PlayerAbilities>().MoveButton(onMove.localPlayer.position);
-					remotePlayerObject.GetComponent<PlayerAbilities>().MoveButton(onMove.remotePlayer.position);
-
-					if (onMove.gameStatus == GameStatus.YourTurn) {
+			{ typeof(Move), () => {
+					var move = (Move)message;
+					if (isLocalTurn) {  // this  move is a response to a local move
+						isLocalTurn = false;
+					} else { // remotePlayer made a move
 						isLocalTurn = true;
+
+						// TODO!: move player2 piece
+					}
+
+					// TODO: update tiles
+					// TODO: animations by server
+				} },
+			{ typeof(GameInit), () => {
+					var gameInit = (GameInit)message;
+					if (gameInit.gameStatus == GameStatus.YourTurn) {
+						isLocalTurn = false;
 					} else {
 						isLocalTurn = false;
 					}
 
-					// TODO: update tiles
+					// TODO: init tiles
+
+					// TODO!: init pieces
+
 				} }
 		};
 
