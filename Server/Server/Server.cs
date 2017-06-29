@@ -69,14 +69,14 @@ namespace Server
 		{
 			GameOfUser(user).Stop();
 
-			if (users.Remove(user)) { // returns true if remove successfull
+			if (users.Remove(user)) { // true if remove successfull
 				Console.WriteLine("User deauthenticated");
 			}
 		}
 
 		private void OnConnectionClose(Connection connection)
 		{
-			if (connections.Remove(connection)) { // returns true if remove successfull
+			if (connections.Remove(connection)) { // true if remove successfull
 				Console.WriteLine ("Connection closed");
 			}
 		}
@@ -87,18 +87,18 @@ namespace Server
 		}
 
 		private void OnGameEnd(Game game) {
-			if (games.Remove(game)) { // returns true if remove successfull
+			if (games.Remove(game)) { // true if remove successfull
 				Console.WriteLine("Game ended");
 			}
 		}
 
-		private Connection ConnectionOfUser(User findUser) { // return null if not connected
-			return null; // TODO!
+		private Connection ConnectionOfUser(User findUser) { // should? return null if not connected
+			return connections.Find(connection => connection.user == findUser); 
 		}
 
-		private Game GameOfUser(User findUser) // return null if not in game
+		private Game GameOfUser(User findUser) // should? return null if not in game
 		{
-			return games[0]; // TODO: implement for more than one game, Warning: currently more than one game will cause a race condition
+			return games.Find(game => (game.user1 == findUser) && (game.user2 == findUser));
 		}
 	}
 }

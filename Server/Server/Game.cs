@@ -28,6 +28,8 @@ namespace Server
 
 			user1.player.position = 7;
 			user2.player.position = 1;
+
+
 		}
 
 		public void Stop()
@@ -37,19 +39,22 @@ namespace Server
 		public void OnMessage(User messageUser, object message)
 		{
 			var @switch = new Dictionary<Type, Action> {
-				{ typeof(Move), () => { // i have no clue if this works at all
+				{ typeof(Move), () => {
 						var move = (Move)message;
-						if (true) { // TODO check if it this users turn
+						if (true) { // TODO check if it is this users turn, is the move legal
 							var res = new Move();
 							res.player = move.player;
 							// TODO new tile
 
-							//ConnectionOfUser(messageUser).SendObject(res);
-							//ConnectionOfUser(TheOtherUser(messageUser)).sendObject(res);
+							// TODO ConnectionOfUser may return null
+							ConnectionOfUser(messageUser).SendObject(res);
+							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);
 						} else {
 							var res = new Status();
 							res = Status.Fail;
-							//ConnectionOfUser(messageUser).SendObject(res);
+
+							// TODO ConnectionOfUser may return null
+							ConnectionOfUser(messageUser).SendObject(res);
 							Console.WriteLine("It's not this players turn");
 						}
 					} }
