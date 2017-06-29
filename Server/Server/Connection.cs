@@ -18,10 +18,8 @@ namespace Server
 		private BinaryWriter clientWriter;
 		private BinaryReader clientReader;
 
-		private Action<Connection, object> onMessageCallback;
-		private Action<Connection> onStopCallback;
-
-		private Connection thisConnection;
+		private Action<Connection, object> OnMessageCallback;
+		private Action<Connection> OnStopCallback;
 
 		private Stopwatch pollTimer;
 
@@ -29,24 +27,27 @@ namespace Server
 
 		public User user;
 
+		public string name { get; private set; }
+
 		public bool connected;
 
 		public Connection()
 		{
 		}
 
-		public void Start(Connection conn, object socket, Action<Connection,object> onMessage, Action<Connection> onClose) 
+		public void Start(TcpClient socket, Action<Connection, object> onMessageCallback, Action<Connection> onCloseCallback) 
 		{
 			pollTimer = new Stopwatch ();
 			pollTimer.Start();
 
 			parser = new Parser();
 
-			thisConnection = conn;
-			onMessageCallback = onMessage;
-			onStopCallback = onClose;
+			OnMessageCallback = onMessageCallback;
+			OnStopCallback = onCloseCallback;
 
-			client = (TcpClient)socket;
+			client = socket;
+
+			name = "Anonymous"; // TODO: name connections
 
 			clientWriter = new BinaryWriter(client.GetStream());
 			clientReader = new BinaryReader(client.GetStream());
@@ -55,7 +56,7 @@ namespace Server
 
 			user = null;
 
-			// create a new worker that will handle the connection
+			// create a new worker that will handle waiting for data
 			BackgroundWorker waiter = new BackgroundWorker();
 			waiter.DoWork += (object sender, DoWorkEventArgs e) => WaitForRequest(e);
 			waiter.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) => {
@@ -70,7 +71,7 @@ namespace Server
 			Log("Closing connection");
 			user = null;
 			client.Close();
-			onStopCallback(thisConnection);
+			OnStopCallback(this);
 		}
 
 		private void WaitForRequest(DoWorkEventArgs e)
@@ -113,10 +114,10 @@ namespace Server
 						}
 					}
 				}, { typeof(Status), () => {
-						onMessageCallback (thisConnection, req);
+						OnMessageCallback (this, req);
 					}
 				}, { typeof(Move), () => {
-						onMessageCallback (thisConnection, req);
+						OnMessageCallback (this, req);
 					}
 				}
 			};

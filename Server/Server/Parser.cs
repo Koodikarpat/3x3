@@ -22,6 +22,15 @@ namespace Networking
 					} },
 				{ typeof(AuthenticationResponse), () => {
 						serializable.authenticationResponse = (AuthenticationResponse)message;
+					} },
+				{ typeof(GameInit), () => {
+						serializable.gameInit = (GameInit)message;
+					} },
+				{ typeof(Move), () => {
+						serializable.move = (Move)message;
+					} },
+				{ typeof(Status), () => {
+						serializable.status = (Status)message;
 					} }
 			};
 
@@ -43,16 +52,22 @@ namespace Networking
 			try {
 				json = reader.ReadString ();
 			} catch {
-				
+				// reading string failed
 			}
 
 			try {
 				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
-				if (deserialised.authenticationRequest != null) { // only one of the Message fields can be populated in one message
+				if (deserialised.authenticationRequest != null) { // only one of the Message.variable can be non null in one message
 					return (AuthenticationRequest)deserialised.authenticationRequest;
 				} else if (deserialised.authenticationResponse != null) {
 					return (AuthenticationResponse)deserialised.authenticationResponse;
+				} else if (deserialised.gameInit != null) {
+					return (GameInit)deserialised.gameInit;
+				} else if (deserialised.gameInit != null) {
+					return (Move)deserialised.move;
+				} else if (deserialised.status != Status.None) { // be careful with enums in Message
+					return (Status)deserialised.status;
 				} else {
 					// parsing message failed
 					return null;

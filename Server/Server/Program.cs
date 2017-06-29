@@ -10,7 +10,7 @@ namespace Server
 		public static void Main(string[] args)
 		{	
 			// listen on PORT
-			// new connections are handled in Connection.cs
+			// new connections are handled in Server.cs
 			// Server server = new Server(PORT);
 			new Server(PORT);
 		}

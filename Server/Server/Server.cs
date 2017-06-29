@@ -12,8 +12,10 @@ namespace Server
 		private TcpListener listener;
 		private Thread listenThread;
 
-		private List<Connection> connections = new List<Connection>();
-		private List<Game> games = new List<Game>();
+		private List<Connection> connections = new List<Connection>(); // open connections
+		private List<Game> games = new List<Game>(); // ongoing games
+		private List<User> users = new List<User>(); // authenticated users
+		// I have no clue if lists can be used in the way they are used in this class
 
 		public Server(int port)
 		{
@@ -35,38 +37,68 @@ namespace Server
 
 				connections.Add(new Connection());
 				var thisConnection = connections[connections.Count - 1];
-				thisConnection.Start(thisConnection, client, OnMessage, OnConnectionClose);
+				thisConnection.Start(client, onMessageCallback: OnMessage, onCloseCallback: OnConnectionClose);
 
 				Console.WriteLine("There are now " + connections.Count + " connections in the list");
-
-				if (connections.Count % 2 == 0) {
-					games.Add(new Game(connections[connections.Count - 2], connections[connections.Count - 1]));
-				}
 			}
 		}
 
 		private void OnMessage(Connection thisConnection, object message)
 		{
-			if (games.Contains(GameOfUser(thisConnection))) {
-				games[games.IndexOf(GameOfUser(thisConnection))].OnMessage(thisConnection, message);
+			if (games.Contains(GameOfUser(thisConnection.user))) {
+				games[games.IndexOf(GameOfUser(thisConnection.user))].OnMessage(thisConnection.user, message);
 			} else {
-				Console.WriteLine ("A request just flew by, but this connection is not in a room");
-
-				var res = new Status ();
-				res = Status.Ok;
-				thisConnection.SendObject(res);
+				Console.WriteLine ("A request just flew by, but this user is not in a game");
 			}
 		}
 
-		private void OnConnectionClose(Connection thisConnection)
+		private void OnUserAuthenticated(User user)
 		{
-			if (connections.Remove(thisConnection)) Console.WriteLine("Connection removed succesfully");
-			thisConnection = null;
+			users.Add(user);
+
+			// if two users, connect them to a game
+
+			if (users.Count % 2 == 0) {
+				if (GameOfUser (user) != null) { // if this user is not aleready in a game
+					games.Add (new Game (users [users.Count - 2], users [users.Count - 1], connectionOfUserCallback: ConnectionOfUser));
+				}
+			}
 		}
 
-		private Game GameOfUser(Connection findConnection)
+		private void OnUserDeauthenticated(User user)
 		{
-			return games[0]; // TODO: implement more than one game Warning: more than two connections made to the server will cause a race condition
+			GameOfUser(user).Stop();
+
+			if (users.Remove(user)) { // returns true if remove successfull
+				Console.WriteLine("User deauthenticated");
+			}
+		}
+
+		private void OnConnectionClose(Connection connection)
+		{
+			if (connections.Remove(connection)) { // returns true if remove successfull
+				Console.WriteLine ("Connection closed");
+			}
+		}
+
+		private void OnConnectionLog(Connection thisConnection, string msg)
+		{
+			Console.WriteLine(thisConnection.name + msg);
+		}
+
+		private void OnGameEnd(Game game) {
+			if (games.Remove(game)) { // returns true if remove successfull
+				Console.WriteLine("Game ended");
+			}
+		}
+
+		private Connection ConnectionOfUser(User findUser) { // return null if not connected
+			return null; // TODO!
+		}
+
+		private Game GameOfUser(User findUser) // return null if not in game
+		{
+			return games[0]; // TODO: implement for more than one game, Warning: currently more than one game will cause a race condition
 		}
 	}
 }

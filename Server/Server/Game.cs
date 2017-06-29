@@ -6,53 +6,50 @@ namespace Server
 {
 	public class Game
 	{
-		public Connection player1;
-		public Connection player2;
+		private Func<User, Connection> ConnectionOfUserCallback;
 
-		public Game (Connection p1, Connection p2)
+		public User user1;
+		public User user2;
+
+		public Game (User u1, User u2, Func<User, Connection> connectionOfUserCallback)
 		{
-			player1 = p1;
-			player2 = p2;
+			ConnectionOfUserCallback = connectionOfUserCallback;
 
-			while (player1.user == null || player2.user == null)
-			{
-			}
-
-			// this should be moved to Start() and become proper initialisation and also initialise clients
-			player1.user.player = new Player();
-			player2.user.player = new Player();
-
-			player1.user.player.turn = true;
-			player2.user.player.turn = false;
-
-			player1.user.player.position = new Position(0, 0);
-			player2.user.player.position = new Position(0, 0);
+			user1 = u1;
+			user2 = u2;
 		}
 
-		public void OnMessage(Connection messageConnection, object message)
+		public void Start()
+		{
+			user1.player = new Player();
+			user2.player = new Player();
+
+			//TODO initialise clients
+
+			user1.player.position = 7;
+			user2.player.position = 1;
+		}
+
+		public void Stop()
+		{
+		}
+
+		public void OnMessage(User messageUser, object message)
 		{
 			var @switch = new Dictionary<Type, Action> {
-				{ typeof(Move), () => {
-						if (messageConnection.user.player.turn) {
-							var res = new OnMove();
-							res.gameStatus = GameStatus.RemoteTurn;
-							res.playTileAnimation = "not implemented";
-							res.localPlayer = messageConnection.user.player;
-							res.remotePlayer = TheOtherConnection(messageConnection).user.player;
+				{ typeof(Move), () => { // i have no clue if this works at all
+						var move = (Move)message;
+						if (true) { // TODO check if it this users turn
+							var res = new Move();
+							res.player = move.player;
+							// TODO new tile
 
-							messageConnection.SendObject(res);
-
-							var update = new OnMove();
-							update.gameStatus = GameStatus.YourTurn;
-							update.playTileAnimation = "not implemented";
-							update.localPlayer = TheOtherConnection(messageConnection).user.player;
-							update.remotePlayer = messageConnection.user.player;
-
-							messageConnection.SendObject(update);
+							//ConnectionOfUser(messageUser).SendObject(res);
+							//ConnectionOfUser(TheOtherUser(messageUser)).sendObject(res);
 						} else {
 							var res = new Status();
 							res = Status.Fail;
-							messageConnection.SendObject(res);
+							//ConnectionOfUser(messageUser).SendObject(res);
 							Console.WriteLine("It's not this players turn");
 						}
 					} }
@@ -61,12 +58,16 @@ namespace Server
 			@switch[message.GetType()]();
 		}
 
-		private Connection TheOtherConnection(Connection theConnection) {
-			if (theConnection.Equals(player1)) {
-				return player2;
+		private User TheOtherUser(User theUser) {
+			if (theUser.Equals(user1)) {
+				return user2;
 			} else {
-				return player1;
+				return user1;
 			}
+		}
+
+		private Connection ConnectionOfUser(User user) {
+			return ConnectionOfUserCallback(user);
 		}
 	}
 }

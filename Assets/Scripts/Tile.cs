@@ -8,7 +8,5 @@ public class Tile
 	public GameObject gameObject;
 	public TileEffects type;
 	public Vector2 position;
-
-
 }
 

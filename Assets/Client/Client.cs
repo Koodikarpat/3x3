@@ -11,7 +11,7 @@ namespace Networking
 {
 	public class Client
 	{
-		private const uint PROTO_VERSION = 0; // Every time you make chance that breaks the interface, you should increment this
+		private const uint PROTO_VERSION = 0; // every time you make chance that breaks the interface, you should increment this
 		public const int PORT = 2500;
 
 		private readonly string serverName;
@@ -26,7 +26,7 @@ namespace Networking
 
 		private Parser parser;
 
-		private Action<object> gameUpdateCallback;
+		private Action<object> GameUpdateCallback;
 		private bool inGame;
 		private bool localAuthenticated;
 
@@ -80,7 +80,7 @@ namespace Networking
 
 		public void StartGame(Action<object> onGameUpdate)
 		{
-			gameUpdateCallback = onGameUpdate;
+			GameUpdateCallback = onGameUpdate;
 		}
 
 		public void Move(Player player)
@@ -117,8 +117,8 @@ namespace Networking
 						localAuthenticated = true;
 						Log("Authentication successfull");
 					} },
-				{ typeof(OnMove), () => {
-						gameUpdateCallback(message);
+				{ typeof(Move), () => {
+						GameUpdateCallback(message);
 					} }
 			};
 

@@ -13,13 +13,18 @@ public class PlayerAbilities : MonoBehaviour
     public GameObject puff;
 	public GameObject multiplayerController;
 
+	public bool serverAnswered = true;
+	public bool animationsFinished = true;
+
 	ButtonSelection buttons;
     TilePlacements tilePlacements;
+	Multiplayer multiplayer;
 
 	void Start () 
 	{
 		buttons = buttonGroup.GetComponent<ButtonSelection> ();
         tilePlacements = buttonGroup.GetComponent<TilePlacements> ();
+		multiplayer = multiplayerController.GetComponent<Multiplayer>();
 
 		//startin locations
 		//Debug.Log (transform.name + " " + buttons.tiles[currentButton].position);
@@ -35,30 +40,49 @@ public class PlayerAbilities : MonoBehaviour
 		// the movement itself
 		// move must always be legal, if online game it must also be your turn
 		if (isLegalMove (currentButton, button)) {
-			if ((multiplayerController.GetComponent<Multiplayer> ().isOnline && multiplayerController.GetComponent<Multiplayer> ().isLocalTurn && turnControlObject.GetComponent<TurnControl> ().Player1) || !multiplayerController.GetComponent<Multiplayer> ().isOnline) {
-				TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
-				turncontrol.ChangeTurn ();
-
-				buttons.tiles [currentButton].type = tilePlacements.GetRandom ();
-				tilePlacements.CreateTile (buttons.tiles [currentButton], currentButton);
-  
-				transform.position = buttons.tiles [button].position;
-				currentButton = button;
+			if ((multiplayer.isOnline && multiplayer.isLocalTurn && turnControlObject.GetComponent<TurnControl> ().Player1) || !multiplayer.isOnline) {
 
 				// if online game
-				if (multiplayerController.GetComponent<Multiplayer> ().isOnline) {
+				if (multiplayer.isOnline) {
 					// make online move
-					multiplayerController.GetComponent<Multiplayer> ().MovePiece (button);
+					multiplayer.MovePiece (button);
 				}
 
-				buttons.tiles [currentButton].type.Action (gameObject, enemy);
-				Animator Animator = buttons.tiles [currentButton].gameObject.GetComponentInChildren<Animator> ();
-				Animator.SetTrigger ("Step on");
+				if(multiplayer.isOnline)
+					serverAnswered = false;
+				//TODO: animationsFinished = false;
+				StartCoroutine(waitAnimations(button));
 
-				puff.GetComponent<ParticleSystem> ().Play ();
-				puff.transform.position = buttons.tiles [button].position;
 			}
 		}
+	}
+
+	private IEnumerator waitAnimations(int button)
+	{
+		while (animationsFinished)
+		{
+			yield return null;
+		}
+		finishMove (button);
+	}
+
+	private void finishMove(int button)
+	{
+		TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
+		turncontrol.ChangeTurn ();
+
+		buttons.tiles [currentButton].type = tilePlacements.GetRandom ();
+		tilePlacements.CreateTile (buttons.tiles [currentButton], currentButton);
+
+		transform.position = buttons.tiles [button].position;
+		currentButton = button;
+
+		buttons.tiles [currentButton].type.Action (gameObject, enemy);
+		Animator Animator = buttons.tiles [currentButton].gameObject.GetComponentInChildren<Animator> ();
+		Animator.SetTrigger ("Step on");
+
+		puff.GetComponent<ParticleSystem> ().Play ();
+		puff.transform.position = buttons.tiles [button].position;
 	}
 
 	bool isLegalMove(int start, int end)
