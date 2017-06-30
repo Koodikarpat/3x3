@@ -49,13 +49,15 @@ public class PlayerAbilities : MonoBehaviour
 			}
 			
 			//TODO: animationsFinished = false;
-			StartCoroutine(waitAnimations(button));
+			StartCoroutine (waitAnimations (button));
+		} else {
+			Debug.Log ("Someone tried to do an illegal move");
 		}
 	}
 
 	private IEnumerator waitAnimations(int button)
 	{
-		while (animationsFinished)
+		while (!animationsFinished)
 		{
 			yield return null;
 		}

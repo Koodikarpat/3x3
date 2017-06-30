@@ -43,9 +43,10 @@ public class ButtonSelection : MonoBehaviour
 		if (turnControl.Player1) {
 			currentPlayer = player1;
 		} else if (turnControl.Player2) {
-			if (!multiplayerController.GetComponent<Multiplayer> ().isOnline) { // local game
+			if (!multiplayerController.GetComponent<Multiplayer>().isOnline) { // local game
 				currentPlayer = player2;
 			} else { // online game
+				Debug.Log("Local player tried to move remote players piece");
 				return;
 			}
 		} else {

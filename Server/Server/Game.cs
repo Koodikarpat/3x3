@@ -59,10 +59,11 @@ namespace Server
 							res.player = move.player;
 							// TODO new tile
 
-							// TODO: flip game board
-
 							// TODO ConnectionOfUser may return null
 							ConnectionOfUser(messageUser).SendObject(res);
+
+							res.player.position = RotatedPosition(res.player.position); // this rotates theboard for player 2
+
 							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);
 						} else {
 							var res = new Status();
@@ -86,6 +87,10 @@ namespace Server
 			} else {
 				return user1;
 			}
+		}
+
+		private int RotatedPosition(int position) {
+			return (position - 10) * -1;
 		}
 
 		private Connection ConnectionOfUser(User user) {

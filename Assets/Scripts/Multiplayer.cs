@@ -15,12 +15,17 @@ public class Multiplayer : MonoBehaviour {
 
 	public GameObject localPlayerObject;
 	public GameObject remotePlayerObject;
+	public GameObject turnControllerObject;
+
+	private Stack<object> messageQueue;
 
 	// use this for initialization
 	void Start()
 	{
-		isOnline = false;
-		StartOnlineGame();
+		if(isOnline)
+			StartOnlineGame();
+
+		messageQueue = new Stack<object>();
 	}
 
 	void Stop() // TODO the client must be disconnected when the scene is exited
@@ -32,12 +37,12 @@ public class Multiplayer : MonoBehaviour {
 
 	public void StartOnlineGame()
 	{
-		isOnline = true;
+		
 		System.Random random = new System.Random (); // TODO
 		String username = SystemInfo.deviceUniqueIdentifier + random.Next (9999);
 		client = new Client ("172.20.147.12", username: username); // this method has an optional 'token'
 		client.Connect();
-		client.StartGame(GameUpdate);
+		client.StartGame(OnGameUpdate);
 	}
 
 	public void MovePiece(int button) // call this when local player moves their piece
@@ -49,7 +54,12 @@ public class Multiplayer : MonoBehaviour {
 		client.Move(msg);
 	}
 
-	private void GameUpdate(object message)
+	private void OnGameUpdate(object message) // client callbacks this function when a message is received
+	{
+		messageQueue.Push(message);
+	}
+
+	private void UpdateGame(object message) // the 'global state' of the 'game' is maintained by this function when isOnline, its called by Update()
 	{
 		var @switch = new Dictionary<Type, Action> {
 			{ typeof(Move), () => {
@@ -72,8 +82,11 @@ public class Multiplayer : MonoBehaviour {
 					var gameInit = (GameInit)message;
 					if (gameInit.gameStatus == GameStatus.YourTurn) { // TODO init turncontroller
 						isLocalTurn = true;
+						// local player gets to start so turn controller is set correctly
 					} else {
 						isLocalTurn = false;
+						// remote player starts Warning: If game init is sent more than once during a game this will cause a race condition
+						turnControllerObject.GetComponent<TurnControl>().ChangeTurn();
 					}
 
 					localPlayer = gameInit.localPlayer;
@@ -82,14 +95,22 @@ public class Multiplayer : MonoBehaviour {
 					// TODO: init tiles
 
 					// TODO: init pieces with correct skins
+
 				} }
 		};
 
 		@switch[message.GetType()]();
 	}
 
+
+
 	// Update is called once per frame
-	void Update ()
+	void Update()
 	{
+		try {
+			UpdateGame(messageQueue.Pop());
+		} catch {
+			// InvalidOperationException: stack is empty
+		}
 	}
 }
