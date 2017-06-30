@@ -10,25 +10,25 @@ public class TurnControl : MonoBehaviour {
 
 
 	//timer test- works!
-	float timeLeft = 20.99f;
+	float timeLeft = 20f;
 	//ajankääntö- works!
 	float turnTime;
 
-	private Text timer; //kello teksti
+	private Slider mySlider; //kello teksti
 	//idk - vuoro
 	Text playerTurn;
 	public GameObject playerTurnText; 
-	public GameObject timerText;
+	public GameObject TimeSlider;
 	public GameObject Player1Object;
 	public GameObject Player2Object;
 
 	// Use this for initialization
 	void Start () {
-		timer = timerText.GetComponent<Text> ();
-		turnTime = timeLeft;
+        mySlider = TimeSlider.GetComponent<Slider>();
+        turnTime = timeLeft;
 		playerTurn = playerTurnText.GetComponent<Text> ();
 
-		Player1 = true;
+        Player1 = true;
 		Player2 = false;
 	}
 	
@@ -38,9 +38,10 @@ public class TurnControl : MonoBehaviour {
 		//Debug.Log ("L:" + timeLeft);
 		//timer/ajakääntö -works!
 		timeLeft -= Time.deltaTime;
-		timer.text = "" + Mathf.Floor (timeLeft);
+        float value = timeLeft / 20;
+        mySlider.value = value;
 
-		{
+        {
 			if (timeLeft < 0) 
 			{
 
