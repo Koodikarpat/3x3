@@ -7,9 +7,11 @@ public class Instantiator : MonoBehaviour
     public List<GameObject> prefablist = new List<GameObject>();
     
     private float timer;
+    private float speedtimer;
 
-	// Use this for initialization
-	void Start ()
+    public float startSpeed;
+    // Use this for initialization
+    void Start ()
     {
        
 	}
@@ -18,13 +20,20 @@ public class Instantiator : MonoBehaviour
 	void Update ()
     {
         timer += Time.deltaTime;
-
-        if (timer > 1)
+        speedtimer += Time.deltaTime;
+        Debug.Log(10 / speedtimer);
+        if (timer > speedtimer / 20)
         {
             timer = 0;
-            int prefabIndex = UnityEngine.Random.Range(0, prefablist.Count);
-            GameObject newpiece = Instantiate(prefablist[prefabIndex]);
-            newpiece.AddComponent<Rigidbody2D>();
+            if (startSpeed - speedtimer > 0)
+            {
+                int prefabIndex = UnityEngine.Random.Range(0, prefablist.Count);
+                GameObject newpiece = Instantiate(prefablist[prefabIndex], transform);
+                CasinoRoll casinoRoll = newpiece.AddComponent<CasinoRoll>();
+                casinoRoll.movementSpeed = startSpeed - speedtimer;
+            }
+
+            
         }
 		
 	}
