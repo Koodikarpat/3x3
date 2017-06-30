@@ -76,7 +76,6 @@ namespace Server
 
 		private void OnConnectionClose(Connection connection)
 		{
-			Console.WriteLine ("going to delet");
 			if (connections.Remove(connection)) { // true if remove successfull
 				Console.WriteLine ("Connection closed");
 			}
@@ -101,7 +100,7 @@ namespace Server
 
 		private Game GameOfUser(User findUser) // returns null if not in game
 		{
-			return games.Find(game => (String.Equals(game.user1.username, findUser.username) && String.Equals(game.user2.username, findUser.username)));
+			return games.Find(game => (String.Equals(game.user1.username, findUser.username) || String.Equals(game.user2.username, findUser.username)));
 		}
 	}
 }

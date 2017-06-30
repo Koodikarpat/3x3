@@ -40,20 +40,16 @@ public class PlayerAbilities : MonoBehaviour
 		// the movement itself
 		// move must always be legal, if online game it must also be your turn
 		if (isLegalMove (currentButton, button)) {
-			if ((multiplayer.isOnline && multiplayer.isLocalTurn && turnControlObject.GetComponent<TurnControl> ().Player1) || !multiplayer.isOnline) {
 
-				// if online game
-				if (multiplayer.isOnline) {
-					// make online move
-					multiplayer.MovePiece (button);
-				}
-
-				if(multiplayer.isOnline)
-					serverAnswered = false;
-				//TODO: animationsFinished = false;
-				StartCoroutine(waitAnimations(button));
-
+			// if online game
+			if (multiplayer.isOnline) {
+				// make online move
+				multiplayer.MovePiece (button);
+				serverAnswered = false;
 			}
+			
+			//TODO: animationsFinished = false;
+			StartCoroutine(waitAnimations(button));
 		}
 	}
 

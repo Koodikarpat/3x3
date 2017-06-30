@@ -96,9 +96,15 @@ namespace Server
 
 		private void OnRequest(RunWorkerCompletedEventArgs e)
 		{
+			if (e.Result == null) {
+				Log ("Parsing fail");
+				return;
+			}
+
 			object req = e.Result;
 
-			var @switch = new Dictionary<Type, Action> { { typeof(AuthenticationRequest), () => {
+			var @switch = new Dictionary<Type, Action> { 
+				{ typeof(AuthenticationRequest), () => {
 						var authReq = (AuthenticationRequest)req;
 						if (authReq.protocolVersion != PROTO_VERSION) {
 							Log ("Protocol version mismatch");
@@ -120,17 +126,16 @@ namespace Server
 							res.status = Status.Fail;
 							SendObject(res);
 						}
-					}
-				}, { typeof(Status), () => {
+					} },
+				{ typeof(Status), () => {
 						OnMessageCallback (this, req);
-					}
-				}, { typeof(Move), () => {
+					} },
+				{ typeof(Move), () => {
 						OnMessageCallback (this, req);
-					}
-				}
+					} }
 			};
 
-			if (req != null) @switch[req.GetType()]();
+			@switch[req.GetType()]();
 		}
 
 		// polls the client every POLL_INTERVAL doesnt really work as its in the same loop as reading the socket

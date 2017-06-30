@@ -39,27 +39,20 @@ public class ButtonSelection : MonoBehaviour
 		//Moving player to a selected location.
 		GameObject currentPlayer;
 		TurnControl turnControl = TurnController.GetComponent<TurnControl> ();
-		if (multiplayerController.GetComponent<Multiplayer>().isOnline) { // online game
-			if (turnControl.Player1) {
-				currentPlayer = player1;
-			} else if (turnControl.Player2) {
-				// TODO: ilmoita vastustajan vuoro
-				return;
-			} else {
-				Debug.Log ("Virhe - Molempien Vuoro");
-				return;
-			}
-		} else { // local multiplayer
-			if (turnControl.Player1) {
-				currentPlayer = player1;
-			} else if (turnControl.Player2) {
+	
+		if (turnControl.Player1) {
+			currentPlayer = player1;
+		} else if (turnControl.Player2) {
+			if (!multiplayerController.GetComponent<Multiplayer> ().isOnline) { // local game
 				currentPlayer = player2;
-			} else {
-				Debug.Log ("Virhe - Molempien Vuoro");
+			} else { // online game
 				return;
 			}
+		} else {
+			Debug.Log ("Virhe - Molempien Vuoro");
+			return;
 		}
-		PlayerAbilities pa = currentPlayer.GetComponent<PlayerAbilities> ();
+		PlayerAbilities pa = currentPlayer.GetComponent<PlayerAbilities>();
 		pa.MoveButton (button);
 	}
 }

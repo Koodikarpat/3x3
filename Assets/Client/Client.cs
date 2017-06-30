@@ -140,6 +140,8 @@ namespace Networking
 					} }
 			};
 
+			Console.WriteLine("Some message was received");
+
 			@switch[message.GetType()]();
 		}
 

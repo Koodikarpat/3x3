@@ -64,7 +64,7 @@ namespace Networking
 					return (AuthenticationResponse)deserialised.authenticationResponse;
 				} else if (deserialised.gameInit != null) {
 					return (GameInit)deserialised.gameInit;
-				} else if (deserialised.gameInit != null) {
+				} else if (deserialised.move != null) {
 					return (Move)deserialised.move;
 				} else if (deserialised.status != Status.None) { // be careful with enums in Message
 					return (Status)deserialised.status;

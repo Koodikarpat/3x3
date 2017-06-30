@@ -34,7 +34,7 @@ public class Multiplayer : MonoBehaviour {
 	{
 		isOnline = true;
 		System.Random random = new System.Random (); // TODO
-		String username = SystemInfo.deviceUniqueIdentifier + random.Next (10);
+		String username = SystemInfo.deviceUniqueIdentifier + random.Next (9999);
 		client = new Client ("172.20.147.12", username: username); // this method has an optional 'token'
 		client.Connect();
 		client.StartGame(GameUpdate);
@@ -42,6 +42,7 @@ public class Multiplayer : MonoBehaviour {
 
 	public void MovePiece(int button) // call this when local player moves their piece
 	{
+		Debug.Log("Send Move");
 		var msg = new Player();
 		msg = localPlayer;
 		msg.position = button;
@@ -60,6 +61,7 @@ public class Multiplayer : MonoBehaviour {
 						isLocalTurn = true;
 
 						// TODO!: move player2 piece
+						remotePlayerObject.GetComponent<PlayerAbilities>().MoveButton(move.player.position);
 					}
 
 					// TODO: update tiles
@@ -68,7 +70,7 @@ public class Multiplayer : MonoBehaviour {
 			{ typeof(GameInit), () => {
 					Debug.Log("A GameInit message was received");
 					var gameInit = (GameInit)message;
-					if (gameInit.gameStatus == GameStatus.YourTurn) {
+					if (gameInit.gameStatus == GameStatus.YourTurn) { // TODO init turncontroller
 						isLocalTurn = true;
 					} else {
 						isLocalTurn = false;
