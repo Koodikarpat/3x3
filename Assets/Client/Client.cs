@@ -27,16 +27,14 @@ namespace Networking
 		private Parser parser;
 
 		private Action<object> GameUpdateCallback;
-		private bool inGame;
 		private bool localAuthenticated;
 
-		public Client(string name, string username = "player", string token = "password")
+		public Client(string name, string username, string token = "password") // any user with token "password" will be authenticated
 		{
 			serverName = name;
 			serverUsername = username;
 			serverAuthToken = token;
 
-			inGame = false;
 			localAuthenticated = false;
 		}
 
@@ -75,6 +73,7 @@ namespace Networking
 
 		public void Disconnect()
 		{
+			// TODO The user should be deauthenticated when the game (Multiplayer Controller) calls disconnect
 			server.Close();
 		}
 
@@ -91,6 +90,13 @@ namespace Networking
 			SendObject(message);
 		}
 
+		private void OnConnectionFail() // should be called when the tcp socket fails
+		{
+			Log("Connection interrupted, reconnecting");
+
+			Connect();
+		}
+
 		private void Authenticate() {
 			var request = new AuthenticationRequest();
 			request.protocolVersion = PROTO_VERSION;
@@ -99,6 +105,9 @@ namespace Networking
 
 			SendObject(request);
 		}
+
+		// TODO private void Deauthenticate()
+		// the protocol does not currently implement any method for deauth
 
 		private void WaitForMessage(DoWorkEventArgs e)
 		{
@@ -114,10 +123,19 @@ namespace Networking
 
 			var @switch = new Dictionary<Type, Action> {
 				{ typeof(AuthenticationResponse), () => {
-						localAuthenticated = true;
-						Log("Authentication successfull");
+						var authRes = (AuthenticationResponse)message;
+						if (authRes.status == Status.Ok) {
+							localAuthenticated = true;
+							Log("Authentication successfull");
+						} else {
+							localAuthenticated = false;
+							Log("Authentication failed");
+						}
 					} },
 				{ typeof(Move), () => {
+						GameUpdateCallback(message);
+					} },
+				{ typeof(GameInit), () => {
 						GameUpdateCallback(message);
 					} }
 			};

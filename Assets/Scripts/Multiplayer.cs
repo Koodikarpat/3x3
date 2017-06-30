@@ -11,7 +11,7 @@ public class Multiplayer : MonoBehaviour {
 	private Player remotePlayer;
 
 	public bool isOnline;
-	public bool isLocalTurn{ get; private set;}
+	public bool isLocalTurn{ get; private set; }
 
 	public GameObject localPlayerObject;
 	public GameObject remotePlayerObject;
@@ -23,7 +23,7 @@ public class Multiplayer : MonoBehaviour {
 		StartOnlineGame();
 	}
 
-	void Stop() // the socket must be closed when the scene is exited
+	void Stop() // TODO the client must be disconnected when the scene is exited
 	{
 		if (isOnline) {
 			client.Disconnect();
@@ -33,7 +33,9 @@ public class Multiplayer : MonoBehaviour {
 	public void StartOnlineGame()
 	{
 		isOnline = true;
-		client = new Client("172.20.147.12");
+		System.Random random = new System.Random (); // TODO
+		String username = SystemInfo.deviceUniqueIdentifier + random.Next (10);
+		client = new Client ("172.20.147.12", username: username); // this method has an optional 'token'
 		client.Connect();
 		client.StartGame(GameUpdate);
 	}
@@ -50,10 +52,11 @@ public class Multiplayer : MonoBehaviour {
 	{
 		var @switch = new Dictionary<Type, Action> {
 			{ typeof(Move), () => {
+					Debug.Log("A Move message was received");
 					var move = (Move)message;
-					if (isLocalTurn) {  // this  move is a response to a local move
+					if (isLocalTurn) {  // this  move is a response to a local move that the loca player just made
 						isLocalTurn = false;
-					} else { // remotePlayer made a move
+					} else { // remote player made a move
 						isLocalTurn = true;
 
 						// TODO!: move player2 piece
@@ -63,17 +66,20 @@ public class Multiplayer : MonoBehaviour {
 					// TODO: animations by server
 				} },
 			{ typeof(GameInit), () => {
+					Debug.Log("A GameInit message was received");
 					var gameInit = (GameInit)message;
 					if (gameInit.gameStatus == GameStatus.YourTurn) {
-						isLocalTurn = false;
+						isLocalTurn = true;
 					} else {
 						isLocalTurn = false;
 					}
 
+					localPlayer = gameInit.localPlayer;
+					remotePlayer = gameInit.remotePlayer;
+
 					// TODO: init tiles
 
-					// TODO!: init pieces
-
+					// TODO: init pieces with correct skins
 				} }
 		};
 

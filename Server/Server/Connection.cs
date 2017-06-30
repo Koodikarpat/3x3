@@ -20,6 +20,9 @@ namespace Server
 
 		private Action<Connection, object> OnMessageCallback;
 		private Action<Connection> OnStopCallback;
+		private Action<User> OnAuthCallback;
+		private Action<User> OnDeauthCallback; // TODO: implement a method for deauthentication
+		private Action<Connection, string> LogCallback;
 
 		private Stopwatch pollTimer;
 
@@ -29,13 +32,14 @@ namespace Server
 
 		public string name { get; private set; }
 
-		public bool connected;
+		public bool connected { get; private set; }
 
 		public Connection()
 		{
+			name = "Anonymous connection";
 		}
 
-		public void Start(TcpClient socket, Action<Connection, object> onMessageCallback, Action<Connection> onCloseCallback) 
+		public void Start(TcpClient socket, Action<Connection, object> onMessageCallback, Action<Connection> onCloseCallback, Action<Connection, string> logCallback, Action<User> onAuthCallback, Action<User> onDeauthCallback) 
 		{
 			pollTimer = new Stopwatch ();
 			pollTimer.Start();
@@ -44,10 +48,13 @@ namespace Server
 
 			OnMessageCallback = onMessageCallback;
 			OnStopCallback = onCloseCallback;
+			OnAuthCallback = onAuthCallback;
+			OnDeauthCallback = onDeauthCallback;
+			LogCallback = logCallback;
 
 			client = socket;
 
-			name = "Anonymous"; // TODO: name connections
+			name = "Unauthenticated connection";
 
 			clientWriter = new BinaryWriter(client.GetStream());
 			clientReader = new BinaryReader(client.GetStream());
@@ -69,7 +76,6 @@ namespace Server
 		public void Stop()
 		{
 			Log("Closing connection");
-			user = null;
 			client.Close();
 			OnStopCallback(this);
 		}
@@ -98,19 +104,21 @@ namespace Server
 							Log ("Protocol version mismatch");
 						}
 
-						user = new User (authReq.username);
-						user.Authenticate (authReq.token);
+						user = new User(authReq.username);
+						user.Authenticate(authReq.token);
 						if (user.IsAuthenticated ()) {
+							name = user.username;
 							Log("Authentication Succesfull");
 							var res = new AuthenticationResponse ();
 							res.status = Networking.Status.Ok;
 							SendObject (res);
+							OnAuthCallback(user);
 						} else {
 							user = null;
-							Log ("Authentication failed");
-							var res = new AuthenticationResponse ();
+							Log("Authentication failed");
+							var res = new AuthenticationResponse();
 							res.status = Status.Fail;
-							SendObject (res);
+							SendObject(res);
 						}
 					}
 				}, { typeof(Status), () => {
@@ -125,7 +133,7 @@ namespace Server
 			if (req != null) @switch[req.GetType()]();
 		}
 
-		// polls the client every POLL_INTERVAL
+		// polls the client every POLL_INTERVAL doesnt really work as its in the same loop as reading the socket
 		private void PollClient()
 		{ 
 			if (pollTimer.ElapsedMilliseconds > POLL_INTERVAL) {
@@ -140,7 +148,7 @@ namespace Server
 
 		private void Log(string msg)
 		{
-			Console.WriteLine("Anonymous connection: " + msg);
+			LogCallback(this, msg);
 		}
 	}
 }

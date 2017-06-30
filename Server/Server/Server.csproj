@@ -43,7 +43,6 @@
     <Compile Include="Message.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Parser.cs" />
-    <Compile Include="EmptyClass.cs" />
     <Compile Include="Game.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -5,7 +5,7 @@ namespace Server
 {
 	public class User
 	{
-		private readonly string username;
+		public string username { get; private set; }
 		private readonly string correctToken;
 
 		private bool authenticated;

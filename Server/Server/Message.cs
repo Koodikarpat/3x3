@@ -66,19 +66,9 @@ namespace Networking
 	public class Player
 	{
 		public string profileId;
-		public int position;
-	}
-
-	public class Inventory
-	{
-		public Piece piece;
-	}
-
-	public class Profile
-	{
-		public string profileId;
 		public string username;
-		public Inventory inventory;
+		public int position;
+		public Piece piece;
 	}
 
 	public class MessageTile {
@@ -89,5 +79,5 @@ namespace Networking
 	public enum Status { None, Ok, Fail };
 	public enum GameStatus { Waiting, YourTurn, RemoteTurn, Ended };
 	public enum MessageTileType { attack, heal, poison };
-	public enum Piece { pice1, piece2 };
+	public enum Piece { pice1, piece2 }; // TODO this should represent actual pieces
 }

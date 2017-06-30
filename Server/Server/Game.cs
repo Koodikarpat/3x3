@@ -33,6 +33,7 @@ namespace Server
 			message.remotePlayer = user2.player;
 			//message.tiles = TODO: implement tile init
 
+			// ConnectionOfUser may return null
 			ConnectionOfUser(user1).SendObject(message);
 
 			message.gameStatus = GameStatus.RemoteTurn;
@@ -41,6 +42,7 @@ namespace Server
 
 			ConnectionOfUser(user2).SendObject(message);
 
+			Console.WriteLine("A new game has begun");
 		}
 
 		public void Stop()
