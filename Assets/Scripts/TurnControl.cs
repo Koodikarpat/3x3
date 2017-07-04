@@ -14,7 +14,7 @@ public class TurnControl : MonoBehaviour {
 	//ajankääntö- works!
 	float turnTime;
 
-	private Slider mySlider; //kello teksti
+	private Slider mySlider; //kelloteksti
 	//idk - vuoro
 	Text playerTurn;
 	public GameObject playerTurnText; 
@@ -38,7 +38,7 @@ public class TurnControl : MonoBehaviour {
 		//Debug.Log ("L:" + timeLeft);
 		//timer/ajakääntö -works!
 		timeLeft -= Time.deltaTime;
-        float value = timeLeft / 20;
+        float value = timeLeft / turnTime;
         mySlider.value = value;
 
         {

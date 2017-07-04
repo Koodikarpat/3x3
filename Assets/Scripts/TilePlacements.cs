@@ -32,29 +32,31 @@ public class TilePlacements : MonoBehaviour
     //tekee uuden tilen
     public void CreateTile(Tile tile, int i)
     {
-        GameObject newtile;
+        GameObject tilePrefab;
 
-        if (tile.gameObject.transform.GetChildCount () != 0)
+        if (tile.gameObject.transform.childCount != 0)
         Destroy (tile.gameObject.transform.GetChild(0).gameObject);
 
         if (tile.type.color == TileEffects.HEAL)
         {
-            newtile = GameObject.Instantiate(heal, tile.gameObject.transform);
+            tilePrefab = heal;
 
         }
         else if (tile.type.color == TileEffects.ATTACK)
         {
-            newtile = GameObject.Instantiate(attack, tile.gameObject.transform);
+            tilePrefab =attack;
         }
         else if (tile.type.color == TileEffects.POISON)
         {
-            newtile = GameObject.Instantiate(poison, tile.gameObject.transform);
+            tilePrefab = poison;
         }
         else
         {
             Debug.Log("Error wrong tile type");
             return;
         }
+
+        GameObject newtile = GameObject.Instantiate(tilePrefab, tile.gameObject.transform, false);
         TileButton tilebutton = newtile.GetComponent<TileButton>();
         tilebutton.buttonnumber = i;
     }

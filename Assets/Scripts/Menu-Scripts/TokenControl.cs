@@ -39,7 +39,7 @@ public class TokenControl : MonoBehaviour {
 	GameObject SetPrefab1 (int tokenCounter) //DO NOT TOUCH, IT FINALLY WORKS
 	{
 		Destroy (currentToken);
-		return Instantiate (prefabArray [tokenCounter], transform);
+		return Instantiate (prefabArray [tokenCounter], transform, false);
 
 	}
 	//-------------------------------------------------------------------------------
