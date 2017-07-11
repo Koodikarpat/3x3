@@ -22,6 +22,8 @@ public class Multiplayer : MonoBehaviour {
 	// use this for initialization
 	void Start()
 	{
+        Application.runInBackground = true;
+        isOnline = true; //TODO: rautalankafixi
 		if(isOnline)
 			StartOnlineGame();
 
@@ -40,7 +42,10 @@ public class Multiplayer : MonoBehaviour {
 		
 		System.Random random = new System.Random (); // TODO
 		String username = SystemInfo.deviceUniqueIdentifier + random.Next (9999);
-		client = new Client ("172.20.147.12", username: username); // this method has an optional 'token'
+        Debug.Log(username);
+        localPlayer = new Player();
+        localPlayer.username = username;
+		client = new Client ("172.20.146.40", username: username); // this method has an optional 'token'
 		client.Connect();
 		client.StartGame(OnGameUpdate);
 	}
@@ -71,7 +76,7 @@ public class Multiplayer : MonoBehaviour {
 						isLocalTurn = true;
 
 						// TODO!: move player2 piece
-						remotePlayerObject.GetComponent<PlayerAbilities>().MoveButton(move.player.position);
+						remotePlayerObject.GetComponent<PlayerAbilities>().MoveButton(move.player.position, remote: true);
 					}
 
 					// TODO: update tiles

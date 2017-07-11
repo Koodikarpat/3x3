@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Networking
 {
@@ -36,7 +36,7 @@ namespace Networking
 
 			@switch[message.GetType()]();
 
-                string json = JsonUtility.ToJson(serializable);
+			string json = JsonConvert.SerializeObject(serializable);
 
 			try {
 				writer.Write(json);
@@ -56,7 +56,7 @@ namespace Networking
 			}
 
 			try {
-                var deserialised = JsonUtility.FromJson<Message>(json);
+				var deserialised = JsonConvert.DeserializeObject<Message>(json);
 
 				if (deserialised.authenticationRequest != null) { // only one of the Message.variable can be non null in one message
 					return (AuthenticationRequest)deserialised.authenticationRequest;

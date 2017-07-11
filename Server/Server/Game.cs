@@ -62,10 +62,14 @@ namespace Server
 							// TODO ConnectionOfUser may return null
 							ConnectionOfUser(messageUser).SendObject(res);
 
+                            Console.WriteLine("position: " + res.player.position);
 							res.player.position = RotatedPosition(res.player.position); // this rotates theboard for player 2
 
 							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);
-						} else {
+
+                            Console.WriteLine("sender user was: " + messageUser.username);
+                            Console.WriteLine("other user was: " + TheOtherUser(messageUser).username);
+                        } else {
 							var res = new Status();
 							res = Status.Fail;
 
@@ -90,7 +94,7 @@ namespace Server
 		}
 
 		private int RotatedPosition(int position) {
-			return (position - 10) * -1;
+            return 8 - position;
 		}
 
 		private Connection ConnectionOfUser(User user) {

@@ -35,14 +35,14 @@ public class PlayerAbilities : MonoBehaviour
 	{
 	}
 
-	public void MoveButton(int button)
+	public void MoveButton(int button, bool remote = false)
 	{
 		// the movement itself
 		// move must always be legal, if online game it must also be your turn
 		if (isLegalMove (currentButton, button)) {
 
 			// if online game
-			if (multiplayer.isOnline) {
+			if (multiplayer.isOnline && !remote) {
 				// make online move
 				multiplayer.MovePiece (button);
 				serverAnswered = false;
@@ -51,7 +51,7 @@ public class PlayerAbilities : MonoBehaviour
 			//TODO: animationsFinished = false;
 			StartCoroutine (waitAnimations (button));
 		} else {
-			Debug.Log ("Someone tried to do an illegal move");
+			Debug.Log ("Someone tried to do an illegal move" + " start: " + currentButton + " end: " + button);
 		}
 	}
 
@@ -79,8 +79,8 @@ public class PlayerAbilities : MonoBehaviour
 		Animator Animator = buttons.tiles [currentButton].gameObject.GetComponentInChildren<Animator> ();
 		Animator.SetTrigger ("Step on");
 
-		puff.GetComponent<ParticleSystem> ().Play ();
-		puff.transform.position = buttons.tiles [button].position;
+		//puff.GetComponent<ParticleSystem> ().Play ();
+		//puff.transform.position = buttons.tiles [button].position;
 	}
 
 	bool isLegalMove(int start, int end)
