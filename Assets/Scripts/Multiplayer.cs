@@ -16,6 +16,8 @@ public class Multiplayer : MonoBehaviour {
 	public GameObject localPlayerObject;
 	public GameObject remotePlayerObject;
 	public GameObject turnControllerObject;
+    public GameObject tileObject;
+    TilePlacements tilePlacements;
 
 	private Stack<object> messageQueue;
 
@@ -23,12 +25,12 @@ public class Multiplayer : MonoBehaviour {
 	void Start()
 	{
         Application.runInBackground = true;
-        isOnline = true; //TODO: rautalankafixi
 		if(isOnline)
 			StartOnlineGame();
 
 		messageQueue = new Stack<object>();
-	}
+        tilePlacements = tileObject.GetComponent<TilePlacements>();
+    }
 
 	void Stop() // TODO the client must be disconnected when the scene is exited
 	{
@@ -97,7 +99,7 @@ public class Multiplayer : MonoBehaviour {
 					localPlayer = gameInit.localPlayer;
 					remotePlayer = gameInit.remotePlayer;
 
-					// TODO: init tiles
+                    TileArray(gameInit); // create gameboard tiles
 
 					// TODO: init pieces with correct skins
 
@@ -107,7 +109,29 @@ public class Multiplayer : MonoBehaviour {
 		@switch[message.GetType()]();
 	}
 
-
+    void TileArray(GameInit gameInit)
+    {
+        Tile[] tiles = new Tile[9];
+        for (int i = 0; i < 9; i++)
+        {
+            tiles[i] = new Tile();
+            switch (gameInit.tiles[i].type)
+            {
+                case MessageTileType.attack:
+                    tiles[i].type = new Attack(gameInit.tiles[i].strength);
+                    tilePlacements.CreateTile(tiles[i], i);
+                    continue;
+                case MessageTileType.heal:
+                    tiles[i].type = new Heal(gameInit.tiles[i].strength);
+                    tilePlacements.CreateTile(tiles[i], i);
+                    continue;
+                case MessageTileType.poison:
+                    tiles[i].type = new Poison(gameInit.tiles[i].strength);
+                    tilePlacements.CreateTile(tiles[i], i);
+                    continue;
+            }
+        }
+    }
 
 	// Update is called once per frame
 	void Update()

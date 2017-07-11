@@ -31,7 +31,7 @@ namespace Server
 			message.gameStatus = GameStatus.YourTurn;
 			message.localPlayer = user1.player;
 			message.remotePlayer = user2.player;
-			//message.tiles = TODO: implement tile init
+            message.tiles = GameBoard();
 
 			// ConnectionOfUser may return null
 			ConnectionOfUser(user1).SendObject(message);
@@ -39,11 +39,55 @@ namespace Server
 			message.gameStatus = GameStatus.RemoteTurn;
 			message.localPlayer = user2.player;
 			message.remotePlayer = user1.player;
+            message.tiles = RotateBoard(message.tiles);
 
 			ConnectionOfUser(user2).SendObject(message);
 
 			Console.WriteLine("A new game has begun");
 		}
+
+        private MessageTile[] GameBoard()
+        {
+            MessageTile[] tileArray = new MessageTile[9];
+            Random rnd = new System.Random();
+
+            for (int i = 0; i < 9; i++)
+            {
+                tileArray[i] = new MessageTile();
+                int random = rnd.Next(0, 3);
+                int strength = rnd.Next(1, 6);
+
+                switch (random)
+                {
+                    case 0:
+                        tileArray[i].type = MessageTileType.attack;
+                        break;
+                    case 1:
+                        tileArray[i].type = MessageTileType.heal;
+                        break;
+                    case 2:
+                        tileArray[i].type = MessageTileType.poison;
+                        break;
+                    default:
+                        break;
+                }
+                tileArray[i].strength = strength;
+            }
+
+            return tileArray;
+        }
+
+        private MessageTile[] RotateBoard(MessageTile[] board)
+        {
+            MessageTile[] rotatedBoard = new MessageTile[9];
+
+            for (int i = 0; i < 9; i++)
+            {
+                rotatedBoard[8 - i] = board[i];
+            }
+
+            return rotatedBoard;
+        }
 
 		public void Stop()
 		{
