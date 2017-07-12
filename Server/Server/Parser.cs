@@ -29,7 +29,10 @@ namespace Networking
 				{ typeof(Move), () => {
 						serializable.move = (Move)message;
 					} },
-				{ typeof(Status), () => {
+                { typeof(TurnChange), () => {
+                        serializable.changeTurn = (TurnChange)message;
+                    } },
+                { typeof(Status), () => {
 						serializable.status = (Status)message;
 					} }
 			};
@@ -66,7 +69,9 @@ namespace Networking
 					return (GameInit)deserialised.gameInit;
 				} else if (deserialised.move != null) {
 					return (Move)deserialised.move;
-				} else if (deserialised.status != Status.None) { // be careful with enums in Message
+                } else if (deserialised.changeTurn != null) {
+                    return (TurnChange)deserialised.changeTurn;
+                } else if (deserialised.status != Status.None) { // be careful with enums in Message
 					return (Status)deserialised.status;
 				} else {
 					// parsing message failed

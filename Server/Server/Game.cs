@@ -10,6 +10,8 @@ namespace Server
 
 		public User user1;
 		public User user2;
+        private int turn; // 1 when user1 is doing his turn, 2 when user2 is doing his turn
+        private Timer timer; // timer for the turns
 
 		public Game (User u1, User u2, Func<User, Connection> connectionOfUserCallback)
 		{
@@ -21,11 +23,14 @@ namespace Server
 
 		public void Start()
 		{
+            timer = new Timer();
 			user1.player = new Player();
 			user2.player = new Player();
 
 			user1.player.position = 7;
 			user2.player.position = 1;
+
+            turn = 1;
 
 			var message = new GameInit();
 			message.gameStatus = GameStatus.YourTurn;
@@ -43,8 +48,29 @@ namespace Server
 
 			ConnectionOfUser(user2).SendObject(message);
 
+            ChangeTurn();
+
 			Console.WriteLine("A new game has begun");
 		}
+
+        public void ChangeTurn()
+        {
+            var message = new TurnChange();
+            if (turn == 1)
+            {
+                message.playerUpNext = user1.player;
+                turn = 2;
+            }
+            else
+            {
+                message.playerUpNext = user2.player;
+                turn = 1;
+            }
+
+            ConnectionOfUser(user1).SendObject(message);
+            ConnectionOfUser(user2).SendObject(message);
+            timer.Start();
+        }
 
         private MessageTile[] GameBoard(int tileCount)
         {
@@ -111,6 +137,8 @@ namespace Server
 							res.player.position = RotatedPosition(res.player.position); // this rotates theboard for player 2
 
 							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);
+
+                            ChangeTurn();
 
                             Console.WriteLine("sender user was: " + messageUser.username);
                             Console.WriteLine("other user was: " + TheOtherUser(messageUser).username);

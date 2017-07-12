@@ -20,6 +20,8 @@ namespace Networking
 		public Move move; // sent by the client when the clients want's to move a piece
 
 		public GameInit gameInit; // the server initializes the the clients
+
+        public TurnChange changeTurn; // sent by server, when it is time to change the turn
 	}
 
 	// MESSAGE TYPES, use these to send messages
@@ -47,6 +49,11 @@ namespace Networking
 		public Player player;
 		public MessageTile newTile; // the server must select the tile
 	}
+
+    public class TurnChange
+    {
+        public Player playerUpNext;
+    }
 
 	public class AuthenticationRequest
 	{
