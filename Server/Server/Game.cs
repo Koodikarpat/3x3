@@ -31,7 +31,7 @@ namespace Server
 			message.gameStatus = GameStatus.YourTurn;
 			message.localPlayer = user1.player;
 			message.remotePlayer = user2.player;
-            message.tiles = GameBoard();
+            message.tiles = GameBoard(9);
 
 			// ConnectionOfUser may return null
 			ConnectionOfUser(user1).SendObject(message);
@@ -46,12 +46,12 @@ namespace Server
 			Console.WriteLine("A new game has begun");
 		}
 
-        private MessageTile[] GameBoard()
+        private MessageTile[] GameBoard(int tileCount)
         {
-            MessageTile[] tileArray = new MessageTile[9];
+            MessageTile[] tileArray = new MessageTile[tileCount];
             Random rnd = new System.Random();
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < tileCount; i++)
             {
                 tileArray[i] = new MessageTile();
                 int random = rnd.Next(0, 3);
@@ -101,7 +101,8 @@ namespace Server
 						if (true) { // TODO check if it is this users turn, is the move legal
 							var res = new Move();
 							res.player = move.player;
-							// TODO new tile
+                            MessageTile[] newTiles = GameBoard(1); // generate 1 new tile
+                            res.newTile = newTiles[0];
 
 							// TODO ConnectionOfUser may return null
 							ConnectionOfUser(messageUser).SendObject(res);

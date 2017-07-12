@@ -15,9 +15,12 @@ public class Multiplayer : MonoBehaviour {
 
 	public GameObject localPlayerObject;
 	public GameObject remotePlayerObject;
-	public GameObject turnControllerObject;
+    PlayerAbilities localPlayerAbilities;
+    PlayerAbilities remotePlayerAbilities;
+    public GameObject turnControllerObject;
     public GameObject tileObject;
     TilePlacements tilePlacements;
+    ButtonSelection buttonSelection;
 
 	private Stack<object> messageQueue;
 
@@ -30,6 +33,9 @@ public class Multiplayer : MonoBehaviour {
 
 		messageQueue = new Stack<object>();
         tilePlacements = tileObject.GetComponent<TilePlacements>();
+        buttonSelection = tileObject.GetComponent<ButtonSelection>();
+        localPlayerAbilities = localPlayerObject.GetComponent<PlayerAbilities>();
+        remotePlayerAbilities = remotePlayerObject.GetComponent<PlayerAbilities>();
     }
 
 	void Stop() // TODO the client must be disconnected when the scene is exited
@@ -74,14 +80,12 @@ public class Multiplayer : MonoBehaviour {
 					var move = (Move)message;
 					if (isLocalTurn) {  // this  move is a response to a local move that the loca player just made
 						isLocalTurn = false;
+                        ChangeTile(move);
 					} else { // remote player made a move
 						isLocalTurn = true;
-
-						// TODO!: move player2 piece
-						remotePlayerObject.GetComponent<PlayerAbilities>().MoveButton(move.player.position, remote: true);
-					}
-
-					// TODO: update tiles
+						remotePlayerAbilities.MoveButton(move.player.position, remote: true);
+                        ChangeTile(move, enemy: true);
+                    }
 					// TODO: animations by server
 				} },
 			{ typeof(GameInit), () => {
@@ -111,26 +115,49 @@ public class Multiplayer : MonoBehaviour {
 
     void TileArray(GameInit gameInit)
     {
-        Tile[] tiles = new Tile[9];
         for (int i = 0; i < 9; i++)
         {
-            tiles[i] = new Tile();
             switch (gameInit.tiles[i].type)
             {
                 case MessageTileType.attack:
-                    tiles[i].type = new Attack(gameInit.tiles[i].strength);
-                    tilePlacements.CreateTile(tiles[i], i);
+                    buttonSelection.tiles[i].type = tilePlacements.GetEffect(0, gameInit.tiles[i].strength);
+                    buttonSelection.tiles[i].position = buttonSelection.tiles[i].gameObject.transform.position;
+                    tilePlacements.CreateTile(buttonSelection.tiles[i], i);
                     continue;
                 case MessageTileType.heal:
-                    tiles[i].type = new Heal(gameInit.tiles[i].strength);
-                    tilePlacements.CreateTile(tiles[i], i);
+                    buttonSelection.tiles[i].type = tilePlacements.GetEffect(1, gameInit.tiles[i].strength);
+                    buttonSelection.tiles[i].position = buttonSelection.tiles[i].gameObject.transform.position;
+                    tilePlacements.CreateTile(buttonSelection.tiles[i], i);
                     continue;
                 case MessageTileType.poison:
-                    tiles[i].type = new Poison(gameInit.tiles[i].strength);
-                    tilePlacements.CreateTile(tiles[i], i);
+                    buttonSelection.tiles[i].type = tilePlacements.GetEffect(2, gameInit.tiles[i].strength);
+                    buttonSelection.tiles[i].position = buttonSelection.tiles[i].gameObject.transform.position;
+                    tilePlacements.CreateTile(buttonSelection.tiles[i], i);
                     continue;
             }
         }
+    }
+
+    int TileType(MessageTileType type)
+    {
+        switch (type)
+        {
+            case MessageTileType.attack:
+                return 0;
+            case MessageTileType.heal:
+                return 1;
+            case MessageTileType.poison:
+                return 2;
+        }
+        Debug.Log("Wrong tile type, setting tile to attack type instead");
+        return 0;
+    }
+
+    void ChangeTile(Move move, bool enemy = false)
+    {
+        int type = TileType(move.newTile.type);
+        if (!enemy) localPlayerAbilities.ChangeTile(type, move.newTile.strength);
+        else remotePlayerAbilities.ChangeTile(type, move.newTile.strength);
     }
 
 	// Update is called once per frame

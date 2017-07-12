@@ -9,12 +9,9 @@ public class TilePlacements : MonoBehaviour
     public GameObject poison;
 
     // Use this for initialization
-    public TileEffects GetRandom()
+    public TileEffects GetEffect(int id, int strength)
 	{
-			int random = Random.Range (0, 3); 
-			int strength = (Random.Range (1, 5));
-
-			switch (random) 
+			switch (id) 
 			{
 			case TileEffects.POISON:
 				return new Poison(strength);
@@ -29,22 +26,22 @@ public class TilePlacements : MonoBehaviour
 				return null;
 			}	
 	}
+
     //tekee uuden tilen
     public void CreateTile(Tile tile, int i)
     {
         GameObject tilePrefab;
 
         if (tile.gameObject.transform.childCount != 0)
-        Destroy (tile.gameObject.transform.GetChild(0).gameObject);
+            Destroy (tile.gameObject.transform.GetChild(0).gameObject);
 
         if (tile.type.color == TileEffects.HEAL)
         {
             tilePrefab = heal;
-
         }
         else if (tile.type.color == TileEffects.ATTACK)
         {
-            tilePrefab =attack;
+            tilePrefab = attack;
         }
         else if (tile.type.color == TileEffects.POISON)
         {

@@ -6,8 +6,9 @@ using UnityEngine.UI;
 public class PlayerAbilities : MonoBehaviour 
 {
 	public GameObject buttonGroup;
-	//Keeping track of the location of the player gameobject; "what button is the player on at the moment"
-	public int currentButton;
+    //Keeping track of the location of the player gameobject; "what button is the player on at the moment"
+    public int currentButton;
+    public int lastButton;
 	public GameObject turnControlObject;
 	public GameObject enemy;
     public GameObject puff;
@@ -29,6 +30,7 @@ public class PlayerAbilities : MonoBehaviour
 		//startin locations
 		//Debug.Log (transform.name + " " + buttons.tiles[currentButton].position);
 		transform.position = buttons.tiles[currentButton].gameObject.transform.position;
+        lastButton = currentButton;
 	}
 
 	void Update () 
@@ -55,6 +57,13 @@ public class PlayerAbilities : MonoBehaviour
 		}
 	}
 
+    public void ChangeTile(int type, int strength)
+    {
+        buttons.tiles[lastButton].type = tilePlacements.GetEffect(type, strength);
+        tilePlacements.CreateTile(buttons.tiles[lastButton], lastButton);
+        lastButton = currentButton;
+    }
+
 	private IEnumerator waitAnimations(int button)
 	{
 		while (!animationsFinished)
@@ -68,9 +77,6 @@ public class PlayerAbilities : MonoBehaviour
 	{
 		TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
 		turncontrol.ChangeTurn ();
-
-		buttons.tiles [currentButton].type = tilePlacements.GetRandom ();
-		tilePlacements.CreateTile (buttons.tiles [currentButton], currentButton);
 
 		transform.position = buttons.tiles [button].position;
 		currentButton = button;
