@@ -21,6 +21,7 @@ public class Multiplayer : MonoBehaviour {
     public GameObject tileObject;
     TilePlacements tilePlacements;
     ButtonSelection buttonSelection;
+    TurnControl turnControlScript;
 
 	private Stack<object> messageQueue;
 
@@ -36,6 +37,7 @@ public class Multiplayer : MonoBehaviour {
         buttonSelection = tileObject.GetComponent<ButtonSelection>();
         localPlayerAbilities = localPlayerObject.GetComponent<PlayerAbilities>();
         remotePlayerAbilities = remotePlayerObject.GetComponent<PlayerAbilities>();
+        turnControlScript = turnControllerObject.GetComponent<TurnControl>();
     }
 
 	void Stop() // TODO the client must be disconnected when the scene is exited
@@ -74,21 +76,33 @@ public class Multiplayer : MonoBehaviour {
 
 	private void UpdateGame(object message) // the 'global state' of the 'game' is maintained by this function when isOnline, its called by Update()
 	{
+        Debug.Log("message");
 		var @switch = new Dictionary<Type, Action> {
 			{ typeof(Move), () => {
 					Debug.Log("A Move message was received");
 					var move = (Move)message;
 					if (isLocalTurn) {  // this  move is a response to a local move that the loca player just made
-						isLocalTurn = false;
                         ChangeTile(move);
-					} else { // remote player made a move
-						isLocalTurn = true;
+                    } else { // remote player made a move
 						remotePlayerAbilities.MoveButton(move.player.position, remote: true);
                         ChangeTile(move, enemy: true);
                     }
 					// TODO: animations by server
 				} },
-			{ typeof(GameInit), () => {
+            { typeof(TurnChange), () => {
+                    Debug.Log("A TurnChange message was received");
+                    var turnChange = (TurnChange)message;
+                    if (turnChange.playerUpNext == remotePlayer) {  // remote player's turn
+						isLocalTurn = false;
+                        turnControlScript.ChangeTurn();
+                        turnControlScript.timerStarted = true;
+                    } else { // your turn
+						isLocalTurn = true;
+                        turnControlScript.ChangeTurn();
+                        turnControlScript.timerStarted = true;
+                    }
+                } },
+            { typeof(GameInit), () => {
 					Debug.Log("A GameInit message was received");
 					var gameInit = (GameInit)message;
 					if (gameInit.gameStatus == GameStatus.YourTurn) { // TODO init turncontroller
@@ -97,8 +111,8 @@ public class Multiplayer : MonoBehaviour {
 					} else {
 						isLocalTurn = false;
 						// remote player starts Warning: If game init is sent more than once during a game this will cause a race condition
-						turnControllerObject.GetComponent<TurnControl>().ChangeTurn();
-					}
+						turnControlScript.ChangeTurn();
+                    }
 
 					localPlayer = gameInit.localPlayer;
 					remotePlayer = gameInit.remotePlayer;

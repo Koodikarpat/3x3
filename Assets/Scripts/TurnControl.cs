@@ -22,11 +22,14 @@ public class TurnControl : MonoBehaviour {
 	public GameObject Player1Object;
 	public GameObject Player2Object;
 
+    public bool timerStarted;
+
 	// Use this for initialization
 	void Start () {
         mySlider = TimeSlider.GetComponent<Slider>();
         turnTime = timeLeft;
 		playerTurn = playerTurnText.GetComponent<Text> ();
+        timerStarted = true;
 
         Player1 = true;
 		Player2 = false;
@@ -35,19 +38,17 @@ public class TurnControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
 	{
-		//Debug.Log ("L:" + timeLeft);
-		//timer/ajakääntö -works!
+        if (!timerStarted) return;
+
 		timeLeft -= Time.deltaTime;
         float value = timeLeft / turnTime;
         mySlider.value = value;
 
+        if (timeLeft <= 0)
         {
-			if (timeLeft < 0) 
-			{
-
-				ChangeTurn ();
-			}
-		}
+            timerStarted = false;
+            timeLeft = turnTime;
+        }
 	}
 	public void ChangeTurn () //Vuoronvaihto
 	{

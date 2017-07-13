@@ -135,7 +135,10 @@ namespace Networking
 				{ typeof(Move), () => {
 						GameUpdateCallback(message);
 					} },
-				{ typeof(GameInit), () => {
+                { typeof(TurnChange), () => {
+                        GameUpdateCallback(message);
+                    } },
+                { typeof(GameInit), () => {
 						GameUpdateCallback(message);
 					} }
 			};

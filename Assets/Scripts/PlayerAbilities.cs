@@ -76,7 +76,7 @@ public class PlayerAbilities : MonoBehaviour
 	private void finishMove(int button)
 	{
 		TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
-		turncontrol.ChangeTurn ();
+		//turncontrol.ChangeTurn ();
 
 		transform.position = buttons.tiles [button].position;
 		currentButton = button;

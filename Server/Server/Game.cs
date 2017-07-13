@@ -24,6 +24,8 @@ namespace Server
 		public void Start()
 		{
             timer = new Timer();
+            timer.gameManager = this;
+            timer.Initialize();
 			user1.player = new Player();
 			user2.player = new Player();
 
@@ -48,13 +50,15 @@ namespace Server
 
 			ConnectionOfUser(user2).SendObject(message);
 
-            ChangeTurn();
+            timer.Start();
 
-			Console.WriteLine("A new game has begun");
+            Console.WriteLine("A new game has begun");
 		}
 
         public void ChangeTurn()
         {
+            //timer.Stop();
+            Console.WriteLine("turn change");
             var message = new TurnChange();
             if (turn == 1)
             {
@@ -138,7 +142,7 @@ namespace Server
 
 							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);
 
-                            ChangeTurn();
+                            //ChangeTurn();
 
                             Console.WriteLine("sender user was: " + messageUser.username);
                             Console.WriteLine("other user was: " + TheOtherUser(messageUser).username);
