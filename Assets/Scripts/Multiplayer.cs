@@ -95,12 +95,12 @@ public class Multiplayer : MonoBehaviour {
             { typeof(TurnChange), () => {
                     Debug.Log("A TurnChange message was received");
                     var turnChange = (TurnChange)message;
-                    if (turnChange.turn == GameStatus.YourTurn) {  // remote player's turn
-                    Debug.Log("localturn");
+                    if (turnChange.turn == GameStatus.YourTurn) {  // your turn
+                        Debug.Log("localturn");
 						isLocalTurn = true;
                         turnControlScript.ChangeTurn();
-                    } else { // your turn
-                    Debug.Log("remoteturn");
+                    } else { // remote player's turn
+                        Debug.Log("remoteturn");
 						isLocalTurn = false;
                         turnControlScript.ChangeTurn();
                     }

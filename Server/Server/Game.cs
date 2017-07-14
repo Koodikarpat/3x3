@@ -10,6 +10,7 @@ namespace Server
 
 		public User user1;
 		public User user2;
+        private GameStatus gameStatus; // current state of the game
         private int turn; // 1 when user1 is doing his turn, 2 when user2 is doing his turn
         private Timer timer; // timer for the turns
 
@@ -23,6 +24,9 @@ namespace Server
 
 		public void Start()
 		{
+            gameStatus = new GameStatus();
+            gameStatus.player1 = new PlayerStatus();
+            gameStatus.player2 = new PlayerStatus();
             timer = new Timer();
             timer.gameManager = this;
             timer.Initialize();
@@ -32,18 +36,26 @@ namespace Server
 			user1.player.position = 7;
 			user2.player.position = 1;
 
+            gameStatus.player1.Initialze(user1.player.username, user1.player.position, 20, 0);
+            gameStatus.player2.Initialze(user1.player.username, user2.player.position, 20, 0);
+
             turn = 1;
 
+            gameStatus.isPlayer1Turn = true;
+
 			var message = new GameInit();
-			message.gameStatus = GameStatus.YourTurn;
+			message.gameStatus = Networking.GameStatus.YourTurn;
 			message.localPlayer = user1.player;
 			message.remotePlayer = user2.player;
             message.tiles = GameBoard(9);
 
+            gameStatus.tiles = new MessageTile[9];
+            gameStatus.tiles = message.tiles;
+
 			// ConnectionOfUser may return null
 			ConnectionOfUser(user1).SendObject(message);
 
-			message.gameStatus = GameStatus.RemoteTurn;
+			message.gameStatus = Networking.GameStatus.RemoteTurn;
 			message.localPlayer = user2.player;
 			message.remotePlayer = user1.player;
             message.tiles = RotateBoard(message.tiles);
@@ -52,6 +64,7 @@ namespace Server
 
             timer.ResetTimer();
 
+            gameStatus.PrintStatus();
             Console.WriteLine("A new game has begun");
 		}
 
@@ -61,20 +74,21 @@ namespace Server
             var message = new TurnChange();
             if (turn == 1)
             {
-                message.turn = GameStatus.RemoteTurn;
+                message.turn = Networking.GameStatus.RemoteTurn;
                 ConnectionOfUser(user1).SendObject(message);
-                message.turn = GameStatus.YourTurn;
+                message.turn = Networking.GameStatus.YourTurn;
                 ConnectionOfUser(user2).SendObject(message);
                 turn = 2;
             }
             else
             {
-                message.turn = GameStatus.YourTurn;
+                message.turn = Networking.GameStatus.YourTurn;
                 ConnectionOfUser(user1).SendObject(message);
-                message.turn = GameStatus.RemoteTurn;
+                message.turn = Networking.GameStatus.RemoteTurn;
                 ConnectionOfUser(user2).SendObject(message);
                 turn = 1;
             }
+            gameStatus.isPlayer1Turn = !gameStatus.isPlayer1Turn;
             timer.ResetTimer();
         }
 
@@ -135,6 +149,7 @@ namespace Server
 							res.player = move.player;
                             MessageTile[] newTiles = GameBoard(1); // generate 1 new tile
                             res.newTile = newTiles[0];
+                            gameStatus.ChangeTile(res.newTile, move.player.position, messageUser == user1);
 
 							// TODO ConnectionOfUser may return null
 							ConnectionOfUser(messageUser).SendObject(res);
