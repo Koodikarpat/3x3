@@ -12,6 +12,9 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	//button objects
 	public Button localMultiplayer;
 	public Button Online;
+    public Button credits;
+    public Button backToMainMenu;
+    public Button changeUsername;
 
 	//transition camera
 	Animator animator;
@@ -25,6 +28,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 
 	//player1 - new, works again
 	public GameObject TokenControl;
+    public string player1Name;
 
 	//player2 random - new, MOVED FROM TOKENCONTROL
 	public GameObject randomToken;
@@ -126,8 +130,29 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 
 	}
 
-	//player2 - makes an object out of the prefab
-	GameObject SetPrefab2 (int randomPrefabIndex) //IT WORKS
+    public void ChangeSceneCredits()
+    {
+        SceneManager.LoadScene ("Credits");
+    }
+
+    public void ChangeSceneMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu_Aleksi");
+    }
+
+    public void openUsernamePanel()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void closeUsernamePanel()
+    {
+        gameObject.SetActive(true);
+    }
+
+
+    //player2 - makes an object out of the prefab
+    GameObject SetPrefab2 (int randomPrefabIndex) //IT WORKS
 	{
 		Destroy (randomToken);
 		return Instantiate (prefabArray [randomPrefabIndex], transform);
