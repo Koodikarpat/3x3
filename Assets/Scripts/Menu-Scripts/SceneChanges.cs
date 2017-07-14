@@ -13,8 +13,15 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	public Button localMultiplayer;
 	public Button Online;
 
+	//transition camera
+	Animator animator;
+	CanvasRenderer renderer;
+
 	//for moving the player tokens (KeepTheseScriptScript, (TokenControl script))
 	public GameObject ObjectKeeper;
+	public GameObject CanvasAuki;
+	public GameObject Canvas;
+	public GameObject Canvashuone;
 
 	//player1 - new, works again
 	public GameObject TokenControl;
@@ -27,14 +34,38 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	// Use this for initialization
 	void Start () {
 
+		animator = CanvasAuki.GetComponent<Animator> ();
+
+
+
 	}
 
 	// Update is called once per frame.
 	void Update () {
 
+
+
+		
 	}
+
+	//Transition animation
+	IEnumerator MyRoutine()
+	{
+		
+		CanvasAuki.SetActive (true);
+		animator.SetTrigger ("Hide");
+		Canvashuone.SetActive (true);
+		yield return new WaitForSeconds(1);
+		SceneManager.LoadScene ("mirkan scene");
+
+
+
+	}
+
 	public void ChangeSceneLocalMultiplayer () //go to play scene (local multiplayer)
 	{
+		
+
 		//move the right token to the play scene
 		KeepTheseScript keepTheseScript = ObjectKeeper.GetComponent<KeepTheseScript> ();//get script
 
@@ -74,8 +105,17 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 
 		//------------------------------------------------------------------------------------
 
-		//and go to the right scene
-		SceneManager.LoadScene ("reetun scene");
+		//Hiding the buttons
+
+		GameObject[] gameObjectArray = GameObject.FindGameObjectsWithTag ("Piilotettava");
+
+		foreach(GameObject go in gameObjectArray)
+		{
+			go.SetActive (false);
+		}
+
+		//playing the transition animation and changing the scene
+		StartCoroutine(MyRoutine());
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version
@@ -83,6 +123,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		// TODO: initialize the pieces
 		// TODO: initialize Multiplayer Controller object with multiplayer.isOnline = true
 		SceneManager.LoadScene("reetun scene"); //TODO: there should be a lobby/waiting for game scene or the mirkan scene should have a "waiting for game" dialog
+
 	}
 
 	//player2 - makes an object out of the prefab
