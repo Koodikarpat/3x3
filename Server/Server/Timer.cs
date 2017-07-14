@@ -7,30 +7,26 @@ namespace Server
     {
         int turnTime = 20; //turn time in seconds
         public Game gameManager;
-        System.Timers.Timer aTimer;
+        public System.Timers.Timer aTimer;
 
         public void Initialize()
         {
             aTimer = new System.Timers.Timer();
             aTimer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
             aTimer.Interval = turnTime * 1000; // seconds to milliseconds
-            Stop();
+            aTimer.Stop();
         }
 
-        public void Start()
+        public void ResetTimer()
         {
-            aTimer.Enabled = true;
-        }
-
-        public void Stop()
-        {
-            aTimer.Enabled = false;
+            aTimer.Stop();
+            aTimer.Start();
         }
 
         // Specify what you want to happen when the Elapsed event is raised.
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            Stop();
+            aTimer.Stop();
             Console.WriteLine("timer stopped");
             if (gameManager != null) gameManager.ChangeTurn();
             else Console.WriteLine("Timer: gameManager not set");

@@ -64,7 +64,7 @@ public class TurnControl : MonoBehaviour {
 			Player2Object.GetComponent <StatusEffects> ().tick ();
 			//player-2-controlled
 		}
-
+        timerStarted = true;
 		timeLeft = turnTime;
 	}
 }

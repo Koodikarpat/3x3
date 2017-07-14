@@ -76,30 +76,33 @@ public class Multiplayer : MonoBehaviour {
 
 	private void UpdateGame(object message) // the 'global state' of the 'game' is maintained by this function when isOnline, its called by Update()
 	{
-        Debug.Log("message");
 		var @switch = new Dictionary<Type, Action> {
 			{ typeof(Move), () => {
 					Debug.Log("A Move message was received");
 					var move = (Move)message;
 					if (isLocalTurn) {  // this  move is a response to a local move that the loca player just made
                         ChangeTile(move);
+                        isLocalTurn = false;
+                        turnControlScript.ChangeTurn();
                     } else { // remote player made a move
 						remotePlayerAbilities.MoveButton(move.player.position, remote: true);
                         ChangeTile(move, enemy: true);
+                        isLocalTurn = true;
+                        turnControlScript.ChangeTurn();
                     }
 					// TODO: animations by server
 				} },
             { typeof(TurnChange), () => {
                     Debug.Log("A TurnChange message was received");
                     var turnChange = (TurnChange)message;
-                    if (turnChange.playerUpNext == remotePlayer) {  // remote player's turn
-						isLocalTurn = false;
-                        turnControlScript.ChangeTurn();
-                        turnControlScript.timerStarted = true;
-                    } else { // your turn
+                    if (turnChange.turn == GameStatus.YourTurn) {  // remote player's turn
+                    Debug.Log("localturn");
 						isLocalTurn = true;
                         turnControlScript.ChangeTurn();
-                        turnControlScript.timerStarted = true;
+                    } else { // your turn
+                    Debug.Log("remoteturn");
+						isLocalTurn = false;
+                        turnControlScript.ChangeTurn();
                     }
                 } },
             { typeof(GameInit), () => {

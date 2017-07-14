@@ -72,7 +72,7 @@ namespace Networking
 
     public class TurnChange
     {
-        public Player playerUpNext;
+        public GameStatus turn;
     }
 
     public class AuthenticationRequest

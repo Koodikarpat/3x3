@@ -50,30 +50,32 @@ namespace Server
 
 			ConnectionOfUser(user2).SendObject(message);
 
-            timer.Start();
+            timer.ResetTimer();
 
             Console.WriteLine("A new game has begun");
 		}
 
         public void ChangeTurn()
         {
-            //timer.Stop();
             Console.WriteLine("turn change");
             var message = new TurnChange();
             if (turn == 1)
             {
-                message.playerUpNext = user1.player;
+                message.turn = GameStatus.RemoteTurn;
+                ConnectionOfUser(user1).SendObject(message);
+                message.turn = GameStatus.YourTurn;
+                ConnectionOfUser(user2).SendObject(message);
                 turn = 2;
             }
             else
             {
-                message.playerUpNext = user2.player;
+                message.turn = GameStatus.YourTurn;
+                ConnectionOfUser(user1).SendObject(message);
+                message.turn = GameStatus.RemoteTurn;
+                ConnectionOfUser(user2).SendObject(message);
                 turn = 1;
             }
-
-            ConnectionOfUser(user1).SendObject(message);
-            ConnectionOfUser(user2).SendObject(message);
-            timer.Start();
+            timer.ResetTimer();
         }
 
         private MessageTile[] GameBoard(int tileCount)
@@ -142,7 +144,7 @@ namespace Server
 
 							ConnectionOfUser(TheOtherUser(messageUser)).SendObject(res);
 
-                            //ChangeTurn();
+                            timer.ResetTimer();
 
                             Console.WriteLine("sender user was: " + messageUser.username);
                             Console.WriteLine("other user was: " + TheOtherUser(messageUser).username);
