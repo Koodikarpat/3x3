@@ -5,7 +5,7 @@ using UnityEngine;
 public class Instantiator : MonoBehaviour
 {
     public List<GameObject> prefablist = new List<GameObject>();
-    
+
     private float timer;
     private float speedtimer;
 
@@ -21,8 +21,7 @@ public class Instantiator : MonoBehaviour
     {
         timer += Time.deltaTime;
         speedtimer += Time.deltaTime;
-        Debug.Log(10 / speedtimer);
-        if (timer > speedtimer / 20)
+        if (timer * (startSpeed - speedtimer) > 3)
         {
             timer = 0;
             if (startSpeed - speedtimer > 0)
@@ -33,8 +32,6 @@ public class Instantiator : MonoBehaviour
                 casinoRoll.movementSpeed = startSpeed - speedtimer;
             }
 
-            
         }
-		
 	}
 }
