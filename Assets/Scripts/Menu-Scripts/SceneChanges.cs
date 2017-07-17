@@ -38,9 +38,8 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	// Use this for initialization
 	void Start () {
 
-		animator = CanvasAuki.GetComponent<Animator> ();
-
-
+        if(CanvasAuki != null)
+		    animator = CanvasAuki.GetComponent<Animator> ();
 
 	}
 
@@ -57,7 +56,8 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	{
 		
 		CanvasAuki.SetActive (true);
-		animator.SetTrigger ("Hide");
+        Debug.Log("setting trigger");
+        animator.SetTrigger ("Hide");
 		Canvashuone.SetActive (true);
 		yield return new WaitForSeconds(1);
 		//SceneManager.LoadScene ("miikan scene");
