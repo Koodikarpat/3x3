@@ -91,14 +91,16 @@ public class PlayerAbilities : MonoBehaviour
 	private void finishMove(int button)
 	{
 
-	TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
-	//turncontrol.ChangeTurn ();
+	    TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
+
+        if(!multiplayer.isOnline)
+            turncontrol.ChangeTurn ();
 
         currentButton = button;
 
         buttons.tiles [currentButton].type.Action (gameObject, enemy);
-	Animator Animator = buttons.tiles [currentButton].gameObject.GetComponentInChildren<Animator> ();
-	Animator.SetTrigger ("Step on");
+	    Animator Animator = buttons.tiles [currentButton].gameObject.GetComponentInChildren<Animator> ();
+	    Animator.SetTrigger ("Step on");
 
 
         puff.GetComponent<ParticleSystem> ().Play ();

@@ -53,14 +53,14 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	}
 
 	//Transition animation
-	IEnumerator MyRoutine()
+	IEnumerator SceneTransition()
 	{
 		
 		CanvasAuki.SetActive (true);
 		animator.SetTrigger ("Hide");
 		Canvashuone.SetActive (true);
 		yield return new WaitForSeconds(1);
-		SceneManager.LoadScene ("mirkan scene");
+		//SceneManager.LoadScene ("miikan scene");
 
 
 
@@ -119,7 +119,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		}
 
 		//playing the transition animation and changing the scene
-		StartCoroutine(MyRoutine());
+		StartCoroutine(SceneTransition());
 
 	}
 	public void ChangeSceneOnline () //loading Screen for Online version

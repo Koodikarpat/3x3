@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TilePlacements : MonoBehaviour 
 {
+    System.Random random = new System.Random();
+
     public GameObject heal;
     public GameObject attack;
     public GameObject poison;
@@ -26,6 +28,12 @@ public class TilePlacements : MonoBehaviour
 				return null;
 			}	
 	}
+
+    public TileEffects GetRandom()
+    {
+        int randInt = random.Next(3);
+        return GetEffect(randInt, 1);
+    }
 
     //tekee uuden tilen
     public void CreateTile(Tile tile, int i)
