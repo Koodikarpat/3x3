@@ -5,7 +5,7 @@ namespace Server
 {
     public class Timer
     {
-        int turnTime = 20; //turn time in seconds
+        int turnTime =20; //turn time in seconds
         public Game gameManager;
         public System.Timers.Timer aTimer;
 
@@ -28,7 +28,8 @@ namespace Server
         {
             aTimer.Stop();
             Console.WriteLine("timer stopped");
-            if (gameManager != null) gameManager.ChangeTurn();
+            if (gameManager != null)
+                gameManager.ChangeTurn();
             else Console.WriteLine("Timer: gameManager not set");
         }
     }
