@@ -11,10 +11,14 @@ public class Poison : TileEffects
 	}
 	public override void Action (GameObject player, GameObject enemy)
 	{
-		if (strength > enemy.GetComponent<StatusEffects> ().turnsLeft)
-				enemy.GetComponent<StatusEffects> ().turnsLeft = strength;
-		//Debug.Log ("Poison");
-	}
+        playerSE = player.GetComponent<StatusEffects>();
+        enemySE = enemy.GetComponent<StatusEffects>();
+
+        if (strength > enemySE.GetEffect(typeof(PoisonEffect)).turns)
+            enemySE.AddStatusEffect(new PoisonEffect(1, 1));
+        //Debug.Log ("Poison");
+
+        base.Action(player, enemy);
+    }
 
 }
-

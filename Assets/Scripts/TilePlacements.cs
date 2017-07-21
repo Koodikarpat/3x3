@@ -65,5 +65,4 @@ public class TilePlacements : MonoBehaviour
         TileButton tilebutton = newtile.GetComponent<TileButton>();
         tilebutton.buttonnumber = i;
     }
-     
 }

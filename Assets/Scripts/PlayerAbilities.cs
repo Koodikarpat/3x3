@@ -108,18 +108,13 @@ public class PlayerAbilities : MonoBehaviour
     }
 
 
-    bool isLegalMove(int start, int end)
-
-	// restricting player movements to just one button away and only horizontally and vertically.
-
+    bool isLegalMove(int start, int end) // restricting player movements to just one button away and only horizontally and vertically.
     {
-
-
         if (end == enemy.GetComponent<PlayerAbilities>().currentButton)
-        return false;
+            return false;
 
         if ((start - 3 == end) || (start + 3 == end))
-        return true;
+            return true;
 
         if (start + 1 == end)
         {

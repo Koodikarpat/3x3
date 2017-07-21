@@ -22,6 +22,8 @@ public class TurnControl : MonoBehaviour {
 	public GameObject Player1Object;
 	public GameObject Player2Object;
 
+    public CardHandler p1CHandler, p2CHandler;
+
     public bool timerStarted;
 
 	// Use this for initialization
@@ -33,6 +35,9 @@ public class TurnControl : MonoBehaviour {
 
         Player1 = true;
 		Player2 = false;
+
+        p1CHandler.ShowCards();
+        p2CHandler.HideCards();
 	}
 	
 	// Update is called once per frame
@@ -52,18 +57,27 @@ public class TurnControl : MonoBehaviour {
 	}
 	public void ChangeTurn () //Vuoronvaihto
 	{
-		Player1 = !Player1;
+        if (!p1CHandler.HasCards()) p1CHandler.NewCards();
+        if (!p2CHandler.HasCards()) p2CHandler.NewCards();
+
+        p1CHandler.HideCards();
+        p2CHandler.HideCards();
+
+
+        Player1 = !Player1;
 		Player2 = !Player2;
 		if (Player1) {
 			playerTurn.text = ("Player 1");
-			Player1Object.GetComponent <StatusEffects> ().tick ();
-			//player-1-controlled
-		}
+			Player1Object.GetComponent <StatusEffects> ().Tick ();
+            p1CHandler.ShowCards();
+            //player-1-controlled
+        }
 		if (Player2) {
 			playerTurn.text = ("Player 2");
-			Player2Object.GetComponent <StatusEffects> ().tick ();
-			//player-2-controlled
-		}
+			Player2Object.GetComponent <StatusEffects> ().Tick ();
+            p2CHandler.ShowCards();
+            //player-2-controlled
+        }
         timerStarted = true;
 		timeLeft = turnTime;
 	}

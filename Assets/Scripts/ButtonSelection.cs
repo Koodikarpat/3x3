@@ -12,12 +12,17 @@ public class ButtonSelection : MonoBehaviour
 
 	public Tile[] tiles = new Tile[9];
 
+    public bool minePlacement = false;
+
     void Awake()
     {
-        if (!multiplayerController.GetComponent<Multiplayer>().isOnline)
-        {
-            for (int i = 0; i < 9; i++)
-            {
+        CreateTiles();
+    }
+
+    public void CreateTiles()
+    {
+        if (!multiplayerController.GetComponent<Multiplayer>().isOnline) {
+            for (int i = 0; i < tiles.Length; i++) {
                 tiles[i].position = tiles[i].gameObject.transform.position;
 
                 TilePlacements tilePlacements = GetComponent<TilePlacements>();
@@ -31,31 +36,36 @@ public class ButtonSelection : MonoBehaviour
         }
     }
 
-    void Update () 
-	{
-		
-	}
-
 	public void click(int button)
 	{
-		//Moving player to a selected location.
-		GameObject currentPlayer;
-		TurnControl turnControl = TurnController.GetComponent<TurnControl> ();
-	
-		if (turnControl.Player1) {
-			currentPlayer = player1;
-		} else if (turnControl.Player2) {
-			if (!multiplayerController.GetComponent<Multiplayer>().isOnline) { // local game
-				currentPlayer = player2;
-			} else { // online game
-				Debug.Log("Local player tried to move remote players piece");
-				return;
-			}
-		} else {
-			Debug.Log ("Virhe - Molempien Vuoro");
-			return;
-		}
-		PlayerAbilities pa = currentPlayer.GetComponent<PlayerAbilities>();
-		pa.MoveButton (button);
+        GameObject currentPlayer;
+        TurnControl turnControl = TurnController.GetComponent<TurnControl>();
+
+        if (turnControl.Player1) {
+            currentPlayer = player1;
+        }
+        else if (turnControl.Player2) {
+            if (!multiplayerController.GetComponent<Multiplayer>().isOnline) { // local game
+                currentPlayer = player2;
+            }
+            else { // online game
+                Debug.Log("Local player tried to move remote players piece");
+                return;
+            }
+        }
+        else {
+            Debug.Log("Virhe - Molempien Vuoro");
+            return;
+        }
+
+        if (!minePlacement) {
+            //Moving player to a selected location.
+            PlayerAbilities pa = currentPlayer.GetComponent<PlayerAbilities>();
+            pa.MoveButton(button);
+        }
+        else if (minePlacement) {
+            tiles[button].type.mine = true;
+            minePlacement = false;
+        }
 	}
 }

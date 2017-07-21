@@ -105,7 +105,7 @@ public class Instantiator : MonoBehaviour
 
     private void ObjectPassed(GameObject gobject)
     {
-        // Debug.Log("Latest casino object passed: " + lastObject.name + " Index: " + objectsPassed);
+        // May add sounds, effects and so on.
     }
 
     private void ObjectStayed(CasinoRoll roll)

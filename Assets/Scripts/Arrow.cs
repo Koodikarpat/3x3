@@ -45,8 +45,8 @@ public class Arrow : MonoBehaviour
         if (!rolling) // Don't send objects accidentally after we are done
             return;
 
-        if (collision.gameObject != currentObject && currentObject != null) // Check if a new object and current ref not null
-            instantiator.SendMessage("ObjectPassed", currentObject); // Send latest object passed
+        if (collision.gameObject != null) // Check if a new object and current ref not null
+            instantiator.SendMessage("ObjectPassed", collision.gameObject); // Send latest object passed
 
         if (currentObject != collision.gameObject) {
             timeout = Timeout; // Object passed, reset timeout.

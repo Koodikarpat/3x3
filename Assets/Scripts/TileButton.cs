@@ -13,7 +13,7 @@ public class TileButton : MonoBehaviour
        buttonSelection = TileGroup.GetComponent<ButtonSelection>();
     }
 
-       
+
 
     void OnMouseDown()
     {
