@@ -46,7 +46,7 @@ namespace Server
 
 		private void OnMessage(Connection thisConnection, object message)
 		{
-			if (games.Contains(GameOfUser(thisConnection.user))) {
+            if (games.Contains(GameOfUser(thisConnection.user))) {
 				games[games.IndexOf(GameOfUser(thisConnection.user))].OnMessage(thisConnection.user, message);
 			} else {
 				OnConnectionLog(thisConnection, "A request just flew by, but this user is not in a game");
@@ -57,28 +57,43 @@ namespace Server
 		{
 			users.Add(user); // TODO: don't add users who aleready are authenticated
 
-			// if two users, connect them to a game TODO: implement better matchmaking
+            // if two users, connect them to a game TODO: implement better matchmaking
 
-			if (users.Count % 2 == 0) {
-				games.Add(new Game (users[users.Count - 2], users[users.Count - 1], ConnectionOfUser));
-				games[games.Count - 1].Start();
-			}
+            if (users.Count % 2 == 0)
+            {
+                games.Add(new Game(users[users.Count - 2], users[users.Count - 1], ConnectionOfUser));
+                games[games.Count - 1].Start();
+            }
+            else
+            {
+                Console.WriteLine("Not enough players");
+            }
 		}
 
 		private void OnUserDeauthenticated(User user)
 		{
-			GameOfUser(user).Stop();
+            Console.WriteLine("User deauthenticated, stop game");
 
-			if (users.Remove(user)) { // true if remove successfull
-				Console.WriteLine("User deauthenticated");
-			}
+            if (users.Remove(user))
+            { // true if remove successful
+                Console.WriteLine("User deauthenticated");
+            }
+            else
+            {
+                Console.WriteLine("User deathentication failed");
+            }
 		}
 
 		private void OnConnectionClose(Connection connection)
 		{
-			if (connections.Remove(connection)) { // true if remove successfull
-				Console.WriteLine ("Connection closed");
-			}
+            if (connections.Remove(connection))
+            { // true if remove successfull
+                Console.WriteLine("Connection closed");
+            }
+            else
+            {
+                Console.WriteLine("Connection failed to close");
+            }
 		}
 
 		private void OnConnectionLog(Connection thisConnection, string msg)
@@ -87,9 +102,14 @@ namespace Server
 		}
 
 		private void OnGameEnd(Game game) {
-			if (games.Remove(game)) { // true if remove successfull
-				Console.WriteLine("Game ended");
-			}
+            if (games.Remove(game))
+            { // true if remove successfull
+                Console.WriteLine("Game ended");
+            }
+            else
+            {
+                Console.WriteLine("Ending the game failed");
+            }
 		}
 
 		// search users based on username, multiple users authenticated with same username will cause a race condition

@@ -52,6 +52,8 @@ namespace Server
             message.remotePlayer = user2.player;
             message.tiles = GameBoard(9);
 
+            SendCards();
+
             tiles = message.tiles;
 
             // ConnectionOfUser may return null
@@ -67,13 +69,19 @@ namespace Server
             timer.ResetTimer();
 
             Console.WriteLine("A new game has begun");
+
         }
 
         public void ChangeTurn()
         {
+            CheckConnection();
             Console.WriteLine("turn change");
             var message = new TurnChange();
-            if (turn == 1)
+            if (turn == 3)
+            {
+
+            }
+            else if (turn == 1)
             {
                 message.turn = Networking.GameStatus.RemoteTurn;
                 ConnectionOfUser(user1).SendObject(message);
@@ -145,6 +153,7 @@ namespace Server
 
         public void Stop()
         {
+
         }
 
         public void OnMessage(User messageUser, object message)
@@ -153,7 +162,8 @@ namespace Server
                 { typeof(Move), () => {
                         var move = (Move)message;
                         if (true)
-                        { 
+                        {
+                            CheckConnection();
                             // TODO check if it is this users turn, is the move legal
 							var res = new Move();
                             res.player = move.player;
@@ -161,6 +171,33 @@ namespace Server
                             int end;
                             int enemy;
                             Console.WriteLine("*******************************************");
+                            if(!CheckConnection())
+                            {
+                                Console.WriteLine("User connection error");
+                                turn = 3;
+                                if (ConnectionOfUser(user1) == null)
+                                {
+                                    user2.player.position = 10;
+                                }
+                                else
+                                {
+                                    user1.player.position = 10;
+                                }
+
+
+                                var status = new GameInit();
+                                Console.WriteLine("End message");
+                                status.gameStatus = Networking.GameStatus.Ended;
+                                if (ConnectionOfUser(user1) == null)
+                                {
+                                    ConnectionOfUser(user2).SendObject(status);
+                                }
+                                else
+                                {
+                                    ConnectionOfUser(user1).SendObject(status);
+                                }
+                                return;
+                            }
                             if (turn == 1)
                             {
                                 start = user1.player.position;
@@ -195,12 +232,12 @@ namespace Server
 
 							// TODO ConnectionOfUser may return null
                             res.player.position = end;
-							ConnectionOfUser(user1).SendObject(res);
+                            ConnectionOfUser(user1).SendObject(res);
 
                             Console.WriteLine("player position to 1: " + res.player.position);
                             res.player.position = RotatedPosition(end); // this rotates the board for player 2
                             Console.WriteLine("player position flipped to 2: " + res.player.position);
-							ConnectionOfUser(user2).SendObject(res);
+                            ConnectionOfUser(user2).SendObject(res);
 
                             //timer.ResetTimer();
 
@@ -227,6 +264,7 @@ namespace Server
 
         private void ChangeTile(MessageTile tile, int pos)
         {
+            CheckConnection();
             if (turn == 1)
             {
                 tiles[user1.player.position] = tile;
@@ -237,6 +275,18 @@ namespace Server
                 tiles[user2.player.position] = tile;
                 user2.player.position = pos;
             }
+        }
+
+        private void sendCards()
+        {
+            Console.WriteLine("sending cards to players");
+            Random rand = new Random();
+            var cards = new SendCards();
+            cards.type1 = rand.Next(0, 8);
+            cards.type2 = rand.Next(0, 8);
+            cards.type3 = rand.Next(0, 8);
+            ConnectionOfUser(user1).SendObject(cards);
+            ConnectionOfUser(user2).SendObject(cards);
         }
 
         private User TheOtherUser(User theUser) {
@@ -288,6 +338,13 @@ namespace Server
             }
 
             return false;
+        }
+
+        private bool CheckConnection()
+        {
+            if (ConnectionOfUser(user1) == null || ConnectionOfUser(user2) == null) { return false; }
+            else if (!ConnectionOfUser(user1).connected || !ConnectionOfUser(user2).connected) { return false; }
+            return true;
         }
     }
 }

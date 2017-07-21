@@ -75,10 +75,11 @@ namespace Server
 
 		public void Stop()
 		{
-			Log("Closing connection");
-			client.Close();
-			OnStopCallback(this);
-		}
+            //close game for player
+            client.Close();
+            OnStopCallback(this);
+            Log("Connection closed");
+        }
 
 		private void WaitForRequest(DoWorkEventArgs e)
 		{
@@ -97,8 +98,9 @@ namespace Server
 		private void OnRequest(RunWorkerCompletedEventArgs e)
 		{
 			if (e.Result == null) {
-				Log ("Parsing fail");
-				return;
+                Stop();
+                Log ("Parsing fail");
+                return;
 			}
 
 			object req = e.Result;
@@ -115,14 +117,14 @@ namespace Server
 						if (user.IsAuthenticated ()) {
 							name = user.username;
 							Log("Authentication Succesfull");
-							var res = new AuthenticationResponse ();
+                            var res = new AuthenticationResponse ();
 							res.status = Networking.Status.Ok;
 							SendObject (res);
 							OnAuthCallback(user);
 						} else {
 							user = null;
 							Log("Authentication failed");
-							var res = new AuthenticationResponse();
+                            var res = new AuthenticationResponse();
 							res.status = Status.Fail;
 							SendObject(res);
 						}

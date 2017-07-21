@@ -22,6 +22,7 @@ public class Multiplayer : MonoBehaviour {
     TilePlacements tilePlacements;
     ButtonSelection buttonSelection;
     TurnControl turnControlScript;
+    public bool gameEnded;
 
 	private Stack<object> messageQueue;
 
@@ -80,6 +81,7 @@ public class Multiplayer : MonoBehaviour {
 			{ typeof(Move), () => {
 					Debug.Log("A Move message was received");
 					var move = (Move)message;
+
 					if (move.player.profileId == localPlayer.profileId) {  // this  move is a response to a local move that the loca player just made
                         ChangeTile(move);
                         isLocalTurn = false;
@@ -93,7 +95,16 @@ public class Multiplayer : MonoBehaviour {
             { typeof(TurnChange), () => {
                     var turnChange = (TurnChange)message;
                     Debug.Log("A TurnChange message was received " + turnChange.turn);
-                    if (turnChange.turn == GameStatus.YourTurn) {  // your turn
+                    //check game status
+                    if(turnChange.turn == GameStatus.Ended)
+                    { // game has ended
+                        Debug.Log("game has been ended");
+                        localPlayerObject.GetComponent<HealthController>().checkHealth(0);
+                        remotePlayerObject.GetComponent<HealthController>().checkHealth(0);
+                        gameEnded = true;
+                        isLocalTurn = false;
+                    }
+                    else if (turnChange.turn == GameStatus.YourTurn) {  // your turn
                         Debug.Log("localturn");
 						isLocalTurn = true;
                         turnControlScript.ChangeTurn();

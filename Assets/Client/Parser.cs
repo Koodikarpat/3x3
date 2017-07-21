@@ -34,6 +34,12 @@ namespace Networking
                     } },
                 { typeof(Status), () => {
                         serializable.status = (Status)message;
+                    } },
+                { typeof(SendCards), () => {
+                        serializable.sendCards = (SendCards)message;
+                    } },
+                { typeof(UseCard), () => {
+                        serializable.useCard = (UseCard)message;
                     } }
             };
 

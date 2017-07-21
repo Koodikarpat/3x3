@@ -140,8 +140,15 @@ namespace Networking
                     } },
                 { typeof(GameInit), () => {
 						GameUpdateCallback(message);
-					} }
-			};
+					} },
+                { typeof(SendCards), () => {
+                        GameUpdateCallback(message);
+                    } },
+                { typeof(UseCard), () => {
+                        GameUpdateCallback(message);
+                    } }
+
+            };
 
 			Console.WriteLine("Some message was received");
 

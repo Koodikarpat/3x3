@@ -20,16 +20,9 @@ public class HealthController : MonoBehaviour
     public void TakeDamage(int amount)
     {
         animator.GetComponent<Animator>().SetTrigger("TakeDamage");
-
         currentHealth -= amount;
-
-        if (currentHealth <= 0) {
-            currentHealth = 0;
-            GameOver = true;
-            GameOverText.GetComponent<Text>().text = "Game Over!";
-            Debug.Log("Gameover");
-        }
-        HealthCounter.text = "" + currentHealth;
+        checkHealth(currentHealth);
+		HealthCounter.text = "" + currentHealth;
     }
 
 	public void Heal (int amount)
@@ -43,6 +36,18 @@ public class HealthController : MonoBehaviour
 	{
 		HealthCounter = healthCounterObject.GetComponent < Text > ();
 		GameOver = false;
+	}
+
+    public void checkHealth(int health)
+    {
+        if (health <= 0)
+        {
+            currentHealth = 0;
+            GameOver = true;
+            GameOverText.GetComponent<Text>().text = "Game Over!";
+            Debug.Log("Gameover");
+        }
+
     }
 		
 	// Update is called once per frame

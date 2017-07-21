@@ -42,6 +42,10 @@ namespace Networking
         public GameInit gameInit; // the server initializes the the clients
 
         public TurnChange turnChange; // sent by server, when it is time to change the turn
+
+        public SendCards sendCards;
+
+        public UseCard useCard;
     }
 
     // MESSAGE TYPES, use these to send messages
@@ -73,6 +77,19 @@ namespace Networking
     public class TurnChange
     {
         public GameStatus turn;
+    }
+
+    public class SendCards
+    {
+        public int type1;
+        public int type2;
+        public int type3;
+    }
+
+    public class UseCard
+    {
+        public int type;
+        public int value;
     }
 
     public class AuthenticationRequest
