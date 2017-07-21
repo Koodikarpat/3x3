@@ -95,6 +95,8 @@ namespace Networking
         public string profileId;
         public string username;
         public int position;
+        public int health;
+        public int poison;
         public Piece piece;
     }
 

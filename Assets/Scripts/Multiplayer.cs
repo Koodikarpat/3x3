@@ -55,7 +55,7 @@ public class Multiplayer : MonoBehaviour {
         Debug.Log(username);
         localPlayer = new Player();
         localPlayer.username = username;
-		client = new Client ("172.20.146.40", username: username); // this method has an optional 'token'
+		client = new Client ("172.20.146.21", username: username); // this method has an optional 'token'
 		client.Connect();
 		client.StartGame(OnGameUpdate);
 	}
@@ -80,21 +80,19 @@ public class Multiplayer : MonoBehaviour {
 			{ typeof(Move), () => {
 					Debug.Log("A Move message was received");
 					var move = (Move)message;
-					if (isLocalTurn) {  // this  move is a response to a local move that the loca player just made
+					if (move.player.profileId == localPlayer.profileId) {  // this  move is a response to a local move that the loca player just made
                         ChangeTile(move);
                         isLocalTurn = false;
-                        turnControlScript.ChangeTurn();
                     } else { // remote player made a move
 						remotePlayerAbilities.MoveButton(move.player.position, remote: true);
                         ChangeTile(move, enemy: true);
                         isLocalTurn = true;
-                        turnControlScript.ChangeTurn();
                     }
 					// TODO: animations by server
 				} },
             { typeof(TurnChange), () => {
-                    Debug.Log("A TurnChange message was received");
                     var turnChange = (TurnChange)message;
+                    Debug.Log("A TurnChange message was received " + turnChange.turn);
                     if (turnChange.turn == GameStatus.YourTurn) {  // your turn
                         Debug.Log("localturn");
 						isLocalTurn = true;
@@ -106,9 +104,9 @@ public class Multiplayer : MonoBehaviour {
                     }
                 } },
             { typeof(GameInit), () => {
-					Debug.Log("A GameInit message was received");
 					var gameInit = (GameInit)message;
-					if (gameInit.gameStatus == GameStatus.YourTurn) { // TODO init turncontroller
+                    Debug.Log("A GameInit message was received " +  gameInit.gameStatus);
+                    if (gameInit.gameStatus == GameStatus.YourTurn) { // TODO init turncontroller
 						isLocalTurn = true;
 						// local player gets to start so turn controller is set correctly
 					} else {
