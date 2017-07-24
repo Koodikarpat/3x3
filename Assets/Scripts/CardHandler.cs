@@ -19,25 +19,36 @@ public class CardHandler : MonoBehaviour {
         if (turnControl == null)
             turnControl = (TurnControl)FindObjectOfType(typeof(TurnControl));
 
-        DrawCards();
+        // DrawCards(/*new int[] { 0, 0, 0 }*/);
     }
 
-    public void DrawCards()
+    /// <summary>
+    /// Draw new cards
+    /// </summary>
+    /// <param name="types">Card types to spawn (index of cardPrefabs array)</param>
+    public void DrawCards(int[] types = null)
     {
         if (Draws > 0 && !HasCards()) {
             Draws--;
-            NewCards();
+            NewCards(types);
         }
         else
             RemoveCards();
     }
 
-    public void NewCards()
+    public void NewCards(int[] types)
     {
-        foreach (CardBase cardslot in cardSlots) {
-            int rand = Random.Range(0, cardPrefabs.Length);
-            GameObject card = Instantiate(cardPrefabs[rand], cardslot.gameObject.transform.position + cardPrefabs[rand].transform.position, cardslot.gameObject.transform.rotation);
-            card.transform.SetParent(cardslot.gameObject.transform);
+        List<int> tps;
+        if (types == null) {
+            tps = new List<int>();
+            for (int i = 0; i < cardPrefabs.Length; i++)
+                tps.Add(Random.Range(0, cardPrefabs.Length));
+        } else
+            tps = new List<int>(types);
+
+        for (int c = 0; c < cardSlots.Length; c++) {
+            GameObject card = Instantiate(cardPrefabs[tps[c]], cardSlots[c].gameObject.transform.position + cardPrefabs[tps[c]].transform.position, cardSlots[c].gameObject.transform.rotation);
+            card.transform.SetParent(cardSlots[c].gameObject.transform);
             currentCards.Add(card);
         }
     }

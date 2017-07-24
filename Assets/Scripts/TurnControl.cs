@@ -36,6 +36,8 @@ public class TurnControl : MonoBehaviour {
         Player1 = true;
 		Player2 = false;
 
+        p1CHandler.DrawCards();
+        p2CHandler.DrawCards();
         p1CHandler.ShowCards();
         p2CHandler.HideCards();
 	}
@@ -57,8 +59,8 @@ public class TurnControl : MonoBehaviour {
 	}
 	public void ChangeTurn () //Vuoronvaihto
 	{
-        if (!p1CHandler.HasCards()) p1CHandler.NewCards();
-        if (!p2CHandler.HasCards()) p2CHandler.NewCards();
+        if (!p1CHandler.HasCards()) p1CHandler.DrawCards();
+        if (!p2CHandler.HasCards()) p2CHandler.DrawCards();
 
         p1CHandler.HideCards();
         p2CHandler.HideCards();
