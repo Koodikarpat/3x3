@@ -11,7 +11,7 @@ public class HealEffect : Effect
 
     public override void TickActivation()
     {
-        if (turns <= 0)
+        if (turns <= 0 || strength <= 0)
             return;
 
         statusEffects.health.Heal(strength);

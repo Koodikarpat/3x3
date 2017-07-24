@@ -14,8 +14,12 @@ public class Heal : TileEffects
         playerSE = player.GetComponent<StatusEffects>();
         enemySE = enemy.GetComponent<StatusEffects>();
 
-        player.GetComponent<HealthController> ().Heal (strength);
-        //Debug.Log ("Heal");
+        if (playerSE.GetEffect(typeof(PowerupEffect)).Effective()) {
+            player.GetComponent<HealthController>().Heal(strength * playerSE.GetEffect(typeof(PowerupEffect)).strength);
+            playerSE.GetEffect(typeof(PowerupEffect)).strength = 0;
+        }
+        else
+            player.GetComponent<HealthController>().Heal(strength);
 
         base.Action(player, enemy);
 	}

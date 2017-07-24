@@ -6,7 +6,7 @@ public class ShieldCard : Card {
 
     public override void Use()
     {
-        getCardHandler().player1SE.AddStatusEffect(new ShieldEffect(Turns, Strength)); // 2 turns since ChangeTurn gets called after effect is created, loses a turn.
+        getCardHandler().player1SE.AddStatusEffect(new ShieldEffect(Turns, Strength));
 
         base.Use();
     }

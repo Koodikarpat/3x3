@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
 public class CardHandler : MonoBehaviour {
 
     public int Draws = 3;
@@ -12,12 +12,26 @@ public class CardHandler : MonoBehaviour {
 
     public HealthController player1HC, player2HC;
     public StatusEffects player1SE, player2SE;
+    public CardHandler opponentCH;
     public TurnControl turnControl;
 
-    void Start()
+    private List<bool> drawnPrefabs = new List<bool>();
+
+    void Awake()
     {
         if (turnControl == null)
             turnControl = (TurnControl)FindObjectOfType(typeof(TurnControl));
+
+        if (opponentCH == null) {
+            CardHandler[] handlers = FindObjectsOfType(typeof(CardHandler)) as CardHandler[];
+            foreach (CardHandler ch in handlers) {
+                if (ch != this)
+                    opponentCH = ch;
+            }
+        }
+
+        for (int i = 0; i < cardPrefabs.Length; i++)
+            drawnPrefabs.Add(false);
 
         // DrawCards(/*new int[] { 0, 0, 0 }*/);
     }
@@ -39,11 +53,28 @@ public class CardHandler : MonoBehaviour {
     public void NewCards(int[] types)
     {
         List<int> tps;
+        int randomCard = 0;
         if (types == null) {
             tps = new List<int>();
-            for (int i = 0; i < cardPrefabs.Length; i++)
-                tps.Add(Random.Range(0, cardPrefabs.Length));
-        } else
+            for (int i = 0; i < cardSlots.Length; i++) {
+                randomCard = Random.Range(0, cardPrefabs.Length);
+                if (!drawnPrefabs[randomCard]) {
+                    drawnPrefabs[randomCard] = true;
+                    tps.Add(randomCard);
+                }
+                else {
+                    if (drawnPrefabs.Any(a => a == false)) {
+                        int firstToAdd = drawnPrefabs.IndexOf(drawnPrefabs.First(f => f == false));
+                        drawnPrefabs[firstToAdd] = true;
+                        tps.Add(firstToAdd);
+                    }
+                    else {
+                        Debug.Log("All cards have been drawn atleast once.");
+                    }
+                }
+            }
+        }
+        else
             tps = new List<int>(types);
 
         for (int c = 0; c < cardSlots.Length; c++) {

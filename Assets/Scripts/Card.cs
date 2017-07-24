@@ -14,6 +14,8 @@ public abstract class Card : MonoBehaviour {
     public AudioClip useSound;
     public AudioSource audioSource;
 
+    public bool skipUseDraw = false;
+
     private CardHandler cardHandler;
 
     private bool moving = false;
@@ -55,7 +57,10 @@ public abstract class Card : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
 
         DoTurn();
-        getCardHandler().DrawCards();
+        if (!skipUseDraw)
+            getCardHandler().DrawCards();
+        else
+            skipUseDraw = false;
 
         yield return null;
     }

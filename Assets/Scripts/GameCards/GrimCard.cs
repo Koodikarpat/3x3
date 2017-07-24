@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class GrimCard : Card {
-
-    public SpriteRenderer damagePercent;
-    public List<Sprite> holdtimeSprites = new List<Sprite>();
+public class GrimCard : Card
+{
+    public Slider holdingSlider;
+    public Text dmgText;
 
     public int difficultyModifier = 2; // Divides the luck, 1 - 3 range recommended. 1 being easiest, 3 being hardest and 2 being the middleground.
     private float onDownTime, onUpTime;
@@ -14,13 +15,14 @@ public class GrimCard : Card {
 
     void Start()
     {
-        if (damagePercent == null) { // Create one programmatically if not set in editor
-            GameObject go = new GameObject();
-            go.name = "DamagePercent";
-            go.transform.SetParent(this.transform);
-            go.transform.localPosition = new Vector3(0, 0, 0);
-            SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-            damagePercent = sr;
+        if (holdingSlider == null) {
+            holdingSlider = GetComponentInChildren<Slider>();
+            holdingSlider.value = 0;
+        }
+
+        if (dmgText == null) {
+            dmgText = GetComponentInChildren<Text>();
+            dmgText.text = "";
         }
     }
 
@@ -44,7 +46,8 @@ public class GrimCard : Card {
             getCardHandler().player2HC.TakeDamage((int)(Strength * (selfDamageProbability / 100)));
         }
 
-        damagePercent.sprite = null; // Clear the sprite for damagePercent
+        holdingSlider.value = 0; // Zero the value
+        dmgText.text = "";
 
         base.Use();
     }
@@ -65,27 +68,18 @@ public class GrimCard : Card {
 
     private IEnumerator percentageSprite()
     {
-        int spriteToUse = 0;
-        int lastProbability = 0;
         while (doPercentageSprites) {
             float currentTime = Time.time;
             float timePassed = (currentTime - onDownTime);
             float probab = Mathf.Floor(timePassed * 10);
             probab = Mathf.Floor(probab / 10);
             int probability = (int)(probab * 10);
+            float damageProb = (probab * 10);
 
             // Debug.Log("Probability " + probability + " Diff " + (probability - lastProbability));
 
-            if (probability - lastProbability >= 10) {
-                lastProbability = probability;
-                if (spriteToUse < holdtimeSprites.Count)
-                    spriteToUse++;
-
-                if (holdtimeSprites.ElementAtOrDefault(spriteToUse) != null)
-                    damagePercent.sprite = holdtimeSprites[spriteToUse];
-
-                // Debug.Log("New sprite set");
-            }
+            holdingSlider.value = probability;
+            dmgText.text = "DMG: " + (Strength * (damageProb / 100)).ToString();
 
             yield return null;
         }

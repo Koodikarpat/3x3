@@ -9,8 +9,6 @@ public class RandomizerCard : Card
         ButtonSelection bs = (ButtonSelection)FindObjectOfType(typeof(ButtonSelection));
         bs.CreateTiles();
 
-        SkipTurn = true;
-
         base.Use();
     }
 

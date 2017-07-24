@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealCard : Card {
-
+public class PowerupCard : Card
+{
     public override void Use()
     {
-        getCardHandler().player1HC.Heal(getCardHandler().player1HC.startingHealth / getCardHandler().player1HC.currentHealth);
+        getCardHandler().player1SE.AddStatusEffect(new PowerupEffect(Turns, Strength));
 
         base.Use();
     }

@@ -8,7 +8,9 @@ using UnityEngine.UI;
 public class StatusEffects : MonoBehaviour
 {
     public HealthController health;
-    public List<Effect> effects = new List<Effect>(new Effect[] { new PoisonEffect(0, 0), new ShieldEffect(0, 0), new LifestealEffect(0, 0) } );
+    public List<Effect> effects = new List<Effect>(new Effect[] 
+    { new HealEffect(0, 0), new PoisonEffect(0, 0), new ShieldEffect(0, 0), new LifestealEffect(0, 0), new PowerupEffect(0, 0) } );
+
 	public Animator tickPoison; // Poison animator object
 	public Text PoisonCounter; // Poison turns text object
 
@@ -28,7 +30,7 @@ public class StatusEffects : MonoBehaviour
     public void AddStatusEffect(Effect effect)
     {
         effects.First(effects => effects.GetType() == effect.GetType()).turns += effect.turns;
-        effects.First(effects => effects.GetType() == effect.GetType()).strength += effect.strength;
+        effects.First(effects => effects.GetType() == effect.GetType()).strength = effect.strength;
 
         foreach (Effect eff in effects) 
             eff.Changes();

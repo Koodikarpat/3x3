@@ -19,6 +19,7 @@ public class PlayerAbilities : MonoBehaviour
     public bool serverAnswered = true;
 	public bool animationsFinished = true;
 
+    public bool canMove = false;
 
     ButtonSelection buttons;
     TilePlacements tilePlacements;
@@ -34,7 +35,9 @@ public class PlayerAbilities : MonoBehaviour
 		//Debug.Log (transform.name + " " + buttons.tiles[currentButton].position);
 		transform.position = buttons.tiles[currentButton].gameObject.transform.position;
         lastButton = currentButton;
-	}
+
+        canMove = true;
+    }
 
 	void Update () 
 	{
@@ -45,7 +48,7 @@ public class PlayerAbilities : MonoBehaviour
 	{
         // the movement itself
         // move must always be legal, if online game it must also be your turn
-		if (isLegalMove (currentButton, button))
+		if (isLegalMove (currentButton, button) && canMove)
         {
 
 			// if online game
@@ -76,6 +79,7 @@ public class PlayerAbilities : MonoBehaviour
         t = 0;
 		while (animationsFinished == false)
 		{
+            canMove = false;
             transform.position = Vector3.Lerp(buttons.tiles[currentButton].position, buttons.tiles[button].position, t);
             t += 1.5f * Time.deltaTime;
             
@@ -85,12 +89,12 @@ public class PlayerAbilities : MonoBehaviour
 
             yield return null;
 		}
-		finishMove (button);
+        canMove = true;
+        finishMove (button);
     }
 
 	private void finishMove(int button)
 	{
-
 	    TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
 
         if(!multiplayer.isOnline)
