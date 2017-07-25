@@ -36,7 +36,7 @@ public class TilePlacements : MonoBehaviour
     }
 
     //tekee uuden tilen
-    public void CreateTile(Tile tile, int i)
+    public bool CreateTile(Tile tile, int i)
     {
         GameObject tilePrefab;
 
@@ -58,11 +58,13 @@ public class TilePlacements : MonoBehaviour
         else
         {
             Debug.Log("Error wrong tile type");
-            return;
+            return false;
         }
 
         GameObject newtile = GameObject.Instantiate(tilePrefab, tile.gameObject.transform, false);
         TileButton tilebutton = newtile.GetComponent<TileButton>();
         tilebutton.buttonnumber = i;
+
+        return true;
     }
 }

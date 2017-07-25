@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class MineCard : Card {
 
-    public override void Use()
+    public override bool Use()
     {
-        ButtonSelection bs = (ButtonSelection)FindObjectOfType(typeof(ButtonSelection));
-        bs.minePlacement = true;
+        if (!base.Use()) return false;
 
-        base.Use();
+        ButtonSelection bs = (ButtonSelection)FindObjectOfType(typeof(ButtonSelection));
+
+        bs.Mineplacement();
+
+        return true;
     }
 
     void OnMouseUp()

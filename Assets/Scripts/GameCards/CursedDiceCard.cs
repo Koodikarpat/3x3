@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class CursedDiceCard : Card
 {
-    public override void Use()
+    public override bool Use()
     {
+        if (!base.Use()) return false;
+
         int randomEffect = Random.Range(0, getCardHandler().player1SE.effects.Count);
 
         Effect newEffect = getCardHandler().player1SE.effects[randomEffect];
@@ -14,8 +16,7 @@ public class CursedDiceCard : Card
         getCardHandler().player1SE.AddStatusEffect(newEffect);
         Debug.Log("Added effect: " + newEffect.ToString());
 
-
-        base.Use();
+        return true;
     }
 
     void OnMouseUp()

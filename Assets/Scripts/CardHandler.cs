@@ -15,15 +15,22 @@ public class CardHandler : MonoBehaviour {
     public CardHandler opponentCH;
     public TurnControl turnControl;
 
+    public Multiplayer multiplayerC;
+
     private List<bool> drawnPrefabs = new List<bool>();
+
+    private int ourPlayer;
 
     void Awake()
     {
         if (turnControl == null)
-            turnControl = (TurnControl)FindObjectOfType(typeof(TurnControl));
+            turnControl = FindObjectOfType<TurnControl>();
+
+        if (multiplayerC == null)
+            multiplayerC = FindObjectOfType<Multiplayer>();
 
         if (opponentCH == null) {
-            CardHandler[] handlers = FindObjectsOfType(typeof(CardHandler)) as CardHandler[];
+            CardHandler[] handlers = FindObjectsOfType<CardHandler>();
             foreach (CardHandler ch in handlers) {
                 if (ch != this)
                     opponentCH = ch;
@@ -33,13 +40,20 @@ public class CardHandler : MonoBehaviour {
         for (int i = 0; i < cardPrefabs.Length; i++)
             drawnPrefabs.Add(false);
 
+        if (turnControl.p1CHandler == this)
+            ourPlayer = 1;
+        else if (turnControl.p2CHandler == this)
+            ourPlayer = 2;
+        else
+            Debug.Log("Unkown player card handler");
+
         // DrawCards(/*new int[] { 0, 0, 0 }*/);
     }
 
     /// <summary>
-    /// Draw new cards
+    /// Draw cards
     /// </summary>
-    /// <param name="types">Card types to spawn (index of cardPrefabs array)</param>
+    /// <param name="types">Card types to spawn (indexes of cardPrefabs array)</param>
     public void DrawCards(int[] types = null)
     {
         if (Draws > 0 && !HasCards()) {
@@ -50,6 +64,10 @@ public class CardHandler : MonoBehaviour {
             RemoveCards();
     }
 
+    /// <summary>
+    /// Instantiate new cards
+    /// </summary>
+    /// <param name="types"></param>
     public void NewCards(int[] types)
     {
         List<int> tps;
@@ -84,6 +102,9 @@ public class CardHandler : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Destroy current cards
+    /// </summary>
     public void RemoveCards()
     {
         foreach (GameObject card in currentCards) {
@@ -92,24 +113,60 @@ public class CardHandler : MonoBehaviour {
         currentCards.Clear();
     }
 
+    /// <summary>
+    /// Returns true if there are cards
+    /// </summary>
+    /// <returns></returns>
     public bool HasCards()
     {
-        if (currentCards.Count > 0)
-            return true;
-        else
+        if (!currentCards.Any())
             return false;
+        else
+            return true;
     }
 
+    /// <summary>
+    /// Makes cards opaque
+    /// </summary>
     public void ShowCards()
     {
-        foreach (CardBase cardslot in cardSlots)
-            cardslot.gameObject.SetActive(true);
+        foreach (var card in currentCards) {
+            if (card != null) {
+                Color color = card.GetComponent<SpriteRenderer>().color;
+                color.a = 1.0f;
+                card.GetComponent<SpriteRenderer>().color = color;
+            }
+        }
     }
 
+    /// <summary>
+    /// Makes cards slightly transparent
+    /// </summary>
     public void HideCards()
     {
-        foreach (CardBase cardslot in cardSlots)
-            cardslot.gameObject.SetActive(false);
+        foreach (var card in currentCards) {
+            if (card != null) {
+                Color color = card.GetComponent<SpriteRenderer>().color;
+                color.a = 0.5f;
+                card.GetComponent<SpriteRenderer>().color = color;
+            }
+        }
     }
 
+    public bool OurTurn()
+    {
+        if (ourPlayer == 1 && turnControl.Player1 || ourPlayer == 2 && turnControl.Player2)
+            return true;
+        else
+            return false; // Not our turn
+    }
+
+    /// <summary>
+    /// Function called by Card's Use(). Passes their type.
+    /// </summary>
+    /// <param name="type"></param>
+    public void CardUsed(Card type)
+    {
+        Debug.Log("Card used: " + type.ToString() + "  by player " + ourPlayer.ToString());
+    }
 }
