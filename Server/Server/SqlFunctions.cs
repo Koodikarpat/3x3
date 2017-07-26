@@ -12,23 +12,37 @@ Remember to add MySql.Data extension to references in Visual Studio so it will w
 There are still bits of code that could be tidyed up
 */
 
-//TODO: Methods to server for calling these methods
+//TODO: Methods for server&client to call these methods
+//Also integrating this into said things
 
 namespace sqlFunctions{
 
 public class mySqlFunctions{
 
-    String server = "127.0.0.1";    //THESE ARE TEST VARIABLES TO CONNECT INTO MYSQL DATABASE
-    String port = "3306";           //FOR NOW EVERYTHING WORKS IN TEST DATABASE
-    String database = "pelaajat";    
-    String mysqlpassword = "Testi";
-    Int32 rank = 100;
-    String deviceId = "Testi4";
-    String username = "Peetu";
-    String inventory;
-    String[] playerInventory;
+        String server = "127.0.0.1";    //THESE ARE TEST VARIABLES TO CONNECT INTO MYSQL DATABASE
+        String port = "3306";           //FOR NOW EVERYTHING WORKS IN TEST DATABASE
+        String database = "pelaajat";    
+        String mysqlpassword = "Testi";
+        //Int32 rank;
+        //String deviceId = "Testi4";
+        //String username = "Peetu";
+        //String inventory;
+        //String[] playerInventory;
+        //String rewardId = "12";
 
-        public void newUser(){
+        public struct UserData
+        {
+            public int rank;
+            //int id;
+            //String deviceId;
+            public String username;
+            public String inventory;
+            public String[] playerInventory;
+            
+        }
+
+        
+        public void newUser(String deviceId, String username){
 
 		string myConnectionString;
         myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";	
@@ -41,13 +55,11 @@ public class mySqlFunctions{
 
 		try{
 			conn.Open();
-			//command.ExecuteNonQuery();
             //Checking if entry already in database
 			object exists = command.ExecuteScalar(); //Returns null if not in database
 
 			if(exists == null){
 				command.CommandText = "insert into users (id,deviceId,username,rank,inventory,last_online,created) values(NULL,?deviceId,?username, 0, '1:2:3', NULL, NULL)";
-				//command.Parameters.AddWithValue("?deviceId", deviceId);
 				command.Parameters.AddWithValue("?username", username);
 				command.ExecuteNonQuery();
 			}else{
@@ -61,8 +73,49 @@ public class mySqlFunctions{
         conn.Close();
         }
 
-    public void getUser(){
+        //TRYING TO GET THIS WORKING
+        public UserData getUser(String deviceId)
+        {
+            UserData values = new UserData();
+            string myConnectionString;
+            myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";
+            MySqlConnection conn = new MySqlConnection(myConnectionString);
+            MySqlCommand command = conn.CreateCommand();
 
+            command.CommandText = "SELECT * FROM users WHERE ?deviceId=deviceId";
+            command.Parameters.AddWithValue("?deviceId", deviceId);
+
+
+            try
+            {
+                conn.Open();
+
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            MySqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                if (reader.HasRows)
+                {
+                    //TODO return these so they can actually be used using STRUCT
+                    values.rank = reader.GetInt32("rank");
+                    values.username = reader.GetString("username");
+                    values.inventory = reader.GetString("inventory");
+                    values.playerInventory = getPlayerInventory(values.inventory);
+                    //Console.WriteLine(rank);
+                    //Console.WriteLine(values.username);
+                }
+                else { Console.WriteLine("No such thing"); }
+            }
+            conn.Close();
+            return values;
+
+        }
+        /*
+    public void getUser(String deviceId){
     	string myConnectionString;
         myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";	
 		MySqlConnection conn = new MySqlConnection(myConnectionString);
@@ -83,21 +136,22 @@ public class mySqlFunctions{
         {
                 if (reader.HasRows)
                 {
-                    rank = reader.GetInt32("rank");
-                    username = reader.GetString("username");
-                    inventory = reader.GetString("inventory");
-                    playerInventory = getPlayerInventory();
+                    //TODO return these so they can actually be used using STRUCT
+                    int rank = reader.GetInt32("rank");
+                    String username = reader.GetString("username");
+                    String inventory = reader.GetString("inventory");
+                    String[] playerInventory = getPlayerInventory(inventory);
                     //Console.WriteLine(rank);
                     Console.WriteLine(username);
-                    //Console.WriteLine(playerInventory.ToString());
                 }
                 else { Console.WriteLine("No such thing"); }
         }
         conn.Close();
 		
 	}
-
-	public void updateRank(){
+    */
+        public void updateRank(String deviceId, int rank)
+        {
 		string myConnectionString;
         myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";	
 		MySqlConnection conn = new MySqlConnection(myConnectionString);
@@ -119,7 +173,8 @@ public class mySqlFunctions{
 
 	}
 
-	public void updateLastlogin(){
+	public void updateLastlogin(String deviceId)
+        {
 		string myConnectionString;
         myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";	
 		MySqlConnection conn = new MySqlConnection(myConnectionString);
@@ -139,7 +194,7 @@ public class mySqlFunctions{
         conn.Close();
 	}
 
-    public void updateUsername()
+    public void updateUsername(String deviceId, String username)
         {
             string myConnectionString;
             myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";
@@ -163,13 +218,14 @@ public class mySqlFunctions{
             conn.Close();
         }
 
-    public void updateInventory(){
+    public void updateInventory(String deviceId, String inventory, String[] playerInventory)
+        {
     	string myConnectionString;
         myConnectionString = "Server=" + server + ";Port=" + port + ";Database=" + database + ";Uid=root;Password=" + mysqlpassword + ";";
         MySqlConnection conn = new MySqlConnection(myConnectionString);
         MySqlCommand command = conn.CreateCommand();
 
-        inventory = createInventoryString();
+        inventory = createInventoryString(playerInventory);
         command.CommandText = "Update users SET inventory=?inventory WHERE deviceId=?deviceId";
         command.Parameters.AddWithValue("?inventory", inventory);
         command.Parameters.AddWithValue("?deviceId", deviceId);
@@ -183,7 +239,7 @@ public class mySqlFunctions{
         conn.Close();
 	}
 
-	public string[] getPlayerInventory(){
+	public string[] getPlayerInventory(String inventory){
 		char[] separatingChars = { ':' };
             string[] playerInventory = inventory.Split(separatingChars, StringSplitOptions.RemoveEmptyEntries);
 
@@ -192,22 +248,36 @@ public class mySqlFunctions{
             //Console.WriteLine(test);
 
             //These are for testing
+            /*
             Console.WriteLine("Entrys in database string");
             foreach (string s in playerInventory)
             {
                 Console.WriteLine(s.ToString());
             }
-
+            */
             return playerInventory;
 	}
 
-	public string createInventoryString(){
-            //string inventory = "4:5:6";
+	public string createInventoryString(String[] playerInventory){
             string inventory = string.Join(":", playerInventory);
             //These prints are for testing
             Console.WriteLine("Transformed string");
             Console.WriteLine(inventory);
             return inventory;
-	
 	}
+
+    public string[] addIntoInventory(String[] playerInventory, String rewardId)
+        {
+            List<string> inventory = new List<string>(playerInventory);
+            inventory.Add(rewardId);
+            playerInventory = inventory.ToArray();
+            
+
+            foreach (string s in inventory)
+            {
+                Console.WriteLine(s.ToString());
+            }
+            
+            return playerInventory;
+        }
 }}

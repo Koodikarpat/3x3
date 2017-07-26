@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class RandomizerCard : Card
 {
-    public override void Use()
+    public override bool Use()
     {
+        if (!base.Use()) return false;
+
         ButtonSelection bs = (ButtonSelection)FindObjectOfType(typeof(ButtonSelection));
         bs.CreateTiles();
 
-        base.Use();
+        return true;
     }
 
     void OnMouseUp()

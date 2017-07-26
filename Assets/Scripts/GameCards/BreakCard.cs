@@ -4,22 +4,25 @@ using UnityEngine;
 
 public class BreakCard : Card
 {
-    public override void Use()
+    public override bool Use()
     {
-        int random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
-        if (random < getCardHandler().opponentCH.currentCards.Count) {
-            if (getCardHandler().opponentCH.currentCards[random] == null) {
-                if (random < getCardHandler().opponentCH.currentCards.Count)
-                    random++;
-                else
-                    random--;
+        if (!base.Use()) return false;
+
+        if (getCardHandler().opponentCH.currentCards.Count > 0) {
+            int random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
+            while (getCardHandler().opponentCH.currentCards[random] == null) {
+                if (getCardHandler().opponentCH.currentCards.Count > 0)
+                    return true;
+
+                random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
             }
             Destroy(getCardHandler().opponentCH.currentCards[random].gameObject);
         }
-        else
-            Debug.Log("No such index");
+        else {
+            Debug.Log("No cards");
+        }
 
-        base.Use();
+        return true;
     }
 
     void OnMouseUp()
