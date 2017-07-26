@@ -12,7 +12,7 @@ public class ShieldEffect : Effect
 
     public override bool Effective()
     {
-        if (turns == 0 || strength <= 0)
+        if (turns == 0 || strength == 0)
             return false;
         else
             return true;

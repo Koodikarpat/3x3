@@ -93,7 +93,9 @@ namespace Networking
 
     public class SendCards
     {
-        public int[,] types = new int[2,3];
+        public int type1;
+        public int type2;
+        public int type3;
     }
 
     public class UseCard

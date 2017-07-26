@@ -99,14 +99,6 @@ namespace Networking
                 { // be careful with enums in Message
                     return (Status)deserialised.status;
                 }
-                else if (deserialised.sendCards != null)
-                {
-                    return (SendCards)deserialised.sendCards;
-                }
-                else if (deserialised.useCard != null)
-                {
-                    return (UseCard)deserialised.useCard;
-                }
                 else {
                     // parsing message failed
                     return null;

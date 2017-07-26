@@ -14,7 +14,12 @@ public class Poison : TileEffects
         playerSE = player.GetComponent<StatusEffects>();
         enemySE = enemy.GetComponent<StatusEffects>();
 
-        enemySE.AddStatusEffect(new PoisonEffect(1, strength));
+        if (playerSE.GetEffect(typeof(PowerupEffect)).Effective()) {
+            enemySE.AddStatusEffect(new PoisonEffect(1, strength * playerSE.GetEffect(typeof(PowerupEffect)).strength));
+            playerSE.GetEffect(typeof(PowerupEffect)).strength = 0;
+        }
+        else
+            enemySE.AddStatusEffect(new PoisonEffect(1, strength));
         
         base.Action(player, enemy);
     }
