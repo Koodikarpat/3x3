@@ -13,7 +13,10 @@ public class Token : MonoBehaviour {
         Knight = 4,
         Ring = 5,
         Teacup = 6,
-        Teapot = 7
+        Teapot = 7,
+        Crown = 8,
+        Crystalball = 9,
+        Sword = 10
     }
     public TokenType tokenType;
 
