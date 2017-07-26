@@ -70,7 +70,10 @@ public abstract class Card : MonoBehaviour {
 
         DoTurn();
 
-        getCardHandler().DrawCards();
+        if (!getCardHandler().multiplayerC.isOnline)
+        {
+            getCardHandler().DrawCards();
+        }
         
         yield return null;
     }

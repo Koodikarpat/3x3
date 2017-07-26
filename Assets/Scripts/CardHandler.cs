@@ -56,6 +56,8 @@ public class CardHandler : MonoBehaviour {
     /// <param name="types">Card types to spawn (indexes of cardPrefabs array)</param>
     public void DrawCards(int[] types = null)
     {
+        for (int i = 0; i < types.Length; i++)
+            Debug.Log(types[i]);
         if (Draws > 0 && !HasCards()) {
             Draws--;
             NewCards(types);
