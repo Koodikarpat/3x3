@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class LifestealCard : Card {
 
-    public override bool Use()
+    public override void Use()
     {
-        if (!base.Use()) return false;
-
         getCardHandler().player1SE.AddStatusEffect(new LifestealEffect(Turns, Strength)); // Strength -1. It'll last until activated.
 
-        return true;
+        base.Use();
     }
 
     void OnMouseUp()

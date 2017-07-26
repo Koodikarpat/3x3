@@ -25,7 +25,6 @@ public class TurnControl : MonoBehaviour {
     public CardHandler p1CHandler, p2CHandler;
 
     public bool timerStarted;
-    public Multiplayer multiplayer;
 
 	// Use this for initialization
 	void Start () {
@@ -37,15 +36,11 @@ public class TurnControl : MonoBehaviour {
         Player1 = true;
 		Player2 = false;
 
-        if (!multiplayer.isOnline)
-        {
-            p1CHandler.DrawCards();
-            p2CHandler.DrawCards();
-        }
-
+        p1CHandler.DrawCards();
+        p2CHandler.DrawCards();
         p1CHandler.ShowCards();
         p2CHandler.HideCards();
-    }
+	}
 	
 	// Update is called once per frame
 	void Update ()
@@ -64,11 +59,8 @@ public class TurnControl : MonoBehaviour {
 	}
 	public void ChangeTurn () //Vuoronvaihto
 	{
-        if (!multiplayer.isOnline)
-        {
-            if (!p1CHandler.HasCards()) p1CHandler.DrawCards();
-            if (!p2CHandler.HasCards()) p2CHandler.DrawCards();
-        }
+        if (!p1CHandler.HasCards()) p1CHandler.DrawCards();
+        if (!p2CHandler.HasCards()) p2CHandler.DrawCards();
 
         p1CHandler.HideCards();
         p2CHandler.HideCards();
@@ -85,8 +77,7 @@ public class TurnControl : MonoBehaviour {
 		if (Player2) {
 			playerTurn.text = ("Player 2");
 			Player2Object.GetComponent <StatusEffects> ().Tick ();
-            if(!multiplayer.isOnline)
-                p2CHandler.ShowCards();
+            p2CHandler.ShowCards();
             //player-2-controlled
         }
         timerStarted = true;

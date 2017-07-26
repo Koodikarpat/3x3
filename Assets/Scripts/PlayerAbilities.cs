@@ -106,10 +106,9 @@ public class PlayerAbilities : MonoBehaviour
 	    Animator Animator = buttons.tiles [currentButton].gameObject.GetComponentInChildren<Animator> ();
 	    Animator.SetTrigger ("Step on");
 
-        if (puff != null) {
-            puff.GetComponent<ParticleSystem>().Play();
-            puff.transform.position = buttons.tiles[button].position;
-        }
+
+        puff.GetComponent<ParticleSystem> ().Play ();
+		puff.transform.position = buttons.tiles [button].position;
     }
 
 

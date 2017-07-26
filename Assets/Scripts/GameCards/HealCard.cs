@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class HealCard : Card {
 
-    public override bool Use()
+    public override void Use()
     {
-        if (!base.Use()) return false;
-
         getCardHandler().player1HC.Heal(getCardHandler().player1HC.startingHealth / getCardHandler().player1HC.currentHealth);
 
-        return true;
+        base.Use();
     }
 
     void OnMouseUp()

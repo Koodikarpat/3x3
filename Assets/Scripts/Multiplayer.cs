@@ -8,7 +8,7 @@ public class Multiplayer : MonoBehaviour {
 
 	private Client client;
 	private Player localPlayer;
-    private Player remotePlayer;
+	private Player remotePlayer;
 
 	public bool isOnline;
 	public bool isLocalTurn{ get; private set; }
@@ -22,16 +22,9 @@ public class Multiplayer : MonoBehaviour {
     TilePlacements tilePlacements;
     ButtonSelection buttonSelection;
     TurnControl turnControlScript;
-    public GameObject cardsp1;
-    public GameObject cardsp2;
     public bool gameEnded;
-    public CardHandler CH1;
-    public CardHandler CH2;
 
-    public int[] p1cards;
-    public int[] p2cards;
-
-    private Stack<object> messageQueue;
+	private Stack<object> messageQueue;
 
 	// use this for initialization
 	void Start()
@@ -46,9 +39,6 @@ public class Multiplayer : MonoBehaviour {
         localPlayerAbilities = localPlayerObject.GetComponent<PlayerAbilities>();
         remotePlayerAbilities = remotePlayerObject.GetComponent<PlayerAbilities>();
         turnControlScript = turnControllerObject.GetComponent<TurnControl>();
-
-        p1cards = new int[3];
-        p2cards = new int[3];
     }
 
 	void Stop() // TODO the client must be disconnected when the scene is exited
@@ -122,21 +112,6 @@ public class Multiplayer : MonoBehaviour {
                         Debug.Log("remoteturn");
 						isLocalTurn = false;
                         turnControlScript.ChangeTurn();
-                    }
-                } },
-            { typeof(SendCards), () => {
-                    var sendCards = (SendCards)message;
-                    Debug.Log("A SendCards message was received");
-                    //check game status
-                    if(!gameEnded)
-                    {
-                         for (int i = 0; i < 3; i++)
-                        {
-                            p1cards[i] = sendCards.types[0,i];
-                            p2cards[i] = sendCards.types[1,i];
-                        }
-                        if (!CH1.HasCards()) CH1.DrawCards(p1cards);
-                        if (!CH2.HasCards()) CH2.DrawCards(p2cards);
                     }
                 } },
             { typeof(GameInit), () => {
