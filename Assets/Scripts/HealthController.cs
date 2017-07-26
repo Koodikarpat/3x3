@@ -7,7 +7,7 @@ public class HealthController : MonoBehaviour
 {
     public int startingHealth = 20;
 	public int currentHealth;
-	public GameObject GameOverText;
+	public GameObject GameOverScreenPanel;
 	public GameObject healthCounterObject;
 	public GameObject PoisonCounterObject;
 	public GameObject animator;
@@ -36,6 +36,7 @@ public class HealthController : MonoBehaviour
 	{
 		HealthCounter = healthCounterObject.GetComponent < Text > ();
 		GameOver = false;
+        GameOverScreenPanel.SetActive(false);
 	}
 
     public void checkHealth(int health)
@@ -44,7 +45,7 @@ public class HealthController : MonoBehaviour
         {
             currentHealth = 0;
             GameOver = true;
-            GameOverText.GetComponent<Text>().text = "Game Over!";
+            GameOverScreenPanel.SetActive(true);
             Debug.Log("Gameover");
         }
 
