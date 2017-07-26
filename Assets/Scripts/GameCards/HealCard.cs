@@ -8,7 +8,7 @@ public class HealCard : Card {
     {
         if (!base.Use()) return false;
 
-        getCardHandler().player1HC.Heal(getCardHandler().player1HC.startingHealth / getCardHandler().player1HC.currentHealth);
+        getCardHandler().player1HC.Heal(Mathf.CeilToInt((float)(getCardHandler().player1HC.startingHealth + getCardHandler().player1HC.currentHealth) / 3));
 
         return true;
     }

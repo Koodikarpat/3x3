@@ -32,28 +32,27 @@ public class ButtonSelection : MonoBehaviour
     public void CreateTiles()
     {
         if (!multiplayerController.GetComponent<Multiplayer>().isOnline) {
-            StartCoroutine(createTiles());
+            for (int i = 0; i < tiles.Count; i++) {
+                StartCoroutine(CreateTile(i));
+            }
         }
     }
 
-    private IEnumerator createTiles()
+    public IEnumerator CreateTile(int i)
     {
-        minePlacementParticles.Clear();
-        for (int i = 0; i < tiles.Count; i++) {
-            tiles[i].position = tiles[i].gameObject.transform.position;
+        tiles[i].position = tiles[i].gameObject.transform.position;
 
-            TilePlacements tilePlacements = GetComponent<TilePlacements>();
-            tiles[i].type = tilePlacements.GetRandom();
+        TilePlacements tilePlacements = GetComponent<TilePlacements>();
+        tiles[i].type = tilePlacements.GetRandom();
 
-            //nappien randomoitu asettelu
-            //tiles[i].gameObject.GetComponentInChildren<Text> ().text = ""+tiles[i].type.strength;
+        //nappien randomoitu asettelu
+        //tiles[i].gameObject.GetComponentInChildren<Text> ().text = ""+tiles[i].type.strength;
 
-            int randomStrength = Random.Range(1, 4 + 1);
-            yield return new WaitUntil(() => tilePlacements.CreateTile(tiles[i], i, randomStrength) == true); // Wait until old tile is destroyed and new spawned
+        int randomStrength = Random.Range(1, 4 + 1);
+        yield return new WaitUntil(() => tilePlacements.CreateTile(tiles[i], i, randomStrength) == true); // Wait until old tile is destroyed and new spawned
 
-            if (minePlacementParticles.Count < tiles.Count)
-                minePlacementParticles.Add(tiles[i].gameObject.GetComponentInChildren<ParticleSystem>());
-        }
+        if (minePlacementParticles.Count < tiles.Count)
+            minePlacementParticles.Add(tiles[i].gameObject.GetComponentInChildren<ParticleSystem>());
 
         yield return null;
     }

@@ -23,6 +23,8 @@ public class FindToken : MonoBehaviour {
 	public GameObject player2Health;
 	SpriteRenderer token2Image;
 
+    private float scaleMultiplier = 0.5f;
+
 
 	//get the object 
 	void Awake (){
@@ -32,31 +34,37 @@ public class FindToken : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		//get the script
-		KeepTheseScript keepTheseScript = objectKeeper.GetComponent<KeepTheseScript> (); //toimii - kerro että tämä on tämä
+        //get the script
+        KeepTheseScript keepTheseScript = objectKeeper.GetComponent<KeepTheseScript> (); //toimii - kerro että tämä on tämä
 
 		//player1 new script works
 		Vector3 currentPosition = keepTheseScript.currentToken.transform.localPosition;
+        Vector3 currentScale = keepTheseScript.currentToken.transform.localScale;
 		keepTheseScript.currentToken.transform.parent = player1.transform; 
 
 		//position
-
 		keepTheseScript.currentToken.transform.localPosition = currentPosition;
+        keepTheseScript.currentToken.transform.localScale = currentScale * scaleMultiplier;
 
 
-		//player2 new script, WORKS
-		keepTheseScript.randomToken.transform.parent = player2.transform; 
+        //player2 new script
 
-		//------------------------------------------------------------------------------------------------------------------
+        Vector3 currentEnemyPosition = keepTheseScript.randomToken.transform.localPosition;
+        Vector3 currentEnemyScale = keepTheseScript.randomToken.transform.localScale;
+        keepTheseScript.randomToken.transform.parent = player2.transform;
+        keepTheseScript.randomToken.transform.localPosition = currentEnemyPosition;
+        keepTheseScript.randomToken.transform.localScale = currentEnemyScale * scaleMultiplier;
 
-		//health-images - player1 - new, IT WORKS FINALLY
-		player1HealthImage = player1Health.GetComponent<Image> (); //is the image component of the object
-		token1Image = keepTheseScript.currentToken.GetComponent<SpriteRenderer> (); //is the image component of currentToken
+        //------------------------------------------------------------------------------------------------------------------
+
+        //health-images - player1 - new, IT WORKS FINALLY
+        player1HealthImage = player1Health.GetComponent<Image> (); //is the image component of the object
+		token1Image = keepTheseScript.currentToken.GetComponentInChildren<SpriteRenderer> (); //is the image component of currentToken
 		player1HealthImage.sprite = token1Image.sprite;
 
 		//health-images - player2 - new, writing
 		player2HealthImage = player2Health.GetComponent<Image> ();
-		token2Image = keepTheseScript.randomToken.GetComponent<SpriteRenderer> ();
+		token2Image = keepTheseScript.randomToken.GetComponentInChildren<SpriteRenderer> ();
 		player2HealthImage.sprite = token2Image.sprite;
 	}
 	

@@ -63,7 +63,6 @@ public class PlayerAbilities : MonoBehaviour
 			StartCoroutine (waitAnimations (button));
 		} else {
 			Debug.Log ("Someone tried to do an illegal move" + " start: " + currentButton + " end: " + button);
-
 		}
 	}
 
@@ -97,8 +96,10 @@ public class PlayerAbilities : MonoBehaviour
 	{
 	    TurnControl turncontrol = turnControlObject.GetComponent<TurnControl> ();
 
-        if(!multiplayer.isOnline)
-            turncontrol.ChangeTurn ();
+        if (!multiplayer.isOnline) {
+            turncontrol.ChangeTurn();
+            StartCoroutine(buttons.CreateTile(currentButton));
+        }
 
         currentButton = button;
 

@@ -10,11 +10,11 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	//connected to - Buttons, will include all the scene change button functions
 
 	//button objects
-	public Button localMultiplayer;
+	/*public Button localMultiplayer;
 	public Button Online;
     public Button credits;
     public Button backToMainMenu;
-    public Button changeUsername;
+    public Button changeUsername;*/
 
 	//transition camera
 	Animator animator;
@@ -24,7 +24,6 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	public GameObject ObjectKeeper;
 	public GameObject CanvasAuki;
 	public GameObject Canvas;
-	public GameObject Canvashuone;
 
 	//player1 - new, works again
 	public GameObject TokenControl;
@@ -56,11 +55,9 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 	{
 		
 		CanvasAuki.SetActive (true);
-        Debug.Log("setting trigger");
         animator.SetTrigger ("Hide");
-		Canvashuone.SetActive (true);
-		yield return new WaitForSeconds(1);
-		//SceneManager.LoadScene ("miikan scene");
+		yield return new WaitForSeconds(2);
+		SceneManager.LoadScene ("Peliscene");
 
 
 
@@ -68,7 +65,6 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 
 	public void ChangeSceneLocalMultiplayer () //go to play scene (local multiplayer)
 	{
-		
 
 		//move the right token to the play scene
 		KeepTheseScript keepTheseScript = ObjectKeeper.GetComponent<KeepTheseScript> ();//get script
@@ -78,8 +74,11 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 			//player1 - works again, new
 
 		Vector3 currentPosition = TokenControl.GetComponent<TokenControl>().currentToken.transform.localPosition;
-		TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = ObjectKeeper.transform; 
+        Vector3 currentScale = TokenControl.GetComponent<TokenControl>().currentToken.transform.localScale;
+        TokenControl.GetComponent<TokenControl>().currentToken.transform.parent = ObjectKeeper.transform; 
 		keepTheseScript.currentToken = TokenControl.GetComponent<TokenControl>().currentToken;
+        keepTheseScript.currentToken.transform.localPosition = currentPosition;
+        keepTheseScript.currentToken.transform.localScale = currentScale;
 	
 		//because the shade-cursed thing moves. doesn't work completely yet
 
@@ -100,12 +99,14 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 		randomToken = SetPrefab2 (randomPrefabIndex);
 				
 
-		//player2 -DO NOT TOUCH, it works
+		//player2
 		Vector3 localPositionNow = randomToken.transform.localPosition; //NEW
+        Vector3 localScaleNow = randomToken.transform.localScale;
 		randomToken.transform.parent = keepTheseScript.transform; //PARENT = ObjectKeeper
 		keepTheseScript.randomToken = randomToken;
 		//because the shade-cursed thing moves. doesn't work completely yet
-		randomToken.transform.position = localPositionNow; //NEW
+		randomToken.transform.localPosition = localPositionNow; //NEW
+        randomToken.transform.localScale = localScaleNow;
 
 		//------------------------------------------------------------------------------------
 
@@ -137,7 +138,7 @@ public class SceneChanges : MonoBehaviour { //might need renaming, this. KeepThe
 
     public void ChangeSceneMainMenu()
     {
-        SceneManager.LoadScene("MainMenu_Aleksi");
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void openUsernamePanel()

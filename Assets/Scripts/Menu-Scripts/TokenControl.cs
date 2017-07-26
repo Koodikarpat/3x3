@@ -24,7 +24,7 @@ public class TokenControl : MonoBehaviour {
 	void Start () {
 		
 		//player1 - works again
-		currentToken = SetPrefab1(tokenCounter); //first token to show
+		currentToken = SetPrefab(tokenCounter); //first token to show
 
 		//---------------------------------------------------------------------------------
 		//buttons - left
@@ -36,7 +36,7 @@ public class TokenControl : MonoBehaviour {
 		//----------------------------------------------------------------------------
 	} 
 	//player1 - makes an object out of the prefab
-	GameObject SetPrefab1 (int tokenCounter) //DO NOT TOUCH, IT FINALLY WORKS
+	GameObject SetPrefab (int tokenCounter)
 	{
 		Destroy (currentToken);
 		return Instantiate (prefabArray [tokenCounter], transform, false);
@@ -44,21 +44,21 @@ public class TokenControl : MonoBehaviour {
 	}
 	//-------------------------------------------------------------------------------
 	//left button task (player1) works again
-	void LeftTaskOnClick() //do not touch
+	void LeftTaskOnClick()
 	{
 		tokenCounter--;
 		if (tokenCounter < 0) 
 			tokenCounter = prefabArray.Length -1;
-		currentToken = SetPrefab1(tokenCounter);
+		currentToken = SetPrefab(tokenCounter);
 
 	}
 	//right button task (player1) works again
-	void RightTaskOnClick () //do not touch
+	void RightTaskOnClick ()
 	{
 		tokenCounter++;
 		if (tokenCounter > prefabArray.Length -1) //se toimii!! ei tyhjää välissä
 			tokenCounter = 0;
-		currentToken = SetPrefab1(tokenCounter);
+		currentToken = SetPrefab(tokenCounter);
 
 	}
 	// Update is called once per frame

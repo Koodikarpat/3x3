@@ -31,7 +31,12 @@ public class StatusEffects : MonoBehaviour
 
     public void AddStatusEffect(Effect effect)
     {
-        effects.First(effects => effects.GetType() == effect.GetType()).turns += effect.turns;
+        Effect foundEffect = effects.First(effects => effects.GetType() == effect.GetType());
+
+
+        if (foundEffect.turns < effect.turns) { 
+            foundEffect.turns = effect.turns;
+        }
         effects.First(effects => effects.GetType() == effect.GetType()).strength = effect.strength;
 
         foreach (Effect eff in effects) 

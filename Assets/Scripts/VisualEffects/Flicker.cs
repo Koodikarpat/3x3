@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Flicker : MonoBehaviour {
 
-	public Image myImage;
+	private Image myImage;
 
 	void Start(){
 		myImage = GetComponent<Image> ();
@@ -16,7 +16,6 @@ public class Flicker : MonoBehaviour {
 		float darkness = Mathf.PerlinNoise(x,0);
 		darkness = darkness / 2 +0.3f;
 		myImage.color = new Color(darkness, darkness, darkness, 1f);
-		//myImage.CrossFadeAlpha (1.0f, 1.0f, true);//CrossFadeAlpha(Alpha, Time, Ignore time scale)
 	}
 }
   

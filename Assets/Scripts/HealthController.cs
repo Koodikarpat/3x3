@@ -28,8 +28,9 @@ public class HealthController : MonoBehaviour
 	public void Heal (int amount)
 	{
 		currentHealth += amount;
-		HealthCounter.text = "" + currentHealth;
-	}
+        checkHealth(currentHealth);
+        HealthCounter.text = "" + currentHealth;
+    }
 
 	// Use this for initialization
 	void Start () 
@@ -47,6 +48,10 @@ public class HealthController : MonoBehaviour
             GameOver = true;
             GameOverScreenPanel.SetActive(true);
             Debug.Log("Gameover");
+        }
+        Debug.Log("HP " + health + " " + startingHealth);
+        if(health > startingHealth) {
+            currentHealth = startingHealth;
         }
 
     }

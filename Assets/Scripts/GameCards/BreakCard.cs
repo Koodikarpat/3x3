@@ -8,18 +8,19 @@ public class BreakCard : Card
     {
         if (!base.Use()) return false;
 
-        if (getCardHandler().opponentCH.currentCards.Count > 0) {
-            int random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
-            while (getCardHandler().opponentCH.currentCards[random] == null) {
-                if (getCardHandler().opponentCH.currentCards.Count > 0)
-                    return true;
+        for (var i = 0; i < Strength; i++) {
+            if (getCardHandler().opponentCH.currentCards.Count > 0) {
+                int random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
+                while (getCardHandler().opponentCH.currentCards[random] == null) {
+                    if (getCardHandler().opponentCH.currentCards.Count > 0)
+                        return true;
 
-                random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
+                    random = Random.Range(0, getCardHandler().opponentCH.currentCards.Count);
+                }
+                Destroy(getCardHandler().opponentCH.currentCards[random].gameObject);
+            } else {
+                Debug.Log("No cards");
             }
-            Destroy(getCardHandler().opponentCH.currentCards[random].gameObject);
-        }
-        else {
-            Debug.Log("No cards");
         }
 
         return true;
