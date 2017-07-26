@@ -14,7 +14,7 @@ public class CursedDiceCard : Card
         newEffect.strength = Strength;
         newEffect.turns = Turns;
         getCardHandler().player1SE.AddStatusEffect(newEffect);
-        Debug.Log("Added effect: " + newEffect.ToString());
+        // Debug.Log("Added effect: " + newEffect.ToString());
 
         return true;
     }

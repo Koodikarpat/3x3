@@ -14,6 +14,8 @@ public class StatusEffects : MonoBehaviour
 	public Animator tickPoison; // Poison animator object
 	public Text PoisonCounter; // Poison turns text object
 
+    public ParticleSystem shieldParticles;
+
     void Start()
     {
         if (health == null)
@@ -24,7 +26,7 @@ public class StatusEffects : MonoBehaviour
             effect.Changes();
         }
 
-        UIChange();
+        Refresh();
     }
 
     public void AddStatusEffect(Effect effect)
@@ -35,7 +37,7 @@ public class StatusEffects : MonoBehaviour
         foreach (Effect eff in effects) 
             eff.Changes();
 
-        UIChange();
+        Refresh();
     }
 
     public Effect GetEffect(Type effectType)
@@ -48,17 +50,26 @@ public class StatusEffects : MonoBehaviour
 
     public void Tick()
     {
-        foreach (Effect effect in effects)
+        foreach (Effect effect in effects) 
             effect.TickActivation();
 
-        UIChange();
+        Refresh();
     }
 		
-    private void UIChange()
+    public void Refresh()
     {
         foreach (Effect effect in effects) {
             if (effect.GetType() == typeof(PoisonEffect))
                 PoisonCounter.text = effect.turns.ToString();
+        }
+
+        if (effects.Any(effects => effects.GetType() == typeof(ShieldEffect))) {
+            if (effects.First(effects => effects.GetType() == typeof(ShieldEffect)).Effective()) {
+                shieldParticles.Play();
+            }
+            else {
+                shieldParticles.Stop();
+            }
         }
     }
 }

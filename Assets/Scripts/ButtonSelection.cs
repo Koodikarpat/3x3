@@ -47,8 +47,9 @@ public class ButtonSelection : MonoBehaviour
 
             //nappien randomoitu asettelu
             //tiles[i].gameObject.GetComponentInChildren<Text> ().text = ""+tiles[i].type.strength;
- 
-            yield return new WaitUntil(() => tilePlacements.CreateTile(tiles[i], i) == true); // Wait until old tile is destroyed and new spawned
+
+            int randomStrength = Random.Range(1, 4 + 1);
+            yield return new WaitUntil(() => tilePlacements.CreateTile(tiles[i], i, randomStrength) == true); // Wait until old tile is destroyed and new spawned
 
             if (minePlacementParticles.Count < tiles.Count)
                 minePlacementParticles.Add(tiles[i].gameObject.GetComponentInChildren<ParticleSystem>());
