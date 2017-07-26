@@ -31,8 +31,9 @@ public class Attack : TileEffects
         }
         else {
             enemySE.GetEffect(typeof(ShieldEffect)).strength -= strength; // Reduce enemy shield strength, eventually breaking it.
+            enemySE.Refresh();
         }
-
+        
         base.Action(player, enemy);
 	}
 }

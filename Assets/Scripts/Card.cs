@@ -14,19 +14,31 @@ public abstract class Card : MonoBehaviour {
     public AudioClip useSound;
     public AudioSource audioSource;
 
-    public bool skipUseDraw = false;
-
     private CardHandler cardHandler;
 
     private bool moving = false;
 
-    public virtual void Use()
+    public virtual bool Use()
     {
+        if (getCardHandler().multiplayerC.isOnline) { // Online
+            if (!getCardHandler().multiplayerC.isLocalTurn) {
+                return false;
+            }
+        }
+        else {
+            if (!getCardHandler().OurTurn()) // Offline
+                return false;
+        }
+
         if (audioSource || useSound != null)
             audioSource.PlayOneShot(useSound);
 
         StartCoroutine(cardMovement(1));
         StartCoroutine(waitFor());
+
+        getCardHandler().CardUsed(this);
+
+        return true;
     }
 
     public CardHandler getCardHandler()
@@ -57,11 +69,12 @@ public abstract class Card : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
 
         DoTurn();
-        if (!skipUseDraw)
-            getCardHandler().DrawCards();
-        else
-            skipUseDraw = false;
 
+        if (!getCardHandler().multiplayerC.isOnline)
+        {
+            getCardHandler().DrawCards();
+        }
+        
         yield return null;
     }
 }

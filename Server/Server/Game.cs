@@ -43,6 +43,11 @@ namespace Server
             Random rand = new Random();
             user1.player.profileId = ""+rand.Next(0,999999);
             user2.player.profileId = "" + rand.Next(0, 999999);
+            //make sure profile ids arent same
+            while (user1.player.profileId == user2.player.profileId)
+            {
+                user2.player.profileId = "" + rand.Next(0, 999999);
+            }
 
             turn = 1;
 
@@ -52,7 +57,9 @@ namespace Server
             message.remotePlayer = user2.player;
             message.tiles = GameBoard(9);
 
-            SendCards();
+            var cards = new SendCards();
+            cards.types = SendCards();
+            ConnectionOfUser(user2).SendObject(cards);
 
             tiles = message.tiles;
 
@@ -74,38 +81,60 @@ namespace Server
 
         public void ChangeTurn()
         {
-            CheckConnection();
-            Console.WriteLine("turn change");
-            var message = new TurnChange();
-            if (turn == 3)
+            if (CheckConnection())
             {
+                Console.WriteLine("turn change");
+                var message = new TurnChange();
+                var cards = new SendCards();
+                cards.types = SendCards();
+                if (turn == 3)
+                {
+                    message.turn = Networking.GameStatus.RemoteTurn;
+                    ConnectionOfUser(user1).SendObject(message);
+                    message.turn = Networking.GameStatus.RemoteTurn;
+                    ConnectionOfUser(user2).SendObject(message);
+                }
+                else if (turn == 1)
+                {
+                    message.turn = Networking.GameStatus.RemoteTurn;
+                    ConnectionOfUser(user1).SendObject(message);
+                    message.turn = Networking.GameStatus.YourTurn;
+                    ConnectionOfUser(user2).SendObject(message);
+                    ConnectionOfUser(user1).SendObject(cards);
+                    turn = 2;
+                }
+                else
+                {
+                    message.turn = Networking.GameStatus.YourTurn;
+                    ConnectionOfUser(user1).SendObject(message);
+                    message.turn = Networking.GameStatus.RemoteTurn;
+                    ConnectionOfUser(user2).SendObject(message);
+                    turn = 1;
+                }
 
-            }
-            else if (turn == 1)
-            {
-                message.turn = Networking.GameStatus.RemoteTurn;
-                ConnectionOfUser(user1).SendObject(message);
-                message.turn = Networking.GameStatus.YourTurn;
-                ConnectionOfUser(user2).SendObject(message);
-                turn = 2;
+                timer.ResetTimer();
+                Console.WriteLine("GAMESTATUS:");
+                Console.WriteLine("Player1: " + user1.player.username + " (position: " + user1.player.position + " health: " + user1.player.health
+                    + " poison: " + user1.player.poison + ")");
+                Console.WriteLine("Player2: " + user2.player.username + " (position: " + user2.player.position + " health: " + user2.player.health
+                    + " poison: " + user2.player.poison + ")");
+                Console.WriteLine("*******************************************");
             }
             else
             {
-                message.turn = Networking.GameStatus.YourTurn;
-                ConnectionOfUser(user1).SendObject(message);
-                message.turn = Networking.GameStatus.RemoteTurn;
-                ConnectionOfUser(user2).SendObject(message);
-                turn = 1;
+                turn = 3;
+                var status = new GameInit();
+                Console.WriteLine("End message");
+                status.gameStatus = Networking.GameStatus.Ended;
+                if (ConnectionOfUser(user1) == null)
+                {
+                    ConnectionOfUser(user2).SendObject(status);
+                }
+                else
+                {
+                    ConnectionOfUser(user1).SendObject(status);
+                }
             }
-
-            timer.ResetTimer();
-
-            Console.WriteLine("GAMESTATUS:");
-            Console.WriteLine("Player1: " + user1.player.username + " (position: " + user1.player.position + " health: " + user1.player.health
-                + " poison: " + user1.player.poison + ")");
-            Console.WriteLine("Player2: " + user2.player.username + " (position: " + user2.player.position + " health: " + user2.player.health
-                + " poison: " + user2.player.poison + ")");
-            Console.WriteLine("*******************************************");
         }
 
         private MessageTile[] GameBoard(int tileCount)
@@ -161,9 +190,8 @@ namespace Server
             var @switch = new Dictionary<Type, Action> {
                 { typeof(Move), () => {
                         var move = (Move)message;
-                        if (true)
+                        if (CheckConnection())
                         {
-                            CheckConnection();
                             // TODO check if it is this users turn, is the move legal
 							var res = new Move();
                             res.player = move.player;
@@ -171,33 +199,6 @@ namespace Server
                             int end;
                             int enemy;
                             Console.WriteLine("*******************************************");
-                            if(!CheckConnection())
-                            {
-                                Console.WriteLine("User connection error");
-                                turn = 3;
-                                if (ConnectionOfUser(user1) == null)
-                                {
-                                    user2.player.position = 10;
-                                }
-                                else
-                                {
-                                    user1.player.position = 10;
-                                }
-
-
-                                var status = new GameInit();
-                                Console.WriteLine("End message");
-                                status.gameStatus = Networking.GameStatus.Ended;
-                                if (ConnectionOfUser(user1) == null)
-                                {
-                                    ConnectionOfUser(user2).SendObject(status);
-                                }
-                                else
-                                {
-                                    ConnectionOfUser(user1).SendObject(status);
-                                }
-                                return;
-                            }
                             if (turn == 1)
                             {
                                 start = user1.player.position;
@@ -250,6 +251,21 @@ namespace Server
                             var res = new Status();
                             res = Status.Fail;
 
+                            Console.WriteLine("User connection error");
+                                turn = 3;
+
+                                var status = new GameInit();
+                                Console.WriteLine("End message");
+                                status.gameStatus = Networking.GameStatus.Ended;
+                                if (ConnectionOfUser(user1) == null)
+                                {
+                                    ConnectionOfUser(user2).SendObject(status);
+                                }
+                                else
+                                {
+                                    ConnectionOfUser(user1).SendObject(status);
+                                }
+
 							// TODO ConnectionOfUser may return null
 							ConnectionOfUser(messageUser).SendObject(res);
                             Console.WriteLine("It's not this players turn");
@@ -264,7 +280,6 @@ namespace Server
 
         private void ChangeTile(MessageTile tile, int pos)
         {
-            CheckConnection();
             if (turn == 1)
             {
                 tiles[user1.player.position] = tile;
@@ -277,16 +292,21 @@ namespace Server
             }
         }
 
-        private void sendCards()
+        private int[,] SendCards()
         {
             Console.WriteLine("sending cards to players");
             Random rand = new Random();
             var cards = new SendCards();
-            cards.type1 = rand.Next(0, 8);
-            cards.type2 = rand.Next(0, 8);
-            cards.type3 = rand.Next(0, 8);
-            ConnectionOfUser(user1).SendObject(cards);
-            ConnectionOfUser(user2).SendObject(cards);
+            int[,] array = new int[2, 3];
+            for (int x = 0; x < 2; x++)
+            {
+                for (int y = 0; y < 3; y++)
+                {
+                    //Acces the array like this
+                    array[x, y] = rand.Next(0,9);
+                }
+            }
+            return array;
         }
 
         private User TheOtherUser(User theUser) {

@@ -26,8 +26,10 @@ public class GrimCard : Card
         }
     }
 
-    public override void Use()
+    public override bool Use()
     {
+        if (!base.Use()) return false;
+
         float timePassed = (onUpTime - onDownTime);
         int luck = Random.Range(4, 10 + 1); // Min luck, max luck (+ 1 because Random.Range is like that).
         int probabilityThreshold = Random.Range(1, (11 * luck / difficultyModifier)); // Single random variable was not random enough, added "luck".
@@ -49,7 +51,7 @@ public class GrimCard : Card
         holdingSlider.value = 0; // Zero the value
         dmgText.text = "";
 
-        base.Use();
+        return true;
     }
 
     void OnMouseDown()
@@ -78,8 +80,10 @@ public class GrimCard : Card
 
             // Debug.Log("Probability " + probability + " Diff " + (probability - lastProbability));
 
-            holdingSlider.value = probability;
-            dmgText.text = "DMG: " + (Strength * (damageProb / 100)).ToString();
+            if (probability <= 100) {
+                holdingSlider.value = probability;
+                dmgText.text = damageProb.ToString() + "%" + " DMG: " + (Strength * (damageProb / 100)).ToString();
+            }
 
             yield return null;
         }

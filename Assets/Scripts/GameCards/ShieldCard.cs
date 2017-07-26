@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ShieldCard : Card {
 
-    public override void Use()
+    public override bool Use()
     {
+        if (!base.Use()) return false;
+
         getCardHandler().player1SE.AddStatusEffect(new ShieldEffect(Turns, Strength));
 
-        base.Use();
+        return true;
     }
 
 
