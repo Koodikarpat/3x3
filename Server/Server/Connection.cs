@@ -134,8 +134,11 @@ namespace Server
 					} },
 				{ typeof(Move), () => {
 						OnMessageCallback (this, req);
-					} }
-			};
+					} },
+                { typeof(UseCard), () => {
+                        OnMessageCallback (this, req);
+                    } }
+            };
 
 			@switch[req.GetType()]();
 		}

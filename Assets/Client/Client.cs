@@ -90,6 +90,17 @@ namespace Networking
 			SendObject(message);
 		}
 
+        public void UseCard(int type, int value)
+        {
+            Debug.Log(type + " " + value);
+            var message = new UseCard();
+            message.type = type;
+            message.value = value;
+            Debug.Log(message.type + " " + message.value);
+
+            SendObject(message);
+        }
+
 		private void OnConnectionFail() // should be called when the tcp socket fails
 		{
 			Log("Connection interrupted, reconnecting");

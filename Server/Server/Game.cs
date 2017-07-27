@@ -59,6 +59,7 @@ namespace Server
 
             var cards = new SendCards();
             cards.types = SendCards();
+            ConnectionOfUser(user1).SendObject(cards);
             ConnectionOfUser(user2).SendObject(cards);
 
             tiles = message.tiles;
@@ -100,7 +101,6 @@ namespace Server
                     ConnectionOfUser(user1).SendObject(message);
                     message.turn = Networking.GameStatus.YourTurn;
                     ConnectionOfUser(user2).SendObject(message);
-                    ConnectionOfUser(user1).SendObject(cards);
                     turn = 2;
                 }
                 else
@@ -111,6 +111,8 @@ namespace Server
                     ConnectionOfUser(user2).SendObject(message);
                     turn = 1;
                 }
+
+                ConnectionOfUser(user1).SendObject(cards);
 
                 timer.ResetTimer();
                 Console.WriteLine("GAMESTATUS:");
@@ -270,7 +272,16 @@ namespace Server
 							ConnectionOfUser(messageUser).SendObject(res);
                             Console.WriteLine("It's not this players turn");
                         }
-                    } }
+                    } },
+                {typeof(UseCard), () => {
+                    var card = (UseCard)message;
+                    Console.WriteLine("got card with type of: " + card.type + " and value of " + card.value);
+                    ConnectionOfUser(user1).SendObject(card);
+                    var cards = new SendCards();
+                    cards.types = SendCards();
+                    ConnectionOfUser(user1).SendObject(cards);
+                    ConnectionOfUser(user2).SendObject(cards);
+                } }
             };
 
             Console.WriteLine("Some message was received");
@@ -303,7 +314,7 @@ namespace Server
                 for (int y = 0; y < 3; y++)
                 {
                     //Acces the array like this
-                    array[x, y] = rand.Next(0,9);
+                    array[x, y] = rand.Next(0, 9);
                 }
             }
             return array;

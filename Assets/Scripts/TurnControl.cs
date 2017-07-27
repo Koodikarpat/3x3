@@ -60,6 +60,7 @@ public class TurnControl : MonoBehaviour {
         {
             timerStarted = false;
             timeLeft = turnTime;
+            ChangeTurn();
         }
 	}
 	public void ChangeTurn () //Vuoronvaihto
@@ -76,7 +77,8 @@ public class TurnControl : MonoBehaviour {
 
         Player1 = !Player1;
 		Player2 = !Player2;
-		if (Player1) {
+        Debug.Log("P1: " + Player1 + "P2: " + Player2);
+        if (Player1) {
 			playerTurn.text = ("Player 1");
 			Player1Object.GetComponent <StatusEffects> ().Tick ();
             p1CHandler.ShowCards();
@@ -85,8 +87,7 @@ public class TurnControl : MonoBehaviour {
 		if (Player2) {
 			playerTurn.text = ("Player 2");
 			Player2Object.GetComponent <StatusEffects> ().Tick ();
-            if(!multiplayer.isOnline)
-                p2CHandler.ShowCards();
+            p2CHandler.ShowCards();
             //player-2-controlled
         }
         timerStarted = true;

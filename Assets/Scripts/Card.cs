@@ -11,6 +11,8 @@ public abstract class Card : MonoBehaviour {
     [Tooltip("Does using the card skip a turn?")]
     public bool SkipTurn = false;
 
+    public int MEISGOOD;
+
     public AudioClip useSound;
     public AudioSource audioSource;
 
@@ -73,6 +75,17 @@ public abstract class Card : MonoBehaviour {
         if (!getCardHandler().multiplayerC.isOnline)
         {
             getCardHandler().DrawCards();
+        }
+        else
+        {
+            if (getCardHandler().multiplayerC.isLocalTurn == true)
+            {
+                getCardHandler().DrawCards(getCardHandler().multiplayerC.p1cards);
+            }
+            else
+            {
+                getCardHandler().DrawCards(getCardHandler().multiplayerC.p2cards);
+            }
         }
         
         yield return null;

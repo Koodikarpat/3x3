@@ -56,17 +56,17 @@ public class CardHandler : MonoBehaviour {
     /// <param name="types">Card types to spawn (indexes of cardPrefabs array)</param>
     public void DrawCards(int[] types = null)
     {
-        if (multiplayerC.isOnline)
-            for (int i = 0; i < types.Length; i++)
-            {
-                Debug.Log(types[i]);
-            }
-        if (Draws > 0 && !HasCards()) {
+        if (Draws > 0 && !HasCards())
+        {
+            Debug.Log("ei ole kortteja");
             Draws--;
             NewCards(types);
         }
         else
+        {
+            Debug.Log("poistetaan kortit");
             RemoveCards();
+        }
     }
 
     /// <summary>
@@ -78,6 +78,7 @@ public class CardHandler : MonoBehaviour {
         List<int> tps;
         int randomCard = 0;
         if (types == null) {
+            Debug.Log("ei tyyppejä");
             tps = new List<int>();
             for (int i = 0; i < cardSlots.Length; i++) {
                 randomCard = Random.Range(0, cardPrefabs.Length);
@@ -98,11 +99,17 @@ public class CardHandler : MonoBehaviour {
             }
         }
         else
+        {
+            Debug.Log("on tyypit");
             tps = new List<int>(types);
+        }
 
+        Debug.Log("cardslotsLength " + cardSlots.Length);
         for (int c = 0; c < cardSlots.Length; c++) {
             GameObject card = Instantiate(cardPrefabs[tps[c]], cardSlots[c].gameObject.transform.position + cardPrefabs[tps[c]].transform.position, cardSlots[c].gameObject.transform.rotation);
             card.transform.SetParent(cardSlots[c].gameObject.transform);
+            card.GetComponent<Card>().MEISGOOD = tps[c];
+            Debug.Log("lisättiin kortti, prefab " + tps[c]);
             currentCards.Add(card);
         }
     }
@@ -173,5 +180,12 @@ public class CardHandler : MonoBehaviour {
     public void CardUsed(Card type)
     {
         Debug.Log("Card used: " + type.ToString() + "  by player " + ourPlayer.ToString());
+
+        int index = type.MEISGOOD;
+
+        Debug.Log(index + " " + type.Strength);
+       
+        if(multiplayerC.isOnline)
+            multiplayerC.UseCard(index ,type.Strength );
     }
 }

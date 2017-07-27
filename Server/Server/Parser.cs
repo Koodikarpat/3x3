@@ -101,7 +101,11 @@ namespace Networking
                 }
                 else if (deserialised.sendCards != null)
                 { // be careful with enums in Message
-                    return (Status)deserialised.status;
+                    return (SendCards)deserialised.sendCards;
+                }
+                else if (deserialised.useCard != null)
+                { // be careful with enums in Message
+                    return (UseCard)deserialised.useCard;
                 }
                 else {
                     // parsing message failed

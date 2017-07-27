@@ -25,8 +25,8 @@ public class Multiplayer : MonoBehaviour {
     public GameObject cardsp1;
     public GameObject cardsp2;
     public bool gameEnded;
-    public CardHandler CH1;
-    public CardHandler CH2;
+     CardHandler CH1;
+     CardHandler CH2;
 
     public int[] p1cards;
     public int[] p2cards;
@@ -46,6 +46,8 @@ public class Multiplayer : MonoBehaviour {
         localPlayerAbilities = localPlayerObject.GetComponent<PlayerAbilities>();
         remotePlayerAbilities = remotePlayerObject.GetComponent<PlayerAbilities>();
         turnControlScript = turnControllerObject.GetComponent<TurnControl>();
+        CH1 = cardsp1.GetComponent<CardHandler>();
+        CH2 = cardsp2.GetComponent<CardHandler>();
 
         p1cards = new int[3];
         p2cards = new int[3];
@@ -130,13 +132,10 @@ public class Multiplayer : MonoBehaviour {
                     //check game status
                     if(!gameEnded)
                     {
-                         for (int i = 0; i < 3; i++)
-                        {
-                            p1cards[i] = sendCards.types[0,i];
-                            p2cards[i] = sendCards.types[1,i];
-                        }
-                        if (!CH1.HasCards()) CH1.DrawCards(p1cards);
-                        if (!CH2.HasCards()) CH2.DrawCards(p2cards);
+                        Debug.Log("sending cards to cardholders");
+                        ChangeCards(sendCards.types);
+                        if(!CH1.HasCards()) CH1.DrawCards(p1cards);
+                        if(!CH2.HasCards()) CH2.DrawCards(p2cards);
                     }
                 } },
             { typeof(GameInit), () => {
@@ -211,8 +210,23 @@ public class Multiplayer : MonoBehaviour {
         else remotePlayerAbilities.ChangeTile(type, move.newTile.strength);
     }
 
-	// Update is called once per frame
-	void Update()
+    void ChangeCards(int[,] cards)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            p1cards[i] = cards[0, i];
+            p2cards[i] = cards[1, i];
+        }
+    }
+
+    public void UseCard(int type, int value)
+    {
+        Debug.Log("using card");
+        client.UseCard(type, value);
+    }
+
+    // Update is called once per frame
+    void Update()
 	{
 		try {
 			UpdateGame(messageQueue.Pop());
