@@ -8,8 +8,9 @@ public class GrimCard : Card
 {
     public Slider holdingSlider;
     public Text dmgText;
-
     public int difficultyModifier = 2; // Divides the luck, 1 - 3 range recommended. 1 being easiest, 3 being hardest and 2 being the middleground.
+    public GameObject effectPrefab;
+
     private float onDownTime, onUpTime;
     private bool doPercentageSprites = false;
 
@@ -28,8 +29,6 @@ public class GrimCard : Card
 
     public override bool Use()
     {
-        if (!base.Use()) return false;
-
         float timePassed = (onUpTime - onDownTime);
         int luck = Random.Range(4, 10 + 1); // Min luck, max luck (+ 1 because Random.Range is like that).
         int probabilityThreshold = Random.Range(1, (11 * luck / difficultyModifier)); // Single random variable was not random enough, added "luck".
@@ -38,14 +37,25 @@ public class GrimCard : Card
         float selfDamageProbability = (probability * 10);
 
         if (selfDamageProbability <= 0)
-            selfDamageProbability = 10;
+            return false;
+
+        if (!base.Use()) return false;
 
         // Debug.Log("Threshold " + probabilityThreshold + " SelfDamageProbability " + selfDamageProbability);
 
-        if (selfDamageProbability > probabilityThreshold)
-            getCardHandler().player1HC.TakeDamage(Strength / 2);
+        if (selfDamageProbability > probabilityThreshold) {
+            getCardHandler().player1HC.TakeDamage(Mathf.CeilToInt(Strength * (selfDamageProbability / 100)) / 2);
+            if (effectPrefab != null) {
+                GameObject eff = Instantiate(effectPrefab, new Vector3(-9, -2, 0), effectPrefab.transform.rotation);
+                Destroy(eff.gameObject, 5);
+            }
+        }
         else if (selfDamageProbability < probabilityThreshold) {
-            getCardHandler().player2HC.TakeDamage((int)(Strength * (selfDamageProbability / 100)));
+            getCardHandler().player2HC.TakeDamage(Mathf.FloorToInt(Strength * (selfDamageProbability / 100)));
+            if (effectPrefab != null) {
+                GameObject eff = Instantiate(effectPrefab, new Vector3(9, -2, 0), effectPrefab.transform.rotation);
+                Destroy(eff.gameObject, 5);
+            }
         }
 
         holdingSlider.value = 0; // Zero the value
@@ -82,7 +92,7 @@ public class GrimCard : Card
 
             if (probability <= 100) {
                 holdingSlider.value = probability;
-                dmgText.text = damageProb.ToString() + "%" + " DMG: " + (Strength * (damageProb / 100)).ToString();
+                dmgText.text = damageProb.ToString() + "%" + " DMG: " + Mathf.FloorToInt(Strength * (damageProb / 100)).ToString();
             }
 
             yield return null;
