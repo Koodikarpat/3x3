@@ -53,6 +53,8 @@ public class ButtonSelection : MonoBehaviour
 
         if (minePlacementParticles.Count < tiles.Count)
             minePlacementParticles.Add(tiles[i].gameObject.GetComponentInChildren<ParticleSystem>());
+        else
+            minePlacementParticles[i] = tiles[i].gameObject.GetComponentInChildren<ParticleSystem>();
 
         yield return null;
     }
