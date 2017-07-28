@@ -57,11 +57,6 @@ namespace Server
             message.remotePlayer = user2.player;
             message.tiles = GameBoard(9);
 
-            var cards = new SendCards();
-            cards.types = SendCards();
-            ConnectionOfUser(user1).SendObject(cards);
-            ConnectionOfUser(user2).SendObject(cards);
-
             tiles = message.tiles;
 
             // ConnectionOfUser may return null
@@ -73,6 +68,16 @@ namespace Server
             message.tiles = RotateBoard(message.tiles);
 
             ConnectionOfUser(user2).SendObject(message);
+
+            var start = new Move();
+            start.player = user1.player;
+            //start.player.position = user1.player.position;
+            ConnectionOfUser(user1).SendObject(start);
+
+            var cards = new SendCards();
+            cards.types = SendCards();
+            ConnectionOfUser(user1).SendObject(cards);
+            ConnectionOfUser(user2).SendObject(cards);
 
             timer.ResetTimer();
 

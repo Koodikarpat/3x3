@@ -78,17 +78,49 @@ public class TurnControl : MonoBehaviour {
         Player1 = !Player1;
 		Player2 = !Player2;
         Debug.Log("P1: " + Player1 + "P2: " + Player2);
-        if (Player1) {
-			playerTurn.text = ("Player 1");
-			Player1Object.GetComponent <StatusEffects> ().Tick ();
-            p1CHandler.ShowCards();
-            //player-1-controlled
+        if (multiplayer.isOnline)
+        {
+            if (multiplayer.isPlayer1 && Player1)
+            {
+                playerTurn.text = ("Player 1");
+                Player1Object.GetComponent<StatusEffects>().Tick();
+                p1CHandler.ShowCards();
+                p2CHandler.HideCards();
+                //player-1-controlled
+            }
+            else if (!multiplayer.isPlayer1 && Player1)
+            {
+                playerTurn.text = ("Player 1");
+                Player1Object.GetComponent<StatusEffects>().Tick();
+                p1CHandler.ShowCards();
+                p2CHandler.HideCards();
+                //player-1-controlled
+            }
+            else if (Player2)
+            {
+                playerTurn.text = ("Player 2");
+                Player2Object.GetComponent<StatusEffects>().Tick();
+                p2CHandler.ShowCards();
+                p1CHandler.HideCards();
+                //player-2-controlled
+            }
         }
-		if (Player2) {
-			playerTurn.text = ("Player 2");
-			Player2Object.GetComponent <StatusEffects> ().Tick ();
-            p2CHandler.ShowCards();
-            //player-2-controlled
+        else
+        {
+            if (Player1)
+            {
+                playerTurn.text = ("Player 1");
+                Player1Object.GetComponent<StatusEffects>().Tick();
+                p1CHandler.ShowCards();
+                //player-1-controlled
+            }
+            if (Player2)
+            {
+                playerTurn.text = ("Player 2");
+                Player2Object.GetComponent<StatusEffects>().Tick();
+                p2CHandler.ShowCards();
+                //player-2-controlled
+            }
         }
         timerStarted = true;
 		timeLeft = turnTime;

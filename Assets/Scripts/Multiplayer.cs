@@ -31,6 +31,9 @@ public class Multiplayer : MonoBehaviour {
     public int[] p1cards;
     public int[] p2cards;
 
+    public bool isTested;
+    public bool isPlayer1;
+
     private Stack<object> messageQueue;
 
 	// use this for initialization
@@ -93,8 +96,7 @@ public class Multiplayer : MonoBehaviour {
 			{ typeof(Move), () => {
 					Debug.Log("A Move message was received");
 					var move = (Move)message;
-
-					if (move.player.profileId == localPlayer.profileId) {  // this  move is a response to a local move that the loca player just made
+                    if (move.player.profileId == localPlayer.profileId) {  // this  move is a response to a local move that the loca player just made
                         ChangeTile(move);
                         isLocalTurn = false;
                     } else { // remote player made a move
@@ -102,6 +104,14 @@ public class Multiplayer : MonoBehaviour {
                         ChangeTile(move, enemy: true);
                         isLocalTurn = true;
                     }
+                    Debug.Log(move.player.position + " " + localPlayer.position);
+                    if(move.player.position == localPlayer.position && !isTested)
+                    {
+                        //this is player1
+                        isPlayer1 = true;
+                    }
+                    isTested = true;
+                                        
 					// TODO: animations by server
 				} },
             { typeof(TurnChange), () => {
