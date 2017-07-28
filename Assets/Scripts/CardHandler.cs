@@ -58,13 +58,11 @@ public class CardHandler : MonoBehaviour {
     {
         if (Draws > 0 && !HasCards())
         {
-            Debug.Log("ei ole kortteja");
             Draws--;
             NewCards(types);
         }
         else
         {
-            Debug.Log("poistetaan kortit");
             RemoveCards();
         }
     }
@@ -78,7 +76,6 @@ public class CardHandler : MonoBehaviour {
         List<int> tps;
         int randomCard = 0;
         if (types == null) {
-            Debug.Log("ei tyyppejä");
             tps = new List<int>();
             for (int i = 0; i < cardSlots.Length; i++) {
                 randomCard = Random.Range(0, cardPrefabs.Length);
@@ -100,16 +97,13 @@ public class CardHandler : MonoBehaviour {
         }
         else
         {
-            Debug.Log("on tyypit");
             tps = new List<int>(types);
         }
 
-        Debug.Log("cardslotsLength " + cardSlots.Length);
         for (int c = 0; c < cardSlots.Length; c++) {
             GameObject card = Instantiate(cardPrefabs[tps[c]], cardSlots[c].gameObject.transform.position + cardPrefabs[tps[c]].transform.position, cardSlots[c].gameObject.transform.rotation);
             card.transform.SetParent(cardSlots[c].gameObject.transform);
-            card.GetComponent<Card>().MEISGOOD = tps[c];
-            Debug.Log("lisättiin kortti, prefab " + tps[c]);
+            card.GetComponent<Card>().thisCardIndex = tps[c];
             currentCards.Add(card);
         }
     }
@@ -181,7 +175,7 @@ public class CardHandler : MonoBehaviour {
     {
         Debug.Log("Card used: " + type.ToString() + "  by player " + ourPlayer.ToString());
 
-        int index = type.MEISGOOD;
+        int index = type.thisCardIndex;
 
         Debug.Log(index + " " + type.Strength);
        

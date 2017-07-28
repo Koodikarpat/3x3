@@ -11,7 +11,7 @@ public abstract class Card : MonoBehaviour {
     [Tooltip("Does using the card skip a turn?")]
     public bool SkipTurn = false;
 
-    public int MEISGOOD;
+    public int thisCardIndex;
 
     public AudioClip useSound;
     public AudioSource audioSource;
